@@ -1,0 +1,19 @@
+default: &default
+  adapter: postgresql
+  username: postgres
+  password: postgres
+  encoding: unicode
+  pool: 5
+  host: localhost
+
+development:
+  <<: *default
+  database: divaa_development
+
+test:
+  <<: *default
+  database: divaa_test
+
+production:
+  <<: *default
+  database: divaa_production
