@@ -1,7 +1,7 @@
 <h1>Your algorithms</h1>
 
 <% if @algorithms.empty? %>
-  <p>Upload your first algorithm here</p>
+  <p>Upload your first algorithm <%= link_to 'here', new_algorithm_path %></p>
 <% else %>
   <% @algorithms.each do |algorithm| %>
     <%= algorithm.name %>
@@ -17,3 +17,5 @@
     <% end %>
   <% end %>
 <% end %>
+
+<%= link_to 'New', new_algorithm_path %>

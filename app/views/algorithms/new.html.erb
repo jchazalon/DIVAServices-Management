@@ -1,0 +1,14 @@
+<%= simple_form_for(@algorithm) do |f| %>
+  <%= f.input :name %>
+  <%= f.input :description, as: :text %>
+  <%= f.fields_for :algorithm_info, @algorithm_info do |f1f| %>
+    <%= f1f.input :author %>
+  <% end %>
+  <%= f.fields_for :input_parameters, @input_parameters do |f2f| %>
+    <%= f2f.input :input_type, collection: InputParameter.possible_input_types %>
+    <%= f2f.fields_for :fields, @fields do |f2ff| %>
+      <%= f2ff.input :name %>
+    <% end %>
+  <% end %>
+  <%= f.submit 'Submit' %>
+<% end %>

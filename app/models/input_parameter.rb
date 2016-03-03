@@ -1,7 +1,6 @@
 class InputParameter < ActiveRecord::Base
   after_validation :create_fields
   require 'json'
-  require 'awesome_print'
 
   has_many :fields
   belongs_to :algorithm
@@ -10,16 +9,16 @@ class InputParameter < ActiveRecord::Base
 
 
   def create_fields
-    p 'yolo'
-    data = JSON.parse(File.read(Rails.root.join('input-number.json')))
-    data = data[input_type]
+    #TODO parse input_types directly from API
+    data = JSON.parse(File.read(Rails.root.join('input_types.json')))
+    data = data[self.input_type]
     data['properties'].each do |k, v|
       create_recurive_field(self,k,v)
     end
   end
 
   def create_recurive_field(parent,k,v)
-    p "Create #{k} with type #{v['type']}"
+    p "Create #{k} with type #{v['type']}".concat((parent == self ? " " : " in #{parent.name}"))
     params = class_name_for_type(v['type']).constantize.create_from_hash(k, v)
     field = class_name_for_type(v['type']).constantize.create!(params)
     parent.fields << field
@@ -31,16 +30,13 @@ class InputParameter < ActiveRecord::Base
   end
 
   def class_name_for_type(type)
-    case(type)
-    when 'number'
-      'NumberField'
-    when 'string'
-      'StringField'
-    when 'object'
-      'ObjectField'
-    when 'boolean'
-      'BooleanField'
-    end
+    "#{type.capitalize}Field"
+  end
+
+  def self.possible_input_types
+    #TODO parse input_types directly from API
+    data = JSON.parse(File.read(Rails.root.join('input_types.json')))
+    [*data.keys]
   end
 
 end

@@ -17,4 +17,21 @@ class AlgorithmInfo < ActiveRecord::Base
       self.save!
     end
   end
+
+  def self.content_attributes
+    @content_attributes ||= {}
+  end
+
+  def self.algorithm_info_attributes
+    {author: :string, email: :string, website: :string}
+  end
+  
+  algorithm_info_attributes.each do |k,v|
+    content_attr k, v
+  end
+
+
+
+
+
 end
