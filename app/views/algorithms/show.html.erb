@@ -1,0 +1,6 @@
+<h1><%= @algorithm.name %></h1>
+
+<% @algorithm.input_parameters.each do |input_parameter| %>
+  <p>Name: <%= input_parameter.get_name_field %></p>
+  <p>Type: <%= input_parameter.input_type %></p>
+<% end %>

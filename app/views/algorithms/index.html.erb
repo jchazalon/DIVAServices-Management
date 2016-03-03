@@ -3,18 +3,23 @@
 <% if @algorithms.empty? %>
   <p>Upload your first algorithm <%= link_to 'here', new_algorithm_path %></p>
 <% else %>
+<table>
+  <thead>
+    <th>Name</th>
+    <th>Namespace</th>
+    <th>Description</th>
+    <th>Input parameters</th>
+    <th>Actions</th>
+  </thead>
   <% @algorithms.each do |algorithm| %>
-    <%= algorithm.name %>
-    <br/>
-    <% algorithm.input_parameters.first.fields.each do |field| %>
-      -><%= field.name %>
-      <% if field.type == 'ObjectField' %>
-        <% field.fields.each do |field1| %>
-          ->-><%= field1.name %>
-        <% end %>
-      <% end %>
-      <br/>
-    <% end %>
+  <tr>
+    <td><%= link_to algorithm.name, algorithm_path(algorithm) %></td>
+    <td><%= algorithm.namespace %></td>
+    <td><%= algorithm.description %></td>
+    <td><%= algorithm.input_parameters.count %> Parameter(s)</td>
+    <td><%= link_to 'Delete', algorithm_path(algorithm), method: :delete %>
+    </td>
+  <tr/>
   <% end %>
 <% end %>
 

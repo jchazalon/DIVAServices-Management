@@ -1,7 +1,6 @@
 class Field < ActiveRecord::Base
 
-  belongs_to :field
-  belongs_to :input_parameter
+  belongs_to :field, polymorphic: true
 
   def self.content_attr(attr_name, attr_type = :string)
     content_attributes[attr_name] = attr_type

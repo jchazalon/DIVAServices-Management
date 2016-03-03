@@ -5,6 +5,8 @@ class CreateAlgorithm < ActiveRecord::Migration
       t.string :name
       t.string :namespace
       t.text :description
+
+      t.timestamps null: false
     end
   end
 end

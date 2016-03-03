@@ -1,17 +1,14 @@
 <%= simple_form_for(@algorithm) do |f| %>
   <%= f.input :name %>
+  <%= f.input :namespace %>
   <%= f.input :description, as: :text %>
-  <%= f.fields_for :algorithm_info, @algorithm_info do |f1f| %>
-    <%= f1f.input :author %>
+  <%= f.simple_fields_for :algorithm_info do |ff| %>
+    <% AlgorithmInfo.algorithm_info_attributes.each do |k,v| %>
+      <%= ff.input k.to_sym %>
+    <% end %>
   <% end %>
-  <%= f.submit 'Submit' %>
-<% end %>
-
-
-<h2>Input parameter example</h2>
-<%= simple_form_for(@input_parameter, url: algorithms_path) do |f| %>
-  <%= f.simple_fields_for :fields do |ff| %>
-    <%= render partial: 'fields', locals: { f: ff } %>
+  <%= f.simple_fields_for :input_parameters do |fff| %>
+    <%= render partial: 'input_parameters/form', locals: { f: fff } %>
   <% end %>
   <%= f.submit 'Submit' %>
 <% end %>

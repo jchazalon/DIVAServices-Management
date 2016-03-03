@@ -4,6 +4,8 @@ class CreateInputParameter < ActiveRecord::Migration
       t.string :input_type
       t.references :algorithm, index: true
       t.references :field, index: true
+
+      t.timestamps null: false
     end
   end
 end

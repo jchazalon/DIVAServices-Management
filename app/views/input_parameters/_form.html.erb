@@ -1,0 +1,5 @@
+<h2>Input parameters</h2>
+<%= f.input :input_type, collection: InputParameter.possible_input_types %>
+<%= f.simple_fields_for :fields do |ff| %>
+  <%= render partial: 'fields', locals: { f: ff } %>
+<% end %>

@@ -2,13 +2,17 @@ class InputParameter < ActiveRecord::Base
   after_validation :create_fields
   require 'json'
 
-  has_many :fields
+  has_many :fields, as: :fieldable
   belongs_to :algorithm
 
   validates :input_type, presence: true
 
   accepts_nested_attributes_for :fields, allow_destroy: :true
 
+  def get_name_field
+    field = Field.where(fieldable_id: self.id).where("payload->>'name' = ?", "name").first
+    field.name unless field.nil?
+  end
 
   def create_fields
     #TODO parse input_types directly from API

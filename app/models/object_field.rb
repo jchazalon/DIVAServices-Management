@@ -1,5 +1,6 @@
 class ObjectField < Field
-  has_many :fields, class_name: 'Field', foreign_key: 'field_id'
+  
+  has_many :fields, as: :fieldable
 
   accepts_nested_attributes_for :fields, allow_destroy: :true
 
