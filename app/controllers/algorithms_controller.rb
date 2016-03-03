@@ -6,9 +6,10 @@ class AlgorithmsController < ApplicationController
 
   def new
     @algorithm = current_user.algorithms.new
-    @algorithm.build_algorithm_info
-    @algorithm.input_parameters.build
-    @algorithm.input_parameters.build
+    # @algorithm.build_algorithm_info
+    # @algorithm.input_parameters.build
+    # @algorithm.input_parameters.build
+    @input_parameter = InputParameter.create!(algorithm: Algorithm.first, input_type: 'select')
   end
 
 end

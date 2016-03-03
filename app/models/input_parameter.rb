@@ -7,6 +7,8 @@ class InputParameter < ActiveRecord::Base
 
   validates :input_type, presence: true
 
+  accepts_nested_attributes_for :fields, allow_destroy: :true
+
 
   def create_fields
     #TODO parse input_types directly from API

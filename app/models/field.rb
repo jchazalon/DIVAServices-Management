@@ -23,6 +23,7 @@ class Field < ActiveRecord::Base
     @content_attributes ||= {}
   end
 
+  content_attr :value, :string
   content_attr :name, :string
   content_attr :infoText, :text
   content_attr :required, :boolean
