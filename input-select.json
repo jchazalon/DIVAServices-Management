@@ -1,0 +1,36 @@
+{ "select": {
+            "type": "object",
+            "required": ["name", "options"],
+            "properties": {
+              "name": {
+                "$ref": "#/definitions/name"
+              },
+              "description": {
+                "$ref": "#/definitions/description"
+              },
+              "options": {
+                "type": "object",
+                "required": ["required", "values", "default"],
+                "properties": {
+                  "required": {
+                    "type": "boolean"
+                  },
+                  "values": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string"
+                    },
+                    "additionalItems": false
+                  },
+                  "default": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+}

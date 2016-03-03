@@ -45,3 +45,7 @@ group :development do
   gem 'spring'
 end
 
+# Added by urs zysset
+gem 'simple_form'
+gem 'thin'
+gem 'devise'

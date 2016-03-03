@@ -1,0 +1,14 @@
+<h1>Your algorithms</h1>
+
+<% if @algorithms.empty? %>
+  <p>Upload your first algorithm here</p>
+<% else %>
+  <% @algorithms.each do |algorithm| %>
+    <%= algorithm.name %>
+    <br/>
+    <% algorithm.input_parameters.first.fields.each do |field| %>
+      <%= field.name %>
+      <br/>
+    <% end %>
+  <% end %>
+<% end %>
