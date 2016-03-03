@@ -11,7 +11,7 @@ class InputParameter < ActiveRecord::Base
 
   def create_fields
     p 'yolo'
-    data = JSON.parse(File.read('/home/lunactic/DEV/diva_algorithm/input-number.json'))
+    data = JSON.parse(File.read(Rails.root.join('input-number.json')))
     data = data[input_type]
     data['properties'].each do |k, v|
       create_recurive_field(self,k,v)
