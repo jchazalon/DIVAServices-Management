@@ -24,5 +24,15 @@ class Field < ActiveRecord::Base
   end
 
   content_attr :name, :string
+  content_attr :infoText, :text
+  content_attr :required, :boolean
+
+  def self.create_from_hash(k,v)
+    params = Hash.new
+    params['name'] = k
+    params['infoText'] = v['infoText']
+    params['required'] = v['required']
+    return params
+  end
 
 end

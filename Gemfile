@@ -49,3 +49,5 @@ end
 gem 'simple_form'
 gem 'thin'
 gem 'devise'
+gem 'json'
+gem 'awesome_print'

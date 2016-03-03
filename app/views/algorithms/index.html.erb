@@ -7,7 +7,12 @@
     <%= algorithm.name %>
     <br/>
     <% algorithm.input_parameters.first.fields.each do |field| %>
-      <%= field.name %>
+      -><%= field.name %>
+      <% if field.type == 'ObjectField' %>
+        <% field.fields.each do |field1| %>
+          ->-><%= field1.name %>
+        <% end %>
+      <% end %>
       <br/>
     <% end %>
   <% end %>
