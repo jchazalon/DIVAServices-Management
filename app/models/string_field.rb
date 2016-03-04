@@ -1,6 +1,5 @@
 class StringField < Field
 
-  content_attr :value, :string
   content_attr :minLength, :integer
   content_attr :maxLength, :integer
 

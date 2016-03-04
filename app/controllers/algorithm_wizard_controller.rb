@@ -33,6 +33,7 @@ class AlgorithmWizardController < ApplicationController
     when :parameters
       @algorithm.update!(algorithm_params)
     when :parameters_details
+      @algorithm.update!(algorithm_params)
     when :upload
     end
     render_wizard @algorithm

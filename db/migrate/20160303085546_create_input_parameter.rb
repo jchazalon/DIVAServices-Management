@@ -3,7 +3,6 @@ class CreateInputParameter < ActiveRecord::Migration
     create_table :input_parameters do |t|
       t.string :input_type
       t.references :algorithm, index: true
-      t.references :field, index: true
 
       t.timestamps null: false
     end

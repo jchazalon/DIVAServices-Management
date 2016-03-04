@@ -53,13 +53,11 @@ ActiveRecord::Schema.define(version: 20160303104708) do
   create_table "input_parameters", force: :cascade do |t|
     t.string   "input_type"
     t.integer  "algorithm_id"
-    t.integer  "field_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
 
   add_index "input_parameters", ["algorithm_id"], name: "index_input_parameters_on_algorithm_id", using: :btree
-  add_index "input_parameters", ["field_id"], name: "index_input_parameters_on_field_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

@@ -19,7 +19,7 @@ class Field < ActiveRecord::Base
   end
 
   def self.content_attributes
-    @content_attributes ||= {}
+    @@content_attributes ||= {}
   end
 
   content_attr :value, :string
@@ -29,6 +29,7 @@ class Field < ActiveRecord::Base
 
   def self.create_from_hash(k,v)
     params = Hash.new
+    params['value'] = ''
     params['name'] = k
     params['infoText'] = v['infoText']
     params['required'] = v['required']

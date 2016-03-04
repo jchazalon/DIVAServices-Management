@@ -28,6 +28,11 @@ class AlgorithmsController < ApplicationController
     end
   end
 
+  def destroy
+    @algorithm.destroy
+    redirect_to algorithms_path
+  end
+
   private
 
   def set_algorithm
