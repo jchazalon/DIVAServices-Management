@@ -5,7 +5,7 @@ class InputParameter < ActiveRecord::Base
   has_many :fields, as: :fieldable
   belongs_to :algorithm
 
-  validates :input_type, presence: true
+  #validates :input_type, presence: true
 
   accepts_nested_attributes_for :fields, allow_destroy: :true
 

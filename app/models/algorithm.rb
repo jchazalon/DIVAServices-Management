@@ -7,8 +7,8 @@ class Algorithm < ActiveRecord::Base
   accepts_nested_attributes_for :algorithm_info, allow_destroy: :true
   accepts_nested_attributes_for :input_parameters, allow_destroy: :true
 
-  validates :name, presence: true
-  validates :namespace, presence: true
-  validates :description, presence: true
+  #validates :name, presence: true
+  #validates :namespace, presence: true
+  #validates :description, presence: true
   #validates :algorithm_info, presence: true
 end
