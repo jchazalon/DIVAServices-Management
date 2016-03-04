@@ -1,0 +1,10 @@
+<h1>Algorithm Wizard - Step 4/4</h1>
+
+<p>Please upload your algorithm</p>
+
+<%= simple_form_for(:upload) do |f| %>
+
+  <%= f.submit 'Upload' %>
+  <%= link_to 'Back', previous_wizard_path %>
+  <%= link_to 'Cancel', algorithms_path %>
+<% end %>

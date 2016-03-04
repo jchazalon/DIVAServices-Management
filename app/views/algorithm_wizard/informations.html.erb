@@ -1,0 +1,22 @@
+<h1>Algorithm Wizard - Step 1/4</h1>
+
+
+<p>Thanks for your interest in contributing to the DIVAService. This wizard will guide you throuh the process of uploading your own Algorithm. First we need some general information about the algorithm and the author(s):</p>
+
+<%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
+
+  <h2>General information</h2>
+  <%= f.input :name %>
+  <%= f.input :namespace %>
+  <%= f.input :description, as: :text %>
+
+  <h2>Additional information</h2>
+  <%= f.simple_fields_for :algorithm_info do |ff| %>
+    <% AlgorithmInfo.algorithm_info_attributes.each do |k,v| %>
+      <%= ff.input k.to_sym %>
+    <% end %>
+  <% end %>
+
+  <%= f.submit 'Next' %>
+  <%= link_to 'Cancel', algorithms_path %>
+<% end %>

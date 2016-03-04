@@ -1,0 +1,21 @@
+<h1>Algorithm Wizard - Step 2/4</h1>
+
+
+<p></p>
+<%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
+
+  <div class="input_parameters">
+    <%= f.simple_fields_for :input_parameters do |ff| %>
+
+      <%= render partial: 'input_parameter_fields', locals: { f: ff } %>
+
+      <div class="links">
+        <%= link_to_add_association 'New input parameter', f, :input_parameters %>
+      </div>
+
+      <%= f.submit 'Next' %>
+      <%= link_to 'Back', previous_wizard_path %>
+      <%= link_to 'Cancel', algorithms_path %>
+    <% end %>
+  </div>
+<% end %>

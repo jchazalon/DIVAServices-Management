@@ -27,12 +27,13 @@ ActiveRecord::Schema.define(version: 20160303104708) do
 
   create_table "algorithms", force: :cascade do |t|
     t.integer  "user_id"
+    t.string   "creation_status"
     t.string   "name"
     t.string   "namespace"
     t.text     "description"
     t.string   "output"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   add_index "algorithms", ["user_id"], name: "index_algorithms_on_user_id", using: :btree
