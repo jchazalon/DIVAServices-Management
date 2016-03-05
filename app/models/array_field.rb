@@ -10,4 +10,18 @@ class ArrayField < Field
     params['uniqueItems'] = v['uniqueItems']
     return params
   end
+
+  def value
+    value = super
+    value.join(';')
+  end
+
+  def value=(value)
+    value = value.split(';')
+    super(value)
+  end
+
+  def object_type
+    'string'
+  end
 end

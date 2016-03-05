@@ -1,12 +1,13 @@
 <h1>Algorithm Wizard - Step 3/4</h1>
 
 
-<p>Please select the necessary inputs to run your algorithm. Note that the order of the input parameter matters, the most top one is the first parameter used in the execution. Further details of the input parameters can be set in the next step:</p>
+<p></p>
+
 <%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
 
   <%= f.simple_fields_for :input_parameters do |ff| %>
 
-    <%= ff.input :input_type, collection: InputParameter.possible_input_types %>
+    <%= ff.input :input_type, collection: InputParameter.possible_input_types, disabled: true %>
     <%= ff.simple_fields_for :fields do |fff| %>
       <%= render partial: 'field', locals: { f: fff } %>
     <% end %>

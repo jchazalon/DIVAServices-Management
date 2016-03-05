@@ -9,4 +9,8 @@ class StringField < Field
     params['maxLength'] = v['maxLength']
     return params
   end
+
+  def object_type
+    'string'
+  end
 end

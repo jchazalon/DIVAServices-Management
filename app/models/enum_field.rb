@@ -7,4 +7,8 @@ class EnumField < Field
     params['values'] = v['values']
     return params
   end
+
+  def object_type
+    'radio_buttons'
+  end
 end
