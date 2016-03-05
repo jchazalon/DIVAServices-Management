@@ -1,5 +1,14 @@
-User.delete_all
-Algorithm.delete_all
+User.destroy_all
+Algorithm.destroy_all
+AlgorithmInfo.destroy_all
+InputParameter.destroy_all
+Field.destroy_all
+StringField.destroy_all
+BooleanField.destroy_all
+ObjectField.destroy_all
+EnumField.destroy_all
+ArrayField.destroy_all
+NumberField.destroy_all
 
 user = User.create!(email: 'dev@diva.unifr.ch', password: '12345678')
 

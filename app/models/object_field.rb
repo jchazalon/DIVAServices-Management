@@ -1,6 +1,6 @@
 class ObjectField < Field
-  
-  has_many :fields, as: :fieldable
+
+  has_many :fields, as: :fieldable, dependent: :destroy
 
   accepts_nested_attributes_for :fields, allow_destroy: :true
 

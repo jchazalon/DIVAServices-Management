@@ -2,7 +2,8 @@
 
 <p>Please upload your algorithm</p>
 
-<%= simple_form_for(:upload) do |f| %>
+<%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
+  <%= f.input :zip_file %>
 
   <%= f.submit 'Upload' %>
   <%= link_to 'Back', previous_wizard_path %>

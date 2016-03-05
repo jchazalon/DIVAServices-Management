@@ -1,13 +1,18 @@
 class InputParameter < ActiveRecord::Base
-  after_validation :create_fields
+  after_validation :create_fields, if: 'self.errors.empty?'
   require 'json'
 
-  has_many :fields, as: :fieldable
+  has_many :fields, as: :fieldable, dependent: :destroy
   belongs_to :algorithm
 
-  #validates :input_type, presence: true
+  validates :input_type, presence: { :unless => (input_type = "")}, if: :done_or_step_2?
 
   accepts_nested_attributes_for :fields, allow_destroy: :true
+
+  def done_or_step_2?
+    self.algorithm.parameters? || self.algorithm.done?
+    return true
+  end
 
   def get_name_field
     field = Field.where(fieldable_id: self.id).where("payload->>'name' = ?", "name").first

@@ -2,7 +2,7 @@ class CreateAlgorithm < ActiveRecord::Migration
   def change
     create_table :algorithms do |t|
       t.references :user, index: true
-      t.string :creation_status
+      t.integer :creation_status
 
       t.string :name
       t.string :namespace

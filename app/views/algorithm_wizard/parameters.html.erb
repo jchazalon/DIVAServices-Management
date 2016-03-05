@@ -13,10 +13,10 @@
       <div class="links">
         <%= link_to_add_association 'New input parameter', f, :input_parameters %>
       </div>
-
-      <%= f.submit 'Next' %>
-      <%= link_to 'Back', previous_wizard_path %>
-      <%= link_to 'Cancel', algorithms_path %>
     <% end %>
   </div>
+
+  <%= f.submit 'Next' %>
+  <%= link_to 'Back', previous_wizard_path %>
+  <%= link_to 'Cancel', algorithms_path %>
 <% end %>

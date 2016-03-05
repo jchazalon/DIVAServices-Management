@@ -7,7 +7,7 @@ class AlgorithmWizardController < ApplicationController
   def show
     case step
     when :informations
-      @algorithm.update_attribute(:creation_status, step)
+      @algorithm.update_attribute(:creation_status, step) unless @algorithm.informations?
       @algorithm.build_algorithm_info if @algorithm.algorithm_info.nil?
     when :parameters
       @algorithm.update_attribute(:creation_status, step)
@@ -29,12 +29,16 @@ class AlgorithmWizardController < ApplicationController
   def update
     case step
     when :informations
-      @algorithm.update!(algorithm_params)
+      #TODO there are still parentless algorithm infos floating around...
+      #TODO maybe simpler to put all in algorithm direclty?
+      @algorithm.algorithm_info.destroy unless @algorithm.algorithm_info.nil?
+      @algorithm.assign_attributes(algorithm_params_step1)
     when :parameters
-      @algorithm.update!(algorithm_params)
+      @algorithm.assign_attributes(algorithm_params_step2)
     when :parameters_details
-      @algorithm.update!(algorithm_params)
+      @algorithm.assign_attributes(algorithm_params_step3)
     when :upload
+      @algorithm.assign_attributes(algorithm_params_step4)
     end
     render_wizard @algorithm
   end
@@ -45,8 +49,12 @@ class AlgorithmWizardController < ApplicationController
     @algorithm = current_user.algorithms.find(params[:algorithm_id])
   end
 
-  def algorithm_params
-    params.require(:algorithm).permit!
+  def algorithm_params_step1
+    params.require(:algorithm).permit(:name, :namespace, :description,
+      algorithm_info_attributes: [:author, :email, :website])
   end
 
+  def algorithm_params_step2
+    params.require(:algorithm).permit!
+  end
 end
