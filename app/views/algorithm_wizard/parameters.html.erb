@@ -1,11 +1,13 @@
 <h1>Algorithm Wizard - Step 2/4</h1>
+<%= progress_bar(2) %>
 
+<h2>Information</h2>
 
 <p>Please select the necessary inputs to run your algorithm. Note that the order of the input parameter matters, the most top one is the first parameter used in the execution. Further details of the input parameters can be set in the next step:</p>
 
 <%= simple_form_for(@algorithm, url: wizard_path, method: :put, html: { class: 'form-horizontal' }) do |f| %>
 
-  <h2>Input</h2>
+  <h3>Input</h3>
   <div class="input_parameters">
     <%= f.simple_fields_for :input_parameters do |ff| %>
 
@@ -18,7 +20,7 @@
   </div>
 
 
-  <h2>Output</h2>
+  <h3>Output</h3>
   <%= f.input :output, collection: DivaServiceApi.available_output_types %>
 
   <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>

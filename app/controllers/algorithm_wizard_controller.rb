@@ -2,12 +2,12 @@ class AlgorithmWizardController < ApplicationController
   include Wicked::Wizard
   before_action :set_algorithm, only: [:show, :update]
 
-  steps :informations, :parameters, :parameters_details, :upload
+  steps *Algorithm.steps
 
   def show
     case step
     when :informations
-      @algorithm.update_attribute(:creation_status, step) unless @algorithm.informations?
+      @algorithm.update_attribute(:creation_status, step)
     when :parameters
       @algorithm.update_attribute(:creation_status, step)
       @algorithm.input_parameters.build if @algorithm.input_parameters.empty?
@@ -54,14 +54,14 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def algorithm_params_step2
-    params.require(:algorithm).permit(input_parameters_attributes: [:id, :input_type, :_destroy])
+    params.require(:algorithm).permit(:output, input_parameters_attributes: [:id, :input_type, :_destroy])
   end
 
-  # Accepts up to 5 level deep nested fields
+  # Accepts up to 7 level deep nested fields
   def algorithm_params_step3
     field_attributes_base = [:id, :value]
     fields = []
-    (1..5).each do
+    (1..7).each do
       fields = field_attributes_base + [fields_attributes: fields]
     end
     params.require(:algorithm).permit(input_parameters_attributes: [:id, fields_attributes: fields])
