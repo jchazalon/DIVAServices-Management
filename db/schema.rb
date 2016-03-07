@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20160305113308) do
     t.string   "namespace"
     t.text     "description"
     t.string   "output"
+    t.string   "language"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.string   "zip_file"

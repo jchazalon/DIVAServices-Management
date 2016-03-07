@@ -14,12 +14,17 @@ class InputParameter < ActiveRecord::Base
     return true
   end
 
-  def get_name_field
-    field = Field.where(fieldable_id: self.id).where("payload->>'name' = ?", "name").first
-    field.name unless field.nil?
+  def all_fields
+    found_fields = Array.new
+    self.fields.each do |field|
+      found_fields << field
+      found_fields = found_fields + field.all_fields if field.type == 'ObjectField'
+    end
+    found_fields
   end
 
   def create_fields
+    return unless self.fields.empty?
     #TODO parse input_types directly from API
     data = JSON.parse(File.read(Rails.root.join('input_types.json')))
     data = data[self.input_type]

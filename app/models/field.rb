@@ -14,7 +14,7 @@ class Field < ActiveRecord::Base
       self.payload ||= {}
       self.payload[attr_name.to_s] = value
       self.payload_will_change!
-      self.save!
+      self.save
     end
   end
 
@@ -26,6 +26,9 @@ class Field < ActiveRecord::Base
   content_attr :name, :string
   content_attr :infoText, :text
   content_attr :required, :boolean
+
+  #TODO Add server-side validations only on user actions!
+  #validates :value, presence: true, if: 'self.required && self.persisted?'
 
   def self.create_from_hash(k,v)
     params = Hash.new

@@ -1,6 +1,25 @@
 <h1><%= @algorithm.name %></h1>
 
-<% @algorithm.input_parameters.each do |input_parameter| %>
-  <p>Name: <%= input_parameter.get_name_field %></p>
-  <p>Type: <%= input_parameter.input_type %></p>
-<% end %>
+<table>
+  <thead>
+    <th>Position</th>
+    <th>Type</th>
+    <th>Name</th>
+  </thead>
+  <% @algorithm.input_parameters.each_with_index do |input_parameter, index| %>
+    <tr>
+      <td><%= index %></td>
+      <td><%= input_parameter.input_type %></td>
+      <td></td>
+    </tr>
+    <% input_parameter.all_fields.each do |field| %>
+      <% unless field.type == 'ObjectField' %>
+        <tr>
+          <td><%= field.object_type %></td>
+          <td><%= field.name %></td>
+          <td><%= field.value %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  <% end %>
+</table>

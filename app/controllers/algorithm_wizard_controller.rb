@@ -14,7 +14,6 @@ class AlgorithmWizardController < ApplicationController
       @algorithm.input_parameters.build if @algorithm.input_parameters.size == 0
     when :parameters_details
       @algorithm.update_attribute(:creation_status, step)
-      @input_parameters = @algorithm.input_parameters
     when :upload
       @algorithm.update_attribute(:creation_status, step)
     end
@@ -55,6 +54,20 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def algorithm_params_step2
-    params.require(:algorithm).permit!
+    params.require(:algorithm).permit(input_parameters_attributes: [:id, :input_type, :_destroy])
+  end
+
+  # Accepts up to 5 level deep nested fields
+  def algorithm_params_step3
+    field_attributes_base = [:id, :value]
+    fields = []
+    (1..5).each do
+      fields = field_attributes_base + [fields_attributes: fields]
+    end
+    params.require(:algorithm).permit(input_parameters_attributes: [:id, fields_attributes: fields])
+  end
+
+  def algorithm_params_step4
+    params.require(:algorithm).permit(:language, :zip_file)
   end
 end

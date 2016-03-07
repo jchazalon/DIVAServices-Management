@@ -10,6 +10,8 @@ class CreateAlgorithm < ActiveRecord::Migration
 
       t.string :output
 
+      t.string :language
+
       t.timestamps null: false
     end
   end

@@ -11,8 +11,9 @@ class Algorithm < ActiveRecord::Base
   enum creation_status: [:empty, :informations, :parameters, :parameters_details, :upload, :done]
 
   validates :name, presence: true, if: :done_or_step_1?
-  #validates :namespace, presence: true
-  #validates :description, presence: true
+  validates :namespace, presence: true, if: :done_or_step_1?
+  validates :description, presence: true, if: :done_or_step_1?
+  
   #validates :algorithm_info, presence: true
 
   def done_or_step_1?

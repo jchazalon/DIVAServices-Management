@@ -1,22 +1,21 @@
-<% unless f.object.type == 'ObjectField' %>
+<% if f.object.type == 'ObjectField' %>
+  <h4><%= f.object.name %></h4>
+  <%= f.simple_fields_for :fields do |ff| %>
+    <%= render partial: 'field', locals: { f: ff } %>
+  <% end %>
+<% else %>
   <% unless f.object.type == 'EnumField' %>
     <%= f.input :value,
       as: f.object.object_type,
       label: f.object.name,
       placeholder: '',
       required: (f.object.object_type == 'boolean' ? false : f.object.required) %>
-    <% else %>
-      <%= f.input :value,
-        as: f.object.object_type,
-        label: f.object.name,
-        collection: f.object.values,
-        required: (f.object.object_type == 'boolean' ? false : f.object.required) %>
-    <% end %>
-  <%= f.hint f.object.infoText unless f.object.infoText.nil? %>
-<% end %>
-
-<% if f.object.type == 'ObjectField' %>
-  <%= f.simple_fields_for :fields do |ff| %>
-    <%= render partial: 'field', locals: { f: ff } %>
+  <% else %>
+    <%= f.input :value,
+      as: f.object.object_type,
+      label: f.object.name,
+      collection: f.object.values,
+      required: (f.object.object_type == 'boolean' ? false : f.object.required) %>
+    <%= f.hint f.object.infoText unless f.object.infoText.nil? %>
   <% end %>
 <% end %>
