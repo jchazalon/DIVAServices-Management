@@ -49,7 +49,7 @@ class InputParameter < ActiveRecord::Base
     "#{type.capitalize}Field"
   end
 
-  def self.possible_input_types
+  def self.available_input_types
     #TODO parse input_types directly from API
     data = JSON.parse(File.read(Rails.root.join('input_types.json')))
     [*data.keys]

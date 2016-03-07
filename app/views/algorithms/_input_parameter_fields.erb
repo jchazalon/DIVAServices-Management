@@ -1,5 +1,5 @@
 <div class="nested-fields">
-  <%= f.input :input_type, collection: InputParameter.possible_input_types %>
+  <%= f.input :input_type, collection: InputParameter.available_input_types %>
   <%= f.simple_fields_for :fields do |ff| %>
     <%= render partial: 'fields/form', locals: { f: ff } %>
   <% end %>

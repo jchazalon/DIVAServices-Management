@@ -42,6 +42,11 @@ class AlgorithmWizardController < ApplicationController
     render_wizard @algorithm
   end
 
+  def finish_wizard_path
+    @algorithm.update_attribute(:creation_status, :done)
+    algorithms_path
+  end
+
   private
 
   def set_algorithm

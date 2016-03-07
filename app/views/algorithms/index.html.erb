@@ -9,6 +9,7 @@
     <th>Namespace</th>
     <th>Description</th>
     <th>Input parameters</th>
+    <th>Creation status</th>
     <th>Actions</th>
   </thead>
   <% @algorithms.each do |algorithm| %>
@@ -17,6 +18,7 @@
     <td><%= algorithm.namespace %></td>
     <td><%= algorithm.description %></td>
     <td><%= algorithm.input_parameters.count %> Parameter(s)</td>
+    <td><%= algorithm.creation_status %></td>
     <td><%= link_to 'Delete', algorithm_path(algorithm), method: :delete %></td>
   <tr/>
   <% end %>

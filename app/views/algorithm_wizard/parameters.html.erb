@@ -3,8 +3,9 @@
 
 <p>Please select the necessary inputs to run your algorithm. Note that the order of the input parameter matters, the most top one is the first parameter used in the execution. Further details of the input parameters can be set in the next step:</p>
 
-<%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
+<%= simple_form_for(@algorithm, url: wizard_path, method: :put, html: { class: 'form-horizontal' }) do |f| %>
 
+  <h2>Input</h2>
   <div class="input_parameters">
     <%= f.simple_fields_for :input_parameters do |ff| %>
 
@@ -15,6 +16,10 @@
       </div>
     <% end %>
   </div>
+
+
+  <h2>Output</h2>
+  <%= f.input :output, collection: Algorithm.available_output_types %>
 
   <%= f.submit 'Next' %>
   <%= link_to 'Back', previous_wizard_path %>
