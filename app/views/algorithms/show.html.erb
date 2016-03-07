@@ -1,25 +1,61 @@
 <h1><%= @algorithm.name %></h1>
 
-<table>
-  <thead>
-    <th>Position</th>
-    <th>Type</th>
-    <th>Name</th>
-  </thead>
-  <% @algorithm.input_parameters.each_with_index do |input_parameter, index| %>
+<h2>General</h2>
+<table class="table">
+  <tr>
+    <td>Name</td>
+    <td><%= @algorithm.name %></td>
+  </tr>
+  <tr>
+    <td>Namespace</td>
+    <td><%= @algorithm.namespace %></td>
+  </tr>
+  <tr>
+    <td>Description</td>
+    <td><%= @algorithm.description %></td>
+  </tr>
+</table>
+
+<h2>Additional Information</h2>
+<table class="table">
+  <% @algorithm.fields.each do |field| %>
     <tr>
-      <td><%= index %></td>
-      <td><%= input_parameter.input_type %></td>
-      <td></td>
+      <td><%= field.name %></td>
+      <td><%= field.value %></td>
     </tr>
-    <% input_parameter.all_fields.each do |field| %>
-      <% unless field.type == 'ObjectField' %>
-        <tr>
-          <td><%= field.object_type %></td>
-          <td><%= field.name %></td>
-          <td><%= field.value %></td>
-        </tr>
-      <% end %>
+  <% end %>
+</table>
+
+<h2>Input</h2>
+<% @algorithm.input_parameters.each do |input_parameter| %>
+  <h4><%= input_parameter.input_type.to_s %></h4>
+  <table class="table">
+  <% input_parameter.all_fields.each do |field| %>
+    <% unless field.type == 'ObjectField' %>
+      <tr>
+        <td><%= field.name %> <span class="label label-primary"><%= field.object_type %></span></td>
+        <td><%= field.value.blank? ? '-' : field.value %></td>
+      </tr>
     <% end %>
   <% end %>
+  </table>
+<% end %>
+
+<h2>Output</h2>
+<table class="table">
+    <tr>
+      <td><%= @algorithm.output %></td>
+    </tr>
+</table>
+
+<h2>Upload</h2>
+<table class="table">
+    <tr>
+      <td>Language</td>
+      <td><%= @algorithm.language %></td>
+    </tr>
+    <tr>
+      <td>File</td>
+      <td><%= @algorithm.zip_file %></td>
+    </tr>
 </table>

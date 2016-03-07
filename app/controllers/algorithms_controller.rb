@@ -1,30 +1,19 @@
 class AlgorithmsController < ApplicationController
-  before_action :set_algorithm, only: [:show, :destroy]
+  before_action :set_algorithm, only: [:show, :update, :destroy]
   respond_to :html
 
   def index
-    @algorithms = current_user.algorithms
+    @algorithms = current_user.algorithms.where(creation_status: 5) #TODO fix with symbol
   end
 
   def show
   end
 
-  def new
-    @algorithm = current_user.algorithms.new
-    @algorithm.build_algorithm_info
-    @algorithm.input_parameters.build
-
-    #@algorithm.input_parameters.create!(input_type: 'select')
-    # @algorithm.input_parameters.build
-    #@input_parameter = InputParameter.create!(algorithm: Algorithm.first, input_type: 'select')
-  end
-
-  def create
-    @algorithm = current_user.algorithms.new(algorithm_params)
-    if @algorithm.save!
+  def update
+    if @algorithm.update(algorithm_params)
       redirect_to algorithms_path
     else
-      render :new
+      render :edit
     end
   end
 

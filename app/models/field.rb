@@ -39,4 +39,8 @@ class Field < ActiveRecord::Base
     return params
   end
 
+  def self.class_name_for_type(type)
+    "#{type.capitalize}Field"
+  end
+
 end

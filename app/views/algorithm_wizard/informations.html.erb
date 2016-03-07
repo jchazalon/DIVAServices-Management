@@ -6,17 +6,15 @@
 <%= simple_form_for(@algorithm, url: wizard_path, method: :put, html: { class: 'form-horizontal' }) do |f| %>
 
   <h2>General information</h2>
-  <%= f.input :name %>
+  <%= f.input :name, required: true %>
   <%= f.input :namespace %>
   <%= f.input :description, as: :text %>
 
   <h2>Additional information</h2>
-  <%= f.simple_fields_for :algorithm_info do |ff| %>
-    <% AlgorithmInfo.algorithm_info_attributes.each do |k,v| %>
-      <%= ff.input k.to_sym %>
-    <% end %>
+  <%= f.simple_fields_for :fields do |ff| %>
+    <%= render partial: 'field', locals: { f: ff } %>
   <% end %>
 
-  <%= f.submit 'Next' %>
-  <%= link_to 'Cancel', algorithms_path %>
+  <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
+  <%= f.submit 'Next', class: 'btn btn-primary' %>
 <% end %>

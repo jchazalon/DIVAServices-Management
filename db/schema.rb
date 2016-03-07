@@ -16,15 +16,6 @@ ActiveRecord::Schema.define(version: 20160305113308) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "algorithm_infos", force: :cascade do |t|
-    t.integer  "algorithm_id"
-    t.json     "payload"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-  end
-
-  add_index "algorithm_infos", ["algorithm_id"], name: "index_algorithm_infos_on_algorithm_id", using: :btree
-
   create_table "algorithms", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "creation_status"

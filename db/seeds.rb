@@ -1,6 +1,5 @@
 User.destroy_all
 Algorithm.destroy_all
-AlgorithmInfo.destroy_all
 InputParameter.destroy_all
 Field.destroy_all
 StringField.destroy_all
@@ -14,10 +13,14 @@ user = User.create!(email: 'dev@diva.unifr.ch', password: '12345678')
 
 
 #Algorithm
-algorithm = user.algorithms.create!(name: 'My Algotithm', namespace: 'diva', description: 'This is my fist algorithm')
+algorithm = user.algorithms.create!(name: 'Dummy Algorithm', namespace: 'diva', description: 'This is a dummy algorithm', creation_status: :done)
+algorithm.additional_information_with('author').value = 'DIVA'
+algorithm.additional_information_with('email').value = 'dev@diva.unifr.ch'
+algorithm.additional_information_with('website').value = 'www.unifr.ch'
 
-#AlgotithmInfo
-algorithm.algorithm_info = AlgorithmInfo.create!(algorithm: algorithm, author: 'Me', email: 'dev@diva.unifr.ch', website: 'diuf.unifr.ch/diva')
+algorithm.output = DivaServiceApi.available_output_types[1]
+algorithm.language = DivaServiceApi.available_languages[1]
+algorithm.save!
 
 # InputParameter
 p '--------------------'

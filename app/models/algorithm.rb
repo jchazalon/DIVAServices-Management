@@ -1,11 +1,13 @@
 class Algorithm < ActiveRecord::Base
   mount_uploader :zip_file, AlgorithmUploader
 
-  has_one :algorithm_info, dependent: :destroy
+  after_validation :create_fields, if: 'self.errors.empty? && self.fields.empty?'
+
+  has_many :fields, as: :fieldable, dependent: :destroy
   has_many :input_parameters, dependent: :destroy
   belongs_to :user
 
-  accepts_nested_attributes_for :algorithm_info, allow_destroy: :true
+  accepts_nested_attributes_for :fields, allow_destroy: :true
   accepts_nested_attributes_for :input_parameters, allow_destroy: :true
 
   enum creation_status: [:empty, :informations, :parameters, :parameters_details, :upload, :done]
@@ -14,21 +16,22 @@ class Algorithm < ActiveRecord::Base
   validates :namespace, presence: true, if: :done_or_step_1?
   validates :description, presence: true, if: :done_or_step_1?
 
-  #validates :algorithm_info, presence: true
-
   def done_or_step_1?
     informations? || done?
+    !self.empty?
   end
 
-  def self.available_languages
-    #TODO parse language_types directly from API
-    data = JSON.parse(File.read(Rails.root.join('language_types.json')))
-    [*data]
+  def create_fields
+    data = DivaServiceApi.additional_information
+    data.each do |k, v|
+      params = Field.class_name_for_type(v['type']).constantize.create_from_hash(k, v)
+      field = Field.class_name_for_type(v['type']).constantize.create!(params)
+      self.fields << field
+    end
   end
 
-  def self.available_output_types
-    #TODO parse output_types directly from API
-    data = JSON.parse(File.read(Rails.root.join('output_types.json')))
-    [*data]
+  def additional_information_with(name)
+    fields = Field.where(fieldable_id: self.id)#, fieldable_type: result.class.name)
+    field = fields.where("payload->>'name' = ?", name).first
   end
 end

@@ -19,9 +19,9 @@
 
 
   <h2>Output</h2>
-  <%= f.input :output, collection: Algorithm.available_output_types %>
+  <%= f.input :output, collection: DivaServiceApi.available_output_types %>
 
-  <%= f.submit 'Next' %>
-  <%= link_to 'Back', previous_wizard_path %>
-  <%= link_to 'Cancel', algorithms_path %>
+  <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>
+  <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
+  <%= f.submit 'Next', class: 'btn btn-primary' %>
 <% end %>

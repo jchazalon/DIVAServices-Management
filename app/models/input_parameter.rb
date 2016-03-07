@@ -1,6 +1,6 @@
 class InputParameter < ActiveRecord::Base
-  after_validation :create_fields, if: 'self.errors.empty?'
-  require 'json'
+
+  after_validation :create_fields, if: 'self.errors.empty? && self.fields.empty?'
 
   has_many :fields, as: :fieldable, dependent: :destroy
   belongs_to :algorithm
@@ -24,9 +24,7 @@ class InputParameter < ActiveRecord::Base
   end
 
   def create_fields
-    return unless self.fields.empty?
-    #TODO parse input_types directly from API
-    data = JSON.parse(File.read(Rails.root.join('input_types.json')))
+    data = DivaServiceApi.input_types
     data = data[self.input_type]
     data['properties'].each do |k, v|
       create_recurive_field(self,k,v)
@@ -34,9 +32,8 @@ class InputParameter < ActiveRecord::Base
   end
 
   def create_recurive_field(parent,k,v)
-    p "Create #{k} with type #{v['type']}".concat((parent == self ? " " : " in #{parent.name}"))
-    params = class_name_for_type(v['type']).constantize.create_from_hash(k, v)
-    field = class_name_for_type(v['type']).constantize.create!(params)
+    params = Field.class_name_for_type(v['type']).constantize.create_from_hash(k, v)
+    field = Field.class_name_for_type(v['type']).constantize.create!(params)
     parent.fields << field
     if v.has_key?('properties')
       v['properties'].each do |k, v|
@@ -45,14 +42,8 @@ class InputParameter < ActiveRecord::Base
     end
   end
 
-  def class_name_for_type(type)
-    "#{type.capitalize}Field"
+  def field_with(name)
+    fields = Field.where(fieldable_id: self.id)#, fieldable_type: result.class.name)
+    field = fields.where("payload->>'name' = ?", name).first
   end
-
-  def self.available_input_types
-    #TODO parse input_types directly from API
-    data = JSON.parse(File.read(Rails.root.join('input_types.json')))
-    [*data.keys]
-  end
-
 end

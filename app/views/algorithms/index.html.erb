@@ -1,9 +1,8 @@
 <h1>Your algorithms</h1>
 
-<% if @algorithms.empty? %>
-  <p>Upload your first algorithm <%= link_to 'here', new_algorithm_path %></p>
-<% else %>
-<table>
+<%= link_to 'New algorithm', algorithm_algorithm_wizard_index_path(:create), method: :post, class: 'btn btn-default' %>
+
+<table class="table">
   <thead>
     <th>Name</th>
     <th>Namespace</th>
@@ -13,17 +12,13 @@
     <th>Actions</th>
   </thead>
   <% @algorithms.each do |algorithm| %>
-  <tr>
-    <td><%= link_to algorithm.name, algorithm_path(algorithm) %></td>
-    <td><%= algorithm.namespace %></td>
-    <td><%= algorithm.description %></td>
-    <td><%= algorithm.input_parameters.count %> Parameter(s)</td>
-    <td><%= algorithm.creation_status %></td>
-    <td><%= link_to 'Delete', algorithm_path(algorithm), method: :delete %></td>
-  <tr/>
-  <% end %>
-<% end %>
-
-<%= link_to 'New', new_algorithm_path %>
-
-<%= link_to 'New(wizard)', algorithm_algorithm_wizard_index_path(:create), method: :post %>
+    <tr>
+      <td><%= link_to algorithm.name, algorithm_path(algorithm) %></td>
+      <td><%= algorithm.namespace %></td>
+      <td><%= algorithm.description %></td>
+      <td><%= algorithm.input_parameters.count %> Parameter(s)</td>
+      <td><%= algorithm.creation_status %></td>
+      <td><%= link_to 'Delete', algorithm_path(algorithm), method: :delete %></td>
+    <tr/>
+  <%  end %>
+</table>

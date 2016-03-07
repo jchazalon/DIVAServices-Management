@@ -9,6 +9,20 @@
 <body>
 
 <div class="container">
+  <div class="header">
+    <nav>
+      <ul class="nav nav-pills pull-right">
+        <li><%= link_to 'Home', algorithms_path %></li>
+        <% if current_user %>
+          <li><%= link_to 'Logout', destroy_user_session_path, method: :delete %></li>
+        <% else %>
+          <li><%= link_to 'Login', new_user_session_path %></li>
+        <% end %>
+      </ul>
+    </nav>
+    <h3>DIVA Algorithm</h3>
+    <hr/>
+  </div>
   <%= yield %>
 </div>
 
