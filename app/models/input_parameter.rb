@@ -26,8 +26,10 @@ class InputParameter < ActiveRecord::Base
   def create_fields
     data = DivaServiceApi.input_types
     data = data[self.input_type]
-    data['properties'].each do |k, v|
-      create_recurive_field(self,k,v)
+    if data.has_key?('properties')
+      data['properties'].each do |k, v|
+        create_recurive_field(self,k,v)
+      end
     end
   end
 
@@ -45,5 +47,17 @@ class InputParameter < ActiveRecord::Base
   def field_with(name)
     fields = Field.where(fieldable_id: self.id)#, fieldable_type: result.class.name)
     field = fields.where("payload->>'name' = ?", name).first
+  end
+
+  def to_schema
+    data = Hash.new
+    self.fields.each do |field|
+      if field.type == 'ObjectField'
+        data[field.name] = field.to_schema
+      else
+        data[field.name] = field.value unless field.value.blank?
+      end
+    end
+    return data
   end
 end

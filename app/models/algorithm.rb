@@ -34,4 +34,18 @@ class Algorithm < ActiveRecord::Base
     fields = Field.where(fieldable_id: self.id)#, fieldable_type: result.class.name)
     field = fields.where("payload->>'name' = ?", name).first
   end
+
+  def to_schema
+    additional_information = self.fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact!.reduce(:merge) || {}
+    inputs = Array.new
+    self.input_parameters.each do |input_parameter|
+      inputs << { input_parameter.input_type => input_parameter.to_schema }
+    end
+    { name: self.name,
+      description: self.description,
+      info: additional_information,
+      input: inputs,
+      output: self.output
+    }.to_json
+  end
 end

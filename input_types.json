@@ -1,10 +1,10 @@
 {
   "highlighter": {
     "type": "object",
-    "properties":{
+    "properties": {
       "type": {
         "type": "enum",
-        "values":[
+        "values": [
           "polygon",
           "rectangle",
           "circle",
@@ -119,25 +119,40 @@
       "options": {
         "type": "object",
         "properties": {
-        "required": {
-          "type": "boolean",
-          "required": true
-        },
-        "values": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "type": "string"
+          "required": {
+            "type": "boolean",
+            "required": true
           },
-          "required": true
-        },
-        "default":{
-          "type":"number",
-          "required": true
+          "values": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            },
+            "required": true
+          },
+          "default": {
+            "type": "number",
+            "required": true
+          }
         }
       }
-      }
     }
+  },
+  "inputImage":{
+    "infoText":"Path to the input image"
+  },
+  "outputImage":{
+    "infoText":"Path where to save the output image"
+  },
+  "resultFile":{
+    "infoText":"Path where to save the resulting json file (if output = file)"
+  },
+  "inputFileExtension":{
+    "infoText":"Extension of the input file"
+  },
+  "outputFolder":{
+    "infoText":"Folder for saving results"
   }
 }

@@ -43,4 +43,15 @@ class Field < ActiveRecord::Base
     "#{type.capitalize}Field"
   end
 
+  def to_schema
+    data = Hash.new
+    self.fields.each do |field|
+      if field.type == 'ObjectField'
+        data[field.name] = field.to_schema
+      else
+        data[field.name] = field.value unless field.value.blank?
+      end
+    end
+    return data
+  end
 end
