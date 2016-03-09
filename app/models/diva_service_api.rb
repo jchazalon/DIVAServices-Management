@@ -13,8 +13,7 @@ class DivaServiceApi
   end
 
   def self.available_input_types
-    #TODO parse input_types directly from API
-    data = JSON.parse(File.read(Rails.root.join('input_types.json')))
+    data = DivaServiceApi.input_types
     [*data.keys]
   end
 
@@ -24,6 +23,15 @@ class DivaServiceApi
 
   def self.additional_information
     JSON.parse(File.read(Rails.root.join('additional_info.json')))
+  end
+
+  def self.input_type_descriptions
+    data = DivaServiceApi.input_types
+    hash = Hash.new
+    available_input_types.each do |input_type|
+      hash[input_type] = data[input_type]['infoText']
+    end
+    hash
   end
 
 end

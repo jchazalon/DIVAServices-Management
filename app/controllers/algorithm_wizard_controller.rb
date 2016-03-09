@@ -11,6 +11,7 @@ class AlgorithmWizardController < ApplicationController
     when :parameters
       @algorithm.update_attribute(:creation_status, step)
       @algorithm.input_parameters.build if @algorithm.input_parameters.empty?
+      @index = 0
     when :parameters_details
       if @algorithm.input_parameters.empty?
         if @algorithm.creation_status == 'upload'

@@ -1,5 +1,23 @@
-<%= f.label :input_type %>
-<div class="nested-fields form-group form-inline">
-  <%= f.input :input_type, label: false, collection: DivaServiceApi.available_input_types %>
-  <%= link_to_remove_association '<i class="fa fa-times"></i> Remove'.html_safe, f, class: 'btn btn-danger' %>
+<div class="nested-fields">
+  <%= f.label :input_type %>
+  <div class="form-group form-inline">
+    <%= f.input :input_type, label: false, collection: DivaServiceApi.available_input_types, :input_html => {:onchange => "update_description(this,#{@index})"} %>
+    <%= link_to_remove_association '<i class="fa fa-times"></i> Remove'.html_safe, f, class: 'btn btn-danger' %>
+  </div>
+  <%= f.hint '', id: "description-#{@index}"  %>
 </div>
+
+<% if @index == 0 %>
+  <script type="text/javascript">
+    function update_description(select, index) {
+      var descriptions = <%= raw(DivaServiceApi.input_type_descriptions.to_json) %>;
+      var description = '';
+      if (descriptions[select.value] != null) {
+        description = descriptions[select.value];
+      }
+      $("p#description-" + index).text(description);
+    }
+  </script>
+<% end %>
+
+<% @index += 1 %>

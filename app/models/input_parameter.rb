@@ -26,6 +26,7 @@ class InputParameter < ActiveRecord::Base
   def create_fields
     data = DivaServiceApi.input_types
     data = data[self.input_type]
+    self.description = data['infoText']
     if data.has_key?('properties')
       data['properties'].each do |k, v|
         create_recurive_field(self,k,v)
