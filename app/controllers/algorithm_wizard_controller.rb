@@ -12,6 +12,14 @@ class AlgorithmWizardController < ApplicationController
       @algorithm.update_attribute(:creation_status, step)
       @algorithm.input_parameters.build if @algorithm.input_parameters.empty?
     when :parameters_details
+      if @algorithm.input_parameters.empty?
+        if @algorithm.creation_status == 'upload'
+          jump_to :parameters
+        else
+          flash[:notice] = "Skipped step 3 due to no input parameters set"
+          skip_step
+        end
+      end
       @algorithm.update_attribute(:creation_status, step)
     when :upload
       @algorithm.update_attribute(:creation_status, step)

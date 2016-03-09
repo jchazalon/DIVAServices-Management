@@ -1,43 +1,30 @@
 module AlgorithmWizardHelper
 
-  def progress_bar(step)
-    '<div class="wizard">
-      <div class="wizard-inner">
-        <div class="connecting-line"></div>
-        <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation">
-            <a role="tab" title="Information">
-              <span class="round-tab">
-                <i class="fa fa-info"></i>
-              </span>
-            </a>
-          </li>
+  def progress_bar(current_step)
+    names = ['General Information', 'Input/Output', 'Detailed Input', 'Upload']
+    icons = ['fa fa-info', 'fa fa-exchange', 'fa fa-list', 'fa fa-upload']
 
-          <li role="presentation" class="active">
-            <a role="tab" title="Input/Output">
-              <span class="round-tab">
-                <i class="fa fa-exchange"></i>
-              </span>
-            </a>
-          </li>
-          <li role="presentation" class="disabled">
-            <a role="tab" title="Details">
-              <span class="round-tab">
-                <i class="fa fa-list"></i>
-              </span>
-            </a>
-          </li>
-
-          <li role="presentation" class="disabled">
-            <a role="tab" title="Upload">
-              <span class="round-tab">
-                <i class="fa fa-upload"></i>
-              </span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>'.html_safe
+    content_tag(:div, class: 'wizard') do
+      content_tag(:div, class: 'wizard-inner') do
+        content_tag(:div, class: 'connecting-line') do
+        end +
+        content_tag(:ul, class: 'nav nav-tabs', role: 'tablist') do
+          (1..(Algorithm.steps.size)).collect do |step|
+            concat progress_icon(names[step - 1], icons[step - 1], step == current_step)
+          end
+        end
+      end
+    end
   end
 
+  def progress_icon(name, icon, active)
+    content_tag(:li, role: 'presentation', class: (active ? 'active' : '')) do
+      content_tag(:a, role: 'tab', title: name) do
+        content_tag(:span, class: 'round-tab') do
+          content_tag(:i, class: icon) do
+          end
+        end
+      end
+    end
+  end
 end
