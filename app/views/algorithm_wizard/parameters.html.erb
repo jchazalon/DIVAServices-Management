@@ -3,9 +3,9 @@
 
 <h2>Information</h2>
 
-<p>Please select the necessary inputs to run your algorithm. Note that the order of the input parameter matters, the most top one is the first parameter used in the execution. Further details of the input parameters can be set in the next step:</p>
+<p>Please select the necessary input and output parameters to run your algorithm. Note that the order of the input parameter matters, the most top one is the first parameter used in the execution query. Further details of the parameters can be set in the next step:</p>
 
-<%= simple_form_for(@algorithm, url: wizard_path, method: :put, html: { class: 'form-horizontal' }) do |f| %>
+<%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
 
   <h3>Input</h3>
   <div class="input_parameters">
@@ -13,10 +13,11 @@
 
       <%= render partial: 'input_parameter_fields', locals: { f: ff } %>
 
-      <div class="links">
-        <%= link_to_add_association 'New input parameter', f, :input_parameters %>
-      </div>
+
     <% end %>
+    <div class="links">
+      <%= link_to_add_association '<i class="fa fa-plus"></i> New input parameter'.html_safe, f, :input_parameters, class: 'btn btn-default' %>
+    </div>
   </div>
 
 

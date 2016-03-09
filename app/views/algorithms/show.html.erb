@@ -31,17 +31,23 @@
 
 <h2>Input</h2>
 <% @algorithm.input_parameters.each do |input_parameter| %>
-  <h4><%= input_parameter.input_type.to_s %></h4>
-  <table class="table">
-  <% input_parameter.all_fields.each do |field| %>
-    <% unless field.type == 'ObjectField' %>
-      <tr>
-        <td><%= field.name %> <span class="label label-primary"><%= field.object_type %></span></td>
-        <td><%= field.value.blank? ? '-' : field.value %></td>
-      </tr>
+  <h4><i class="fa fa-arrow-right"></i> <%= input_parameter.input_type.to_s %></h4>
+  <% unless input_parameter.fields.empty? %>
+    <table class="table">
+      <thead>
+        <th style="width: 40%">Field</th>
+        <th style="width: 60%">Value</th>
+      </thead>
+    <% input_parameter.all_fields.each do |field| %>
+      <% unless field.type == 'ObjectField' %>
+        <tr>
+          <td><%= field.name %> <span class="label label-primary"><%= field.object_type %></span></td>
+          <td><%= field.value.blank? ? '-' : field.value %></td>
+        </tr>
+      <% end %>
     <% end %>
+    </table>
   <% end %>
-  </table>
 <% end %>
 
 <h2>Output</h2>

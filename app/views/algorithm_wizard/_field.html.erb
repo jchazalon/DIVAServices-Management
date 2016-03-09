@@ -1,5 +1,5 @@
 <% if f.object.type == 'ObjectField' %>
-  <h4><%= f.object.name %></h4>
+  <h3><%= f.object.name.capitalize %></h3>
   <%= f.simple_fields_for :fields do |ff| %>
     <%= render partial: 'field', locals: { f: ff } %>
   <% end %>

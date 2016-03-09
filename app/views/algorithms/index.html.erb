@@ -20,5 +20,25 @@
       <td><%= algorithm.creation_status %></td>
       <td><%= link_to 'Delete', algorithm_path(algorithm), method: :delete %></td>
     <tr/>
-  <%  end %>
+  <% end %>
 </table>
+
+<% unless @unfinished_algorithms.empty? %>
+  <h1>Unfinished Algorithms</h1>
+  <table class="table">
+    <thead>
+      <th>Name</th>
+      <th>Current step</th>
+      <th>Actions</th>
+    </thead>
+    <% @unfinished_algorithms.each do |algorithm| %>
+      <tr>
+        <td><%= link_to (algorithm.name.blank? ? 'N/A' : algorithm.name), algorithm_path(algorithm) %></td>
+        <td><%= algorithm.creation_status %></td>
+        <td><%= algorithm.input_parameters.count %> Parameter(s)</td>
+        <td><%= link_to 'Continue', algorithm_algorithm_wizard_path(algorithm, algorithm.creation_status) %></td>
+        <td><%= link_to 'Delete', algorithm_path(algorithm), method: :delete %></td>
+      <tr/>
+    <% end %>
+  </table>
+<% end %>

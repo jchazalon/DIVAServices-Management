@@ -1,4 +1,5 @@
-<div class="nested-fields">
-  <%= f.input :input_type, collection: DivaServiceApi.available_input_types %>
-  <%= link_to_remove_association 'Remove', f %>
+<%= f.label :input_type %>
+<div class="nested-fields form-group form-inline">
+  <%= f.input :input_type, label: false, collection: DivaServiceApi.available_input_types %>
+  <%= link_to_remove_association '<i class="fa fa-times"></i> Remove'.html_safe, f, class: 'btn btn-danger' %>
 </div>

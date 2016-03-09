@@ -3,9 +3,9 @@
 
 <h2>Input details</h2>
 
-<p>Configure the detailed options for each input parameter:</p>
+<p>Please configure each previously selected input parameter. Unrequired fields can be left out:</p>
 
-<%= simple_form_for(@algorithm, url: wizard_path, method: :put, html: { class: 'form-horizontal' }) do |f| %>
+<%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
 
   <%= f.simple_fields_for :input_parameters do |ff| %>
     <h3>Parameter <%= ff.index + 1 %></h3>
@@ -13,6 +13,7 @@
     <%= ff.simple_fields_for :fields do |fff| %>
       <%= render partial: 'field', locals: { f: fff } %>
     <% end %>
+    <hr/>
   <% end %>
 
   <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>
