@@ -28,27 +28,44 @@
     </tr>
   <% end %>
 </table>
+<div class="row pull-right">
+  <%= link_to 'Edit algorithm informations', edit_algorithm_path(@algorithm), class: 'btn btn-default' %>
+</div>
 
+<div class="row">
 <h2>Input</h2>
 <% @algorithm.input_parameters.each do |input_parameter| %>
-  <h4><i class="fa fa-arrow-right"></i> <%= input_parameter.input_type.to_s %></h4>
-  <% unless input_parameter.fields.empty? %>
-    <table class="table">
-      <thead>
-        <th style="width: 40%">Field</th>
-        <th style="width: 60%">Value</th>
-      </thead>
-    <% input_parameter.all_fields.each do |field| %>
-      <% unless field.type == 'ObjectField' %>
-        <tr>
-          <td><%= field.name %> <span class="label label-primary"><%= field.object_type %></span></td>
-          <td><%= field.value.blank? ? '-' : field.value %></td>
-        </tr>
+  <div class="col-md-12">
+    <h4><i class="fa fa-arrow-right"></i> <%= input_parameter.input_type.to_s %></h4>
+    <p class="help-block"><%= input_parameter.description %></p>
+    <% unless input_parameter.fields.empty? %>
+      <table class="table">
+        <thead>
+          <th style="width: 40%">Field</th>
+          <th style="width: 60%">Value</th>
+        </thead>
+      <% input_parameter.all_fields.each do |field| %>
+        <% unless field.type == 'ObjectField' %>
+          <tr>
+            <td><%= field.name %> <span class="label label-primary"><%= field.object_type %></span></td>
+            <td><%= field.value.blank? ? '-' : field.value %></td>
+          </tr>
+        <% end %>
       <% end %>
+      </table>
     <% end %>
-    </table>
-  <% end %>
+    <div class="col-md-12">
+      <div class="pull-right">
+        <%= link_to 'Edit input parameter', edit_algorithm_input_parameter_path(@algorithm, input_parameter), class: 'btn btn-default' %>
+        <%= link_to 'Remove', algorithm_input_parameter_path(@algorithm, input_parameter), method: :delete, class: 'btn btn-danger' %>
+      </div>
+    </div>
+  </div>
 <% end %>
+</div>
+<div class="row">
+    <%= link_to 'Add input parameter', new_algorithm_input_parameter_path(@algorithm), class: 'btn btn-default' %>
+</div>
 
 <h2>Output</h2>
 <table class="table">
@@ -56,6 +73,11 @@
       <td><%= @algorithm.output %></td>
     </tr>
 </table>
+<div class="col-md-12">
+  <div class="pull-right">
+    <%= link_to 'Edit output', edit_algorithm_path(@algorithm), class: 'btn btn-default' %>
+  </div>
+</div>
 
 <h2>Upload</h2>
 <table class="table">
@@ -68,3 +90,8 @@
       <td><%= @algorithm.zip_file %></td>
     </tr>
 </table>
+<div class="col-md-12">
+  <div class="pull-right">
+    <%= link_to 'Edit file', edit_algorithm_path(@algorithm), class: 'btn btn-default' %>
+  </div>
+</div>
