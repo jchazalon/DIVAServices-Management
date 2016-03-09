@@ -7,13 +7,13 @@
   <% unless f.object.type == 'EnumField' %>
     <%= f.input :value,
       as: f.object.object_type,
-      label: f.object.name,
+      label: f.object.name.capitalize,
       placeholder: '',
       required: (f.object.object_type == 'boolean' ? false : f.object.required) %>
   <% else %>
     <%= f.input :value,
       as: f.object.object_type,
-      label: f.object.name,
+      label: f.object.name.capitalize,
       collection: f.object.values,
       required: (f.object.object_type == 'boolean' ? false : f.object.required) %>
     <%= f.hint f.object.infoText unless f.object.infoText.nil? %>

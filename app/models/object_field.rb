@@ -16,4 +16,9 @@ class ObjectField < Field
     end
     found_fields
   end
+  
+  def field_with(name)
+    fields = Field.where(fieldable_id: self.id)#, fieldable_type: result.class.name)
+    field = fields.where("payload->>'name' = ?", name).first
+  end
 end

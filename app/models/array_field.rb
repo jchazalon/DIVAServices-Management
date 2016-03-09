@@ -11,9 +11,13 @@ class ArrayField < Field
     return params
   end
 
-  def value
-    value = super
-    value.join(';')
+  def value(as_array = false)
+    if as_array
+      super()
+    else
+      value = super()
+      value.join(';')
+    end
   end
 
   def value=(value)

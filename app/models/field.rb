@@ -49,7 +49,13 @@ class Field < ActiveRecord::Base
       if field.type == 'ObjectField'
         data[field.name] = field.to_schema
       else
-        data[field.name] = field.value unless field.value.blank?
+        unless field.value.blank?
+          if field.type == 'ArrayField'
+            data[field.name] = field.value(true)
+          else
+            data[field.name] = field.value
+          end
+        end
       end
     end
     return data

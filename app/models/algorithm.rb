@@ -55,7 +55,8 @@ class Algorithm < ActiveRecord::Base
       description: self.description,
       info: additional_information,
       input: inputs,
-      output: self.output
+      output: self.output,
+      file: self.zip_file.current_path 
     }.to_json
   end
 

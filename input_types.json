@@ -84,7 +84,7 @@
             "required": true
           },
           "default": {
-            "type": "number",
+            "type": "string",
             "required": true
           },
           "min": {
