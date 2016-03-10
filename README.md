@@ -35,7 +35,7 @@ $ \password postgres
 ```
 Set the password to 'postgres' and exit the postgresql console:
 ```sh
-\q`
+\q
 ```
 Install the postgresql gem:
 ```sh
@@ -45,12 +45,12 @@ gem install pg
 #### 5. Install node.js
 ```sh
 sudo apt-get install nodejs
-````
+```
 
 #### 6. Clone and setup repo
 ```sh
 $ git clone git@bitbucket.org:StupidBird/diva_algorithm.git
-````
+```
 Navigate to the repo and install the missing dependencies via bundler:
 ```sh
 $ cd /diva_algorithm
