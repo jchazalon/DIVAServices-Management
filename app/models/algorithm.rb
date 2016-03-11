@@ -11,7 +11,7 @@ class Algorithm < ActiveRecord::Base
   accepts_nested_attributes_for :input_parameters, allow_destroy: :true
 
   def self.steps
-    [:informations, :parameters, :parameters_details, :upload]
+    [:informations, :parameters, :parameters_details, :upload, :review]
   end
 
   enum creation_status: [:empty, *Algorithm.steps, :done]

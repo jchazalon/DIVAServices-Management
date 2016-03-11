@@ -1,4 +1,4 @@
-<h1>Algorithm Wizard - Step 3/4</h1>
+<h1>Algorithm Wizard - Step 3/5</h1>
 <%= progress_bar(3) %>
 
 <h2>Input details</h2>
@@ -10,6 +10,7 @@
   <%= f.simple_fields_for :input_parameters do |ff| %>
     <h3>Parameter <%= ff.index + 1 %></h3>
     <%= ff.input :input_type, collection: DivaServiceApi.available_input_types, disabled: true %>
+    <%= f.hint ff.object.description %>
     <%= ff.simple_fields_for :fields do |fff| %>
       <%= render partial: 'field', locals: { f: fff } %>
     <% end %>

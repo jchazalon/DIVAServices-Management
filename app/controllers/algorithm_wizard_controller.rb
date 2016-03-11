@@ -1,15 +1,13 @@
 class AlgorithmWizardController < ApplicationController
   include Wicked::Wizard
+  before_action :algorithm_not_finished_yet!, only: [:show, :update]
   before_action :set_algorithm, only: [:show, :update]
 
   steps *Algorithm.steps
 
   def show
     case step
-    when :informations
-      @algorithm.update_attribute(:creation_status, step)
     when :parameters
-      @algorithm.update_attribute(:creation_status, step)
       @algorithm.input_parameters.build if @algorithm.input_parameters.empty?
       @index = 0
     when :parameters_details
@@ -21,10 +19,8 @@ class AlgorithmWizardController < ApplicationController
           skip_step
         end
       end
-      @algorithm.update_attribute(:creation_status, step)
-    when :upload
-      @algorithm.update_attribute(:creation_status, step)
     end
+    @algorithm.update_attribute(:creation_status, step) if steps.include?(step)
     render_wizard
   end
 
@@ -56,6 +52,14 @@ class AlgorithmWizardController < ApplicationController
 
   def set_algorithm
     @algorithm = current_user.algorithms.find(params[:algorithm_id])
+  end
+
+  def algorithm_not_finished_yet!
+    @algorithms = set_algorithm
+    if @algorithm.creation_status == 'done' #TODO fix with symbol
+      flash[:notice] = "The algorithm '#{@algorithm.name}' is already finished!"
+      redirect_to algorithms_path
+    end
   end
 
   def algorithm_params_step1

@@ -1,8 +1,8 @@
 module AlgorithmWizardHelper
 
   def progress_bar(current_step)
-    names = ['General Information', 'Input/Output', 'Detailed Input', 'Upload']
-    icons = ['fa fa-info', 'fa fa-exchange', 'fa fa-list', 'fa fa-upload']
+    names = ['General Information', 'Input/Output', 'Detailed Input', 'Upload', 'Review']
+    icons = ['fa fa-info', 'fa fa-exchange', 'fa fa-list', 'fa fa-upload', 'fa fa-eye']
 
     content_tag(:div, class: 'wizard') do
       content_tag(:div, class: 'wizard-inner') do

@@ -1,9 +1,11 @@
-<h1><%= @algorithm.name %></h1>
+<h1>Algorithm Wizard - Step 5/5</h1>
+<%= progress_bar(5) %>
 
-<h2>Schema</h2>
-<pre><%= @algorithm.to_schema %></pre>
+<h2>Review</h2>
 
-<h2>General</h2>
+<p>Review before publishing</p>
+
+<h3>General</h3>
 <table class="table">
   <tr>
     <td>Name</td>
@@ -19,7 +21,7 @@
   </tr>
 </table>
 
-<h2>Additional Information</h2>
+<h3>Additional Information</h3>
 <table class="table">
   <% @algorithm.fields.each do |field| %>
     <tr>
@@ -28,9 +30,12 @@
     </tr>
   <% end %>
 </table>
+<div class="row pull-right">
+  <%= link_to 'Edit algorithm informations', wizard_path(:informations), class: 'btn btn-default' %>
+</div>
 
 <div class="row">
-<h2>Input</h2>
+<h3>Input</h3>
 <ol>
 <% @algorithm.input_parameters.each do |input_parameter| %>
   <div class="col-md-12">
@@ -58,15 +63,25 @@
 <% end %>
 </ol>
 </div>
+<div class="col-md-12">
+  <div class="pull-right">
+    <%= link_to 'Edit input parameters', wizard_path(:parameters), class: 'btn btn-default' %>
+  </div>
+</div>
 
-<h2>Output</h2>
+<h3>Output</h3>
 <table class="table">
     <tr>
       <td><%= @algorithm.output %></td>
     </tr>
 </table>
+<div class="col-md-12">
+  <div class="pull-right">
+    <%= link_to 'Edit output', wizard_path(:parameters), class: 'btn btn-default' %>
+  </div>
+</div>
 
-<h2>Upload</h2>
+<h3>Upload</h3>
 <table class="table">
     <tr>
       <td>Language</td>
@@ -76,4 +91,18 @@
       <td>File</td>
       <td><%= @algorithm.zip_file %></td>
     </tr>
+    <tr>
+      <td>Executable path</td>
+      <td><%= @algorithm.executable_path %></td>
+    </tr>
 </table>
+<div class="col-md-12">
+  <div class="pull-right">
+    <%= link_to 'Edit upload', wizard_path(:upload), class: 'btn btn-default' %>
+  </div>
+</div>
+
+
+<%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>
+<%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
+<%= link_to 'Publish', next_wizard_path, class: 'btn btn-primary' %>

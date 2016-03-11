@@ -1,4 +1,4 @@
-<h1>Algorithm Wizard - Step 2/4</h1>
+<h1>Algorithm Wizard - Step 2/5</h1>
 <%= progress_bar(2) %>
 
 <h2>Information</h2>
@@ -20,6 +20,7 @@
 
   <h3>Output</h3>
   <%= f.input :output, collection: DivaServiceApi.available_output_types %>
+  <%= f.hint 'Type of the output' %>
 
   <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
