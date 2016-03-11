@@ -11,6 +11,7 @@ class CreateAlgorithm < ActiveRecord::Migration
       t.string :output
 
       t.string :language
+      t.string :executable_path
 
       t.timestamps null: false
     end

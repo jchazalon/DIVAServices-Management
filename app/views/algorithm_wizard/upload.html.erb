@@ -7,6 +7,7 @@
 
 <%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
   <%= f.input :zip_file %>
+  <%= f.input :executable_path %>
   <%= f.input :language, collection: DivaServiceApi.available_languages %>
 
   <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>

@@ -77,6 +77,6 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def algorithm_params_step4
-    params.require(:algorithm).permit(:language, :zip_file)
+    params.require(:algorithm).permit(:language, :zip_file, :executable_path)
   end
 end
