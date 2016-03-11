@@ -45,6 +45,7 @@ class AlgorithmWizardController < ApplicationController
 
   def finish_wizard_path
     @algorithm.update_attribute(:creation_status, :done)
+    AlgorithmPublishJob.set(wait: 5.seconds).perform_later(@algorithm.id)
     algorithms_path
   end
 

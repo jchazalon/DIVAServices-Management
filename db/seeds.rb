@@ -22,7 +22,7 @@ algorithm.update_attribute(:executable_path, 'main.jar')
 algorithm.output = DivaServiceApi.available_output_types[1]
 algorithm.language = DivaServiceApi.available_languages[1]
 algorithm.save!
-algorithm.update_attribute(:creation_status, :done)
+algorithm.update_attribute(:creation_status, 5)
 
 # InputParameter
 input_parameter1 = algorithm.input_parameters.create!(input_type: 'number')

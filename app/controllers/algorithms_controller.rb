@@ -3,7 +3,7 @@ class AlgorithmsController < ApplicationController
   respond_to :html
 
   def index
-    @algorithms = current_user.algorithms.where(creation_status: 6) #TODO fix with symbol
+    @algorithms = current_user.algorithms.where.not(creation_status: [1,2,3,4,5]) #TODO fix with symbol
     @unfinished_algorithms = current_user.algorithms.where(creation_status: [1,2,3,4,5]) #TODO fix with symbol
   end
 

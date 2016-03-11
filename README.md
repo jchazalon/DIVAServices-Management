@@ -68,3 +68,8 @@ Run server:
 ```sh
 $ rails s
 ```
+
+Run the delayed_job daemon:
+```sh
+$ ./bin/delayed_job start
+```
