@@ -55,4 +55,5 @@ gem 'cocoon'
 gem 'wicked'
 gem 'carrierwave'
 gem 'twitter-bootstrap-rails'
-gem "font-awesome-rails"
+gem 'font-awesome-rails'
+gem 'httparty'
