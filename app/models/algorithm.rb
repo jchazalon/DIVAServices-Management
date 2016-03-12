@@ -1,4 +1,6 @@
 class Algorithm < ActiveRecord::Base
+  include Rails.application.routes.url_helpers
+
   mount_uploader :zip_file, AlgorithmUploader
 
   after_validation :create_fields, if: 'self.errors.empty? && self.fields.empty?'
@@ -46,6 +48,10 @@ class Algorithm < ActiveRecord::Base
     field = fields.where("payload->>'name' = ?", name).first
   end
 
+  def zip_url
+     root_url[0..-2] + self.zip_file.url
+  end
+
   def to_schema
     additional_information = self.fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact!.reduce(:merge) || {}
     inputs = Array.new
@@ -57,7 +63,7 @@ class Algorithm < ActiveRecord::Base
       info: additional_information,
       input: inputs,
       output: self.output,
-      file: self.zip_file.current_path
+      file: self.zip_url
     }.to_json
   end
 

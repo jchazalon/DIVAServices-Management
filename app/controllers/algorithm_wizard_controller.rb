@@ -9,7 +9,6 @@ class AlgorithmWizardController < ApplicationController
     case step
     when :parameters
       @algorithm.input_parameters.build if @algorithm.input_parameters.empty?
-      @index = 0
     when :parameters_details
       if @algorithm.input_parameters.empty?
         if @algorithm.creation_status == 'upload'
@@ -45,7 +44,7 @@ class AlgorithmWizardController < ApplicationController
 
   def finish_wizard_path
     @algorithm.update_attribute(:creation_status, :done)
-    AlgorithmPublishJob.set(wait: 5.seconds).perform_later(@algorithm.id)
+    ValidateAlgorithmJob.set(wait: 5.seconds).perform_later(@algorithm.id)
     algorithms_path
   end
 

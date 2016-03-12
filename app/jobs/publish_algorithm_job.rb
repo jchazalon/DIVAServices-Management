@@ -1,4 +1,4 @@
-class AlgorithmPublishJob < ActiveJob::Base
+class PublishAlgorithmJob < ActiveJob::Base
   queue_as :default
 
   def perform(algorithm_id)

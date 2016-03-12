@@ -23,6 +23,12 @@
   <% end %>
 </table>
 
+<% if @algorithms.empty? %>
+<div style="padding: 15px;">
+  <p class="bg-info">You haven't uploaded any algorithm yet. Click on 'New algorithm' to start now!</p>
+</div>
+<% end %>
+
 <% unless @unfinished_algorithms.empty? %>
   <h1>Unfinished Algorithms</h1>
   <table class="table">

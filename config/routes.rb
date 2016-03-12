@@ -6,5 +6,4 @@ Rails.application.routes.draw do
     resources :algorithm_wizard, controller: 'algorithm_wizard'
       resources :input_parameters
   end
-
 end
