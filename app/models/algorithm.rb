@@ -25,6 +25,7 @@ class Algorithm < ActiveRecord::Base
   validates :output, presence: true, if: :done_or_step_2?
   validates :zip_file, presence: true, if: :done_or_step_4?
   validates :executable_path, presence: true, if: :done_or_step_4?
+  validate :zip_file_includes_executable_path, if: :done_or_step_4?
   validates :language, presence: true, if: :done_or_step_4?
 
   def done_or_step_1?
@@ -41,6 +42,11 @@ class Algorithm < ActiveRecord::Base
 
   def done_or_step_4?
     upload? || done?
+  end
+
+  def zip_file_includes_executable_path
+    p self.zip_file.file.find_entry self.executable_path
+    false
   end
 
   def additional_information_with(name)
