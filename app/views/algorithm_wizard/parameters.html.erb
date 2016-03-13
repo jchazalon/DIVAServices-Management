@@ -28,7 +28,7 @@
 <% end %>
 
 <script type="text/javascript">
-  function update_description(select) {
+  function update_infotext(select) {
     var descriptions = <%= raw(DivaServiceApi.input_type_descriptions.to_json) %>;
     var description = '';
     if (descriptions[select.value] != null) {
