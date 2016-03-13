@@ -1,5 +1,6 @@
 class Algorithm < ActiveRecord::Base
   include Rails.application.routes.url_helpers
+  require 'zip'
 
   mount_uploader :zip_file, AlgorithmUploader
 
@@ -22,10 +23,16 @@ class Algorithm < ActiveRecord::Base
   validates :namespace, presence: true, if: :done_or_step_1?
   validates :description, presence: true, if: :done_or_step_1?
   #TODO validate required additional_information fields
+
   validates :output, presence: true, if: :done_or_step_2?
-  validates :zip_file, presence: true, if: :done_or_step_4?
+
+  validates :zip_file, presence: true, file_size: { less_than: 100.megabytes }, if: :done_or_step_4?
+  validates_integrity_of :zip_file, if: :done_or_step_4?
+  validates_processing_of :zip_file, if: :done_or_step_4?
   validates :executable_path, presence: true, if: :done_or_step_4?
+  validate :valid_zip_file, if: :done_or_step_4?
   validate :zip_file_includes_executable_path, if: :done_or_step_4?
+  validate :executable_path_is_a_file, if: :done_or_step_4?
   validates :language, presence: true, if: :done_or_step_4?
 
   def done_or_step_1?
@@ -44,9 +51,36 @@ class Algorithm < ActiveRecord::Base
     upload? || done?
   end
 
+  def valid_zip_file
+    begin
+      zip = Zip::File.open(self.zip_file.file.file)
+    rescue StandardError
+      errors.add(:zip_file, 'is not a valid zip')
+    ensure
+      zip.close if zip
+    end
+  end
+
   def zip_file_includes_executable_path
-    p self.zip_file.file.find_entry self.executable_path
-    false
+    begin
+      zip = Zip::File.open(self.zip_file.file.file)
+      errors.add(:zip_file, "doesn't contain the executable '#{self.executable_path}'") unless zip.find_entry(self.executable_path)
+    rescue StandardError
+      errors.add(:zip_file, 'is not a valid zip')
+    ensure
+      zip.close if zip
+    end
+  end
+
+  def executable_path_is_a_file
+    begin
+      zip = Zip::File.open(self.zip_file.file.file)
+      errors.add(:executable_path, "doesn't point to a file") unless zip.find_entry(self.executable_path).ftype == :file
+    rescue StandardError
+      errors.add(:zip_file, 'is not a valid zip')
+    ensure
+      zip.close if zip
+    end
   end
 
   def additional_information_with(name)

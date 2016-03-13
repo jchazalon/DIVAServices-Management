@@ -18,11 +18,11 @@ algorithm.additional_information_with('author').value = 'DIVA'
 algorithm.additional_information_with('email').value = 'dev@diva.unifr.ch'
 algorithm.additional_information_with('website').value = 'www.unifr.ch'
 algorithm.update_attribute(:zip_file, File.open(File.join(Rails.root, 'dummy.zip')))
-algorithm.update_attribute(:executable_path, 'main.jar')
+algorithm.update_attribute(:executable_path, 'empty')
 algorithm.output = DivaServiceApi.available_output_types[1]
 algorithm.language = DivaServiceApi.available_languages[1]
+algorithm.update_attribute(:creation_status, :done)
 algorithm.save!
-algorithm.update_attribute(:creation_status, 5)
 
 # InputParameter
 input_parameter1 = algorithm.input_parameters.create!(input_type: 'number')
