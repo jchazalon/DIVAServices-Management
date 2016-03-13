@@ -34,6 +34,6 @@
     if (descriptions[select.value] != null) {
       description = descriptions[select.value];
     }
-    $('p').closest("#description").text(description);
+    $(select).parent().parent().parent().find('.help-block').text(description);
   }
 </script>

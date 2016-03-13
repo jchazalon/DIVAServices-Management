@@ -4,5 +4,5 @@
     <%= f.input :input_type, label: false, collection: DivaServiceApi.available_input_types, :input_html => {:onchange => "update_description(this)"} %>
     <%= link_to_remove_association '<i class="fa fa-times"></i> Remove'.html_safe, f, class: 'btn btn-danger' %>
   </div>
-  <%= f.hint '', id: "description"  %>
+  <%= f.hint '' %>
 </div>
