@@ -97,7 +97,7 @@ class Algorithm < ActiveRecord::Base
   end
 
   def to_schema
-    additional_information = self.fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact!.reduce(:merge) || {}
+    additional_information = self.fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact.reduce(:merge) || {}
     inputs = Array.new
     self.input_parameters.each do |input_parameter|
       inputs << { input_parameter.input_type => input_parameter.to_schema }
