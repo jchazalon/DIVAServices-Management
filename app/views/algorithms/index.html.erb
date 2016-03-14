@@ -39,7 +39,7 @@
     </thead>
     <% @unfinished_algorithms.each do |algorithm| %>
       <tr>
-        <td><%= link_to (algorithm.name.blank? ? 'N/A' : algorithm.name), algorithm_path(algorithm) %></td>
+        <td><%= algorithm.name.blank? ? 'N/A' : algorithm.name %></td>
         <td><%= algorithm.creation_status %></td>
         <td><%= algorithm.input_parameters.count %> Parameter(s)</td>
         <td><%= link_to 'Continue', algorithm_algorithm_wizard_path(algorithm, algorithm.creation_status) %></td>

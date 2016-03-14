@@ -13,7 +13,7 @@ class ArrayField < Field
 
   def value(as_array = false)
     if as_array
-      super()
+      super()[0] #XXX fix
     else
       value = super()
       value.join(';')

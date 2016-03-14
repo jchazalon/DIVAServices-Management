@@ -1,5 +1,6 @@
 class AlgorithmsController < ApplicationController
   before_action :set_algorithm, only: [:show, :update, :destroy]
+  before_action :algorithm_finished_wizard!, only: :show
   respond_to :html
 
   def index
@@ -31,6 +32,13 @@ class AlgorithmsController < ApplicationController
 
   def algorithm_params
     params.require(:algorithm).permit!
+  end
+
+  def algorithm_finished_wizard!
+    unless @algorithm.finished_wizard?
+      flash[:notice] = "Please finish the wizard first"
+      redirect_to algorithm_algorithm_wizard_path(@algorithm, @algorithm.creation_status)
+    end
   end
 
 end

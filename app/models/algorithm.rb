@@ -51,6 +51,10 @@ class Algorithm < ActiveRecord::Base
     upload? || done?
   end
 
+  def finished_wizard?
+    done? || safe? || validated? || published?
+  end
+
   def valid_zip_file
     begin
       zip = Zip::File.open(self.zip_file.file.file)
@@ -89,7 +93,7 @@ class Algorithm < ActiveRecord::Base
   end
 
   def zip_url
-     root_url[0..-2] + self.zip_file.url
+     root_url[0..-2] + self.zip_file.url if self.zip_file.file
   end
 
   def to_schema
