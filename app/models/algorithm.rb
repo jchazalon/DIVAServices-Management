@@ -19,36 +19,36 @@ class Algorithm < ActiveRecord::Base
 
   enum creation_status: [:empty, *Algorithm.steps, :done, :safe, :validated, :published]
 
-  validates :name, presence: true, if: :done_or_step_1?
-  validates :namespace, presence: true, if: :done_or_step_1?
-  validates :description, presence: true, if: :done_or_step_1?
+  validates :name, presence: true, if: :review_or_step_1?
+  validates :namespace, presence: true, if: :review_or_step_1?
+  validates :description, presence: true, if: :review_or_step_1?
   #TODO validate required additional_information fields
 
-  validates :output, presence: true, if: :done_or_step_2?
+  validates :output, presence: true, if: :review_or_step_2?
 
-  validates :zip_file, presence: true, file_size: { less_than: 100.megabytes }, if: :done_or_step_4?
-  validates_integrity_of :zip_file, if: :done_or_step_4?
-  validates_processing_of :zip_file, if: :done_or_step_4?
-  validates :executable_path, presence: true, if: :done_or_step_4?
-  validate :valid_zip_file, if: :done_or_step_4?
-  validate :zip_file_includes_executable_path, if: :done_or_step_4?
-  validate :executable_path_is_a_file, if: :done_or_step_4?
-  validates :language, presence: true, if: :done_or_step_4?
+  validates :zip_file, presence: true, file_size: { less_than: 100.megabytes }, if: :review_or_step_4?
+  validates_integrity_of :zip_file, if: :review_or_step_4?
+  validates_processing_of :zip_file, if: :review_or_step_4?
+  validates :executable_path, presence: true, if: :review_or_step_4?
+  validate :valid_zip_file, if: :review_or_step_4?
+  validate :zip_file_includes_executable_path, if: :review_or_step_4?
+  validate :executable_path_is_a_file, if: :review_or_step_4?
+  validates :language, presence: true, if: :review_or_step_4?
 
-  def done_or_step_1?
-    informations? || done?
+  def review_or_step_1?
+    informations? || review?
   end
 
-  def done_or_step_2?
-    parameters? || done?
+  def review_or_step_2?
+    parameters? || review?
   end
 
-  def done_or_step_3?
-    parameters_details? || done?
+  def review_or_step_3?
+    parameters_details? || review?
   end
 
-  def done_or_step_4?
-    upload? || done?
+  def review_or_step_4?
+    upload? || review?
   end
 
   def finished_wizard?

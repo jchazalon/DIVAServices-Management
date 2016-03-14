@@ -19,12 +19,12 @@ class AlgorithmWizardController < ApplicationController
         end
       end
     end
-    @algorithm.update_attribute(:creation_status, step) if steps.include?(step)
+    @algorithm.update_attribute(:creation_status, step.to_sym) if steps.include?(step)
     render_wizard
   end
 
   def create
-    @algorithm = current_user.algorithms.create!(creation_status: 'empty')
+    @algorithm = current_user.algorithms.create!(creation_status: :empty)
     redirect_to wizard_path(steps.first, algorithm_id: @algorithm.id)
   end
 
@@ -56,7 +56,7 @@ class AlgorithmWizardController < ApplicationController
 
   def algorithm_not_finished_yet!
     @algorithms = set_algorithm
-    if @algorithm.creation_status == 'done' #TODO fix with symbol
+    if @algorithm.creation_status == :done
       flash[:notice] = "The algorithm '#{@algorithm.name}' is already finished!"
       redirect_to algorithms_path
     end
