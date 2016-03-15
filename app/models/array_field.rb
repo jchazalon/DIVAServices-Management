@@ -5,6 +5,7 @@ class ArrayField < Field
 
   def self.create_from_hash(k,v)
     params = super(k,v)
+    params['infoText'] += ' | Seperate the individual values with a ";"'
     params['minItems'] = v['minItems']
     params['uniqueItems'] = v['uniqueItems']
     return params

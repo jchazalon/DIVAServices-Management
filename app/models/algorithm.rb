@@ -103,6 +103,7 @@ class Algorithm < ActiveRecord::Base
       inputs << { input_parameter.input_type => input_parameter.to_schema }
     end
     { name: self.name,
+      namespace: self.namespace,
       description: self.description,
       info: additional_information,
       input: inputs,
