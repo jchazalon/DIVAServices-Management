@@ -107,7 +107,9 @@ class Algorithm < ActiveRecord::Base
       info: additional_information,
       input: inputs,
       output: self.output,
-      file: self.zip_url
+      file: self.zip_url,
+      language: self.language,
+      executable: self.executable_path
     }.to_json
   end
 
