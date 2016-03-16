@@ -110,7 +110,7 @@ class Algorithm < ActiveRecord::Base
     end
     { name: self.name,
       namespace: self.namespace,
-      description: self.description,
+      description: self.description.gsub("\r\n", ' '),
       info: additional_information,
       input: inputs,
       output: self.output,

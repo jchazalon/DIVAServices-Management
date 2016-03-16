@@ -11,13 +11,9 @@ class ArrayField < Field
     return params
   end
 
-  def value(as_array = false)
-    if as_array
-      super()[0] #XXX fix
-    else
+  def value
       value = super()
       value.join(';')
-    end
   end
 
   def value=(value)
@@ -27,5 +23,9 @@ class ArrayField < Field
 
   def object_type
     'string'
+  end
+
+  def value_to_schema
+    self.value[0]
   end
 end

@@ -7,4 +7,13 @@ class NumberField < Field
   def object_type
     'float'
   end
+
+  def value_to_schema
+    number = self.value.to_f
+    if number % 1 == 0
+      number.to_i
+    else
+      number
+    end
+  end
 end

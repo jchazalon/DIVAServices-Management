@@ -7,4 +7,8 @@ class BooleanField < Field
   def object_type
     'boolean'
   end
+
+  def value_to_schema
+    self.value.to_b
+  end
 end
