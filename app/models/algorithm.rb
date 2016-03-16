@@ -87,6 +87,12 @@ class Algorithm < ActiveRecord::Base
     end
   end
 
+  @@current_input_parameter_position = 0
+
+  def next_input_parameter_position
+    @@current_input_parameter_position += 1
+  end
+
   def additional_information_with(name)
     fields = Field.where(fieldable_id: self.id)#, fieldable_type: result.class.name)
     field = fields.where("payload->>'name' = ?", name).first

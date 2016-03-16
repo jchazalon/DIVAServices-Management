@@ -1,7 +1,17 @@
 class InputParametersController < ApplicationController
-  before_action :set_algorithm, only: [:new, :edit, :create, :update, :destroy]
+  before_action :set_algorithm, only: [:sort, :new, :edit, :create, :update, :destroy]
   before_action :set_input_parameter, only: [:edit, :update, :destroy]
   respond_to :html
+
+  def sort
+    params[:sorted_input_parameters].each_with_index do |id, pos|
+     input_parameter = @algorithm.input_parameters.find(id)
+     input_parameter.position = pos
+     input_parameter.save!
+   end
+
+   render nothing: true
+  end
 
   def new
     @input_parameter = @algorithm.input_parameters.new

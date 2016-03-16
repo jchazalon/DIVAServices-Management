@@ -7,16 +7,21 @@
 
 <%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
 
-  <%= f.simple_fields_for :input_parameters do |ff| %>
-    <h3>Parameter <%= ff.index + 1 %></h3>
-    <%= ff.input :input_type, collection: DivaServiceApi.available_input_types, disabled: true %>
-    <%= f.hint ff.object.description %>
-    <%= ff.simple_fields_for :fields do |fff| %>
-      <%= render partial: 'field', locals: { f: fff } %>
+  <div class="input_parameters">
+    <%= f.simple_fields_for :input_parameters do |ff| %>
+      <div class="list-group-item" data-id="<%= ff.object.id %>">
+        <span style="display:inline;" class="handle">☰</span>
+        <h3 style="display:inline;" >Parameter <%= ff.index + 1 %></h3>
+        <%= ff.input :input_type, collection: DivaServiceApi.available_input_types, disabled: true %>
+        <%= f.hint ff.object.description %>
+        <%= ff.simple_fields_for :fields do |fff| %>
+          <%= render partial: 'field', locals: { f: fff } %>
+        <% end %>
+      </div>
     <% end %>
-    <hr/>
-  <% end %>
+  </div>
 
+  </br>
   <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
   <%= f.submit 'Next', class: 'btn btn-primary' %>

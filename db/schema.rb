@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 20160311214907) do
 
   create_table "input_parameters", force: :cascade do |t|
     t.string   "input_type"
+    t.integer  "position"
     t.string   "description"
     t.integer  "algorithm_id"
     t.datetime "created_at",   null: false

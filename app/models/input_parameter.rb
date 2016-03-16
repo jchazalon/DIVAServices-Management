@@ -1,11 +1,14 @@
 class InputParameter < ActiveRecord::Base
+  default_scope { order('position ASC') }
 
+  before_validation :set_position, if: 'self.position.nil?'
   after_validation :create_fields, if: 'self.errors.empty? && self.fields.empty?'
 
   has_many :fields, as: :fieldable, dependent: :destroy
   belongs_to :algorithm
 
   validates :input_type, presence: { :unless => (input_type = "")}, if: :done_or_step_2?
+  validates :position, presence: true, if: :done_or_step_2?
 
   accepts_nested_attributes_for :fields, allow_destroy: :true
 
@@ -21,6 +24,10 @@ class InputParameter < ActiveRecord::Base
       found_fields = found_fields + field.all_fields if field.type == 'ObjectField'
     end
     found_fields
+  end
+
+  def set_position
+    self.position = self.algorithm.next_input_parameter_position
   end
 
   def create_fields
