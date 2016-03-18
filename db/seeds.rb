@@ -18,7 +18,7 @@ user = User.create!(email: 'dev@diva.unifr.ch', password: '12345678')
 algorithm1 = user.algorithms.create!(name: 'Dummy Algorithm', namespace: 'diva', description: 'This is a dummy algorithm', creation_status: :empty)
 algorithm1.additional_information_with('author').value = 'DIVA'
 algorithm1.additional_information_with('email').value = 'dev@diva.unifr.ch'
-algorithm1.additional_information_with('website').value = 'www.unifr.ch'
+algorithm1.additional_information_with('website').value = 'http://www.unifr.ch'
 algorithm1.update_attribute(:zip_file, File.open(File.join(Rails.root, 'dummy.zip')))
 algorithm1.update_attribute(:executable_path, 'empty')
 algorithm1.output = DivaServiceApi.available_output_types[1]
@@ -64,7 +64,7 @@ algorithm2.additional_information_with('author').value = 'DIVA'
 algorithm2.additional_information_with('DOI').value = 'doi:10.1000/182'
 algorithm2.additional_information_with('purpose').value = 'Just for fun'
 algorithm2.additional_information_with('email').value = 'dev@diva.unifr.ch'
-algorithm2.additional_information_with('website').value = 'www.diva.unifr.ch'
+algorithm2.additional_information_with('website').value = 'http://www.diva.unifr.ch'
 algorithm2.update_attribute(:zip_file, File.open(File.join(Rails.root, 'dummy.zip')))
 algorithm2.update_attribute(:executable_path, 'empty')
 algorithm2.output = DivaServiceApi.available_output_types[0]
