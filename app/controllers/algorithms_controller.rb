@@ -3,6 +3,13 @@ class AlgorithmsController < ApplicationController
   before_action :algorithm_finished_wizard!, only: :show
   respond_to :html
 
+  #XXX Dev only
+  def dev_unpublish
+    algorithm = current_user.algorithms.find(params[:id])
+    algorithm.update_attributes(creation_status: :review)
+    redirect_to algorithms_path
+  end
+
   def index
     @algorithms = current_user.algorithms.where.not(creation_status: [1,2,3,4,5]) #TODO fix with symbol
     @unfinished_algorithms = current_user.algorithms.where(creation_status: [1,2,3,4,5]) #TODO fix with symbol
