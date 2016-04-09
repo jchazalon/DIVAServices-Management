@@ -26,6 +26,6 @@ class ArrayField < Field
   end
 
   def value_to_schema
-    self.value[0]
+    self.value.split(';')
   end
 end
