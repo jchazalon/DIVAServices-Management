@@ -17,7 +17,7 @@ class Algorithm < ActiveRecord::Base
     [:informations, :parameters, :parameters_details, :upload, :review]
   end
 
-  enum creation_status: [:empty, *Algorithm.steps, :done, :safe, :validated, :published]
+  enum creation_status: [:empty, *Algorithm.steps, :done, :safe, :validated, :built, :published]
 
   validates :name, presence: true, if: :review_or_step_1?
   validates :namespace, presence: true, if: :review_or_step_1?
@@ -52,7 +52,7 @@ class Algorithm < ActiveRecord::Base
   end
 
   def finished_wizard?
-    done? || safe? || validated? || published?
+    done? || safe? || validated? || built? || published?
   end
 
   def valid_zip_file

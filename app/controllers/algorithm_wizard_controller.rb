@@ -44,34 +44,7 @@ class AlgorithmWizardController < ApplicationController
 
   def finish_wizard_path
     @algorithm.update_attribute(:creation_status, :done)
-
-    # Create Dockerfile
-    directory_name = "public/uploads/algorithm/zip_file/#{@algorithm.id}/docker/"
-    Dir.mkdir(directory_name) unless File.exists?(directory_name)
-    File.open(File.join("public/uploads/algorithm/zip_file/#{@algorithm.id}/docker/", 'Dockerfile'), 'w+') do |file|
-      file.write "FROM ubuntu\n" +
-        "MAINTAINER diva@unifr.ch\n" +
-        "RUN apt-get update\n" +
-  		  "COPY . /data/algorithm/"
-    end
-
-    # Unpack zip
-    Zip::File.open("public/uploads/algorithm/zip_file/#{@algorithm.id}/dummy.zip") do |zipfile|
-      zipfile.each do |file|
-        f_path=File.join("public/uploads/algorithm/zip_file/#{@algorithm.id}/docker/", file.name)
-        FileUtils.mkdir_p(File.dirname(f_path))
-        zipfile.extract(file, f_path) unless File.exist?(f_path)
-      end
-    end
-
-    p 'start'
-    p `ls`
-    p `cd public/uploads/algorithm/zip_file/#{@algorithm.id}/docker/ && tar -zcvf docker.tar * && cd ../../../../../../`
-    p `ls`
-
-    p Docker::Image.build_from_tar(File.open(File.join("public/uploads/algorithm/zip_file/#{@algorithm.id}/docker/", 'docker.tar'), 'r'))
-
-    #CreateDockerJob.perform_later(@algorithm.id)
+    ValidateAlgorithmJob.perform_later(@algorithm.id)
     algorithms_path
   end
 

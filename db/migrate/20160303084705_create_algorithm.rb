@@ -13,6 +13,8 @@ class CreateAlgorithm < ActiveRecord::Migration
       t.string :language
       t.string :executable_path
 
+      t.string :image
+
       t.timestamps null: false
     end
   end
