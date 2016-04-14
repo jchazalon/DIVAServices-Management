@@ -44,7 +44,8 @@ class AlgorithmWizardController < ApplicationController
 
   def finish_wizard_path
     @algorithm.update_attribute(:creation_status, :done)
-    ValidateAlgorithmJob.perform_later(@algorithm.id)
+    #XXX Currently don't use validate_algorithm_job
+    CreateDockerJob.perform_later(@algorithm.id)
     algorithms_path
   end
 

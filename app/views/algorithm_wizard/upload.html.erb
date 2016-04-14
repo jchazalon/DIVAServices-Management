@@ -7,7 +7,7 @@
 
 <%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
   <%= f.input :zip_file %>
-  <%= f.hint 'zip/rar/7z file containing the executables as well as all necessary dependencies' %>
+  <%= f.hint 'zip file containing the executables as well as all necessary dependencies' %>
   <%= f.input :executable_path %>
   <%= f.hint 'Path of the executable file in the provided zip file. (e.g. "bin/main.jar")' %>
   <%= f.input :language, collection: DivaServiceApi.available_languages %>

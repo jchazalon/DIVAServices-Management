@@ -15,12 +15,12 @@ user = User.create!(email: 'dev@diva.unifr.ch', password: '12345678')
 ############
 #Algorithm 1
 ############
-algorithm1 = user.algorithms.create!(name: 'Dummy Algorithm', namespace: 'diva', description: 'This is a dummy algorithm', creation_status: :empty)
+algorithm1 = user.algorithms.create!(name: 'Canny Edge Detection', namespace: 'diva', description: 'Who knows, I always onyl read candy detection ;)', creation_status: :empty)
 algorithm1.additional_information_with('author').value = 'DIVA'
 algorithm1.additional_information_with('email').value = 'dev@diva.unifr.ch'
 algorithm1.additional_information_with('website').value = 'http://www.unifr.ch'
-algorithm1.update_attribute(:zip_file, File.open(File.join(Rails.root, 'dummy.zip')))
-algorithm1.update_attribute(:executable_path, 'empty')
+algorithm1.update_attribute(:zip_file, File.open(File.join(Rails.root, 'cannyedgedetection.zip')))
+algorithm1.update_attribute(:executable_path, 'cannyedgedetection/cannyedgedetection.jar')
 algorithm1.output = DivaServiceApi.available_output_types[1]
 algorithm1.language = DivaServiceApi.available_languages[1]
 algorithm1.update_attribute(:creation_status, :done)
@@ -59,14 +59,14 @@ input_parameter5 = algorithm1.input_parameters.create!(input_type: 'inputImage')
 ############
 #Algorithm 2
 ############
-algorithm2 = user.algorithms.create!(name: 'OCR', namespace: 'diva', description: 'Recognizes text on a provided image', creation_status: :empty)
+algorithm2 = user.algorithms.create!(name: 'Noising', namespace: 'diva', description: 'Noises the image I guess?!', creation_status: :empty)
 algorithm2.additional_information_with('author').value = 'DIVA'
 algorithm2.additional_information_with('DOI').value = 'doi:10.1000/182'
 algorithm2.additional_information_with('purpose').value = 'Just for fun'
 algorithm2.additional_information_with('email').value = 'dev@diva.unifr.ch'
 algorithm2.additional_information_with('website').value = 'http://www.diva.unifr.ch'
-algorithm2.update_attribute(:zip_file, File.open(File.join(Rails.root, 'dummy.zip')))
-algorithm2.update_attribute(:executable_path, 'empty')
+algorithm2.update_attribute(:zip_file, File.open(File.join(Rails.root, 'noising.zip')))
+algorithm2.update_attribute(:executable_path, 'noising/noising.jar')
 algorithm2.output = DivaServiceApi.available_output_types[0]
 algorithm2.language = DivaServiceApi.available_languages[0]
 algorithm2.update_attribute(:creation_status, :review)

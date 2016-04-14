@@ -5,50 +5,51 @@ class CreateDockerJob < ActiveJob::Base
     algorithm = Algorithm.find(algorithm_id)
     if algorithm
 
+      # Create/Clean docker folder
+      directory = "#{Rails.root}/public/uploads/algorithm/zip_file/#{algorithm.id}/docker/"
+      FileUtils.rm_rf(directory) if File.exists?(directory)
+      Dir.mkdir(directory)
+
       p 'Create Dockerfile'
-      create_dockerfile(algorithm)
+      create_dockerfile(directory, algorithm)
       #TODO select and provide correct base images
       #TODO Add entrypoint/cmd
       #TODO add script to run algorithm
 
       p 'Extract algorithm'
-      extract_algorithm(algorithm)
-      #TODO name zips all the same
-      #TODO what if its not a zip?
+      extract_algorithm(directory, algorithm)
 
       p 'Create tar'
       `cd #{Rails.root}/public/uploads/algorithm/zip_file/#{algorithm.id}/docker/ && tar -zcvf docker.tar * && cd #{Rails.root}`
 
       p 'Build image'
-      build_image(algorithm)
+      build_image(directory, algorithm)
       #TODO Check for errors
 
       p 'Update status'
       algorithm.update_attribute(:creation_status, :built)
-      PublishAlgorithmJob.perform_later(algorithm.id)
+      #XXX PublishAlgorithmJob.perform_later(algorithm.id)
     else
       p 'Algorithm not found!'
     end
   end
 
-  def build_image(algorithm)
-    image = Docker::Image.build_from_tar(File.open(File.join("#{Rails.root}/public/uploads/algorithm/zip_file/#{algorithm.id}/docker/", 'docker.tar'), 'r'))
+  def build_image(directory, algorithm)
+    p image = Docker::Image.build_from_tar(File.open(File.join(directory, 'docker.tar'), 'r'), { t: algorithm.name.downcase.tr(' ', '_') })
     algorithm.image = image.id
   end
 
-  def extract_algorithm(algorithm)
-    Zip::File.open("#{Rails.root}/public/uploads/algorithm/zip_file/#{algorithm.id}/dummy.zip") do |zipfile|
+  def extract_algorithm(directory, algorithm)
+    Zip::File.open("#{directory}../algorithm.zip") do |zipfile|
       zipfile.each do |file|
-        file_path = File.join("#{Rails.root}/public/uploads/algorithm/zip_file/#{algorithm.id}/docker/", file.name)
+        file_path = File.join(directory, file.name)
         FileUtils.mkdir_p(File.dirname(file_path))
         zipfile.extract(file, file_path) unless File.exist?(file_path)
       end
     end
   end
 
-  def create_dockerfile(algorithm)
-    directory = "#{Rails.root}/public/uploads/algorithm/zip_file/#{algorithm.id}/docker/"
-    Dir.mkdir(directory) unless File.exists?(directory)
+  def create_dockerfile(directory, algorithm)
     File.open(File.join(directory, 'Dockerfile'), 'w+') do |file|
       file.write dockerfile
     end
