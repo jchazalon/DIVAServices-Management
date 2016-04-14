@@ -26,8 +26,7 @@ class CreateDockerJob < ActiveJob::Base
       build_image(directory, algorithm)
       #TODO Check for errors
 
-      p 'Update status'
-      algorithm.update_attribute(:creation_status, :built)
+      p 'Done'
       #XXX PublishAlgorithmJob.perform_later(algorithm.id)
     else
       p 'Algorithm not found!'
@@ -35,8 +34,14 @@ class CreateDockerJob < ActiveJob::Base
   end
 
   def build_image(directory, algorithm)
-    p image = Docker::Image.build_from_tar(File.open(File.join(directory, 'docker.tar'), 'r'), { t: algorithm.name.downcase.tr(' ', '_') })
-    algorithm.image = image.id
+    begin
+      image = Docker::Image.build_from_tar(File.open(File.join(directory, 'docker.tar'), 'r'), { t: algorithm.name.downcase.tr(' ', '_') })
+      algorithm.image = image.id
+      algorithm.update_attribute(:creation_status, :built)
+    rescue => e
+      Rails.logger.error { "ERROR while building: #{e.message} #{e.backtrace.join("\n")}" }
+      algorithm.update_attribute(:creation_status, :error)
+    end
   end
 
   def extract_algorithm(directory, algorithm)
