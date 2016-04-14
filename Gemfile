@@ -62,3 +62,5 @@ gem 'daemons'
 gem 'rubyzip'
 gem 'file_validators'
 gem 'wannabe_bool'
+
+gem 'docker-api'
