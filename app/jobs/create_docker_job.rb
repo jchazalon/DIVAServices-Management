@@ -14,7 +14,11 @@ class CreateDockerJob < ActiveJob::Base
       create_dockerfile(directory, algorithm)
       #TODO select and provide correct base images
       #TODO Add entrypoint/cmd
+
+      p 'Create script.sh'
+      create_script(directory, algorithm)
       #TODO add script to run algorithm
+      #TODO move script outside of algorithm folder!!!!
 
       p 'Extract algorithm'
       extract_algorithm(directory, algorithm)
@@ -54,16 +58,30 @@ class CreateDockerJob < ActiveJob::Base
     end
   end
 
-  def create_dockerfile(directory, algorithm)
-    File.open(File.join(directory, 'Dockerfile'), 'w+') do |file|
-      file.write dockerfile
+  def create_script(directory, algorithm)
+    File.open(File.join(directory, 'script.sh'), 'w+') do |file|
+      file.write script(algorithm)
     end
   end
 
-  def dockerfile
-    "FROM ubuntu\n" +
+  def create_dockerfile(directory, algorithm)
+    File.open(File.join(directory, 'Dockerfile'), 'w+') do |file|
+      file.write dockerfile(algorithm)
+    end
+  end
+
+  def script(algorithm)
+    "#!/bin/sh\n" +
+    "wget -O /data/dummy_image.png http://dummyimage.com/600x400/adadad/ffffff\n" +
+    "/data/algorithm/#{algorithm.executable_path} dummy_image.png ."
+  end
+
+  def dockerfile(algorithm)
+    "FROM java:openjdk-9\n" +
     "MAINTAINER diva@unifr.ch\n" +
     "RUN apt-get update\n" +
-    "COPY . /data/algorithm/"
+    "RUN apt-get install wget\n" +
+    "COPY . /data/algorithm/\n" +
+    "ENTRYPOINT /data/algorithm/script.sh"
   end
 end
