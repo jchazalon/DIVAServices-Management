@@ -27,8 +27,18 @@ class CreateDockerJob < ActiveJob::Base
       `cd #{Rails.root}/public/uploads/algorithm/zip_file/#{algorithm.id}/docker/ && tar -zcvf docker.tar * && cd #{Rails.root}`
 
       p 'Build image'
-      build_image(directory, algorithm)
+      image = build_image(directory, algorithm)
       #TODO Check for errors
+
+      p 'Start container'
+      p container = Docker::Container.create('Image' => image.id)
+      p container.start
+      
+      result = container.wait
+      p "Container terminated with #{result}"
+
+      p 'Removed Container'
+      container.delete
 
       p 'Done'
       #XXX PublishAlgorithmJob.perform_later(algorithm.id)
@@ -42,6 +52,7 @@ class CreateDockerJob < ActiveJob::Base
       image = Docker::Image.build_from_tar(File.open(File.join(directory, 'docker.tar'), 'r'), { t: algorithm.name.downcase.tr(' ', '_') })
       algorithm.image = image.id
       algorithm.update_attribute(:creation_status, :built)
+      return image
     rescue => e
       Rails.logger.error { "ERROR while building: #{e.message} #{e.backtrace.join("\n")}" }
       algorithm.update_attribute(:creation_status, :error)
@@ -72,8 +83,11 @@ class CreateDockerJob < ActiveJob::Base
 
   def script(algorithm)
     "#!/bin/sh\n" +
+    "ls -al\n" +
     "wget -O /data/dummy_image.png http://dummyimage.com/600x400/adadad/ffffff\n" +
-    "/data/algorithm/#{algorithm.executable_path} dummy_image.png ."
+    "touch /data/result.json\n" +
+    "java -Djava.awt.headless=true -jar /data/algorithm/#{algorithm.executable_path}  /data/dummy_image.png /data /data/result.json"
+    #TODO copy results somewhere
   end
 
   def dockerfile(algorithm)
@@ -81,7 +95,9 @@ class CreateDockerJob < ActiveJob::Base
     "MAINTAINER diva@unifr.ch\n" +
     "RUN apt-get update\n" +
     "RUN apt-get install wget\n" +
-    "COPY . /data/algorithm/\n" +
-    "ENTRYPOINT /data/algorithm/script.sh"
+    "WORKDIR /data/algorithm\n" +
+    "COPY . .\n" +
+    'RUN ["chmod", "+x", "./script.sh"]' + "\n" +
+    "ENTRYPOINT ./script.sh"
   end
 end
