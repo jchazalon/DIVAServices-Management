@@ -33,7 +33,7 @@ class CreateDockerJob < ActiveJob::Base
       p 'Start container'
       p container = Docker::Container.create('Image' => image.id)
       p container.start
-      
+
       result = container.wait
       p "Container terminated with #{result}"
 
@@ -86,12 +86,12 @@ class CreateDockerJob < ActiveJob::Base
     "ls -al\n" +
     "wget -O /data/dummy_image.png http://dummyimage.com/600x400/adadad/ffffff\n" +
     "touch /data/result.json\n" +
-    "java -Djava.awt.headless=true -jar /data/algorithm/#{algorithm.executable_path}  /data/dummy_image.png /data /data/result.json"
+    "java -Djava.awt.headless=true -jar /data/algorithm/#{algorithm.executable_path}  /data/dummy_image.png /data"
     #TODO copy results somewhere
   end
 
   def dockerfile(algorithm)
-    "FROM java:openjdk-9\n" +
+    "FROM java:openjdk-8\n" +
     "MAINTAINER diva@unifr.ch\n" +
     "RUN apt-get update\n" +
     "RUN apt-get install wget\n" +
