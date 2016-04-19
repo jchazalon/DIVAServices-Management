@@ -1,6 +1,7 @@
 class DivaServiceApi
   include HTTParty
   base_uri 'localhost:8080'
+  default_timeout 15
   format :json
 
   def self.available_languages

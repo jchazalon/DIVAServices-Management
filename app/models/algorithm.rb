@@ -2,6 +2,18 @@ class Algorithm < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   require 'zip'
 
+  def self.steps
+    [:informations, :parameters, :parameters_details, :upload, :review]
+  end
+
+  enum creation_status: [:empty, *Algorithm.steps, :validating, :building, :published, :deactivated, :error]
+
+  ENVIRONMENTS = ['ubuntu:14.04', 'ubuntu:15.10', 'java:6', 'java:7', 'java:8', 'java:9', 'ruby:2.1', 'ruby:2.2', 'ruby:2.3', 'node:5', 'python:2.7', 'python:3.3', 'python:3.5']
+
+  def self.environments
+    ENVIRONMENTS
+  end
+
   mount_uploader :zip_file, AlgorithmUploader
 
   after_validation :create_fields, if: 'self.errors.empty? && self.fields.empty?'
@@ -13,14 +25,9 @@ class Algorithm < ActiveRecord::Base
   accepts_nested_attributes_for :fields, allow_destroy: :true
   accepts_nested_attributes_for :input_parameters, allow_destroy: :true
 
-  def self.steps
-    [:informations, :parameters, :parameters_details, :upload, :review]
-  end
-
-  enum creation_status: [:empty, *Algorithm.steps, :done, :safe, :validated, :built, :published, :error]
-
-  validates :name, presence: true, if: :review_or_step_1?
-  validates :namespace, presence: true, if: :review_or_step_1?
+  validates :creation_status, presence: true
+  validates :name, presence: true, format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "cannot contain any special characters" }, if: :review_or_step_1?
+  validates :namespace, presence: true, format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "cannot contain any special characters" }, if: :review_or_step_1?
   validates :description, presence: true, if: :review_or_step_1?
   #TODO validate required additional_information fields
 
@@ -29,11 +36,12 @@ class Algorithm < ActiveRecord::Base
   validates :zip_file, presence: true, file_size: { less_than: 100.megabytes }, if: :review_or_step_4?
   validates_integrity_of :zip_file, if: :review_or_step_4?
   validates_processing_of :zip_file, if: :review_or_step_4?
-  validates :executable_path, presence: true, if: :review_or_step_4?
+  validates :executable_path, presence: true, format: { with: /\A[a-zA-Z0-9\.\-\s\/\_]+\z/, message: "contains invalid characters" }, if: :review_or_step_4?
   validate :valid_zip_file, if: :review_or_step_4?
   validate :zip_file_includes_executable_path, if: :review_or_step_4?
   validate :executable_path_is_a_file, if: :review_or_step_4?
   validates :language, presence: true, if: :review_or_step_4?
+  validates :environment, presence: true, inclusion: { in: environments }, if: :review_or_step_4?
 
   def review_or_step_1?
     informations? || review?
@@ -52,7 +60,7 @@ class Algorithm < ActiveRecord::Base
   end
 
   def finished_wizard?
-    done? || safe? || validated? || built? || published? || error?
+    validating? || building? || published? || deactivated? || error?
   end
 
   def valid_zip_file
@@ -87,6 +95,10 @@ class Algorithm < ActiveRecord::Base
     end
   end
 
+  def image_name
+    "#{self.name.downcase.tr(' ', '_')}:1.0"
+  end
+
   @@current_input_parameter_position = 0
 
   def next_input_parameter_position
@@ -109,6 +121,7 @@ class Algorithm < ActiveRecord::Base
       inputs << { input_parameter.input_type => input_parameter.to_schema }
     end
     { name: self.name,
+      image_name: self.image_name,
       namespace: self.namespace,
       description: self.description.gsub("\r\n", ' '),
       info: additional_information,

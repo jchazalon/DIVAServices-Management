@@ -2,7 +2,7 @@ class CreateAlgorithm < ActiveRecord::Migration
   def change
     create_table :algorithms do |t|
       t.references :user, index: true
-      t.integer :creation_status
+      t.integer :creation_status, default: 0
 
       t.string :name
       t.string :namespace
@@ -11,9 +11,8 @@ class CreateAlgorithm < ActiveRecord::Migration
       t.string :output
 
       t.string :language
+      t.string :environment
       t.string :executable_path
-
-      t.string :image
 
       t.timestamps null: false
     end

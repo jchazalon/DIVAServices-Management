@@ -4,17 +4,16 @@ class ValidateAlgorithmJob < ActiveJob::Base
   def perform(algorithm_id)
     algorithm = Algorithm.find(algorithm_id)
     if algorithm
-
-      p 'Calling /validate/create'
+      p 'Calling DIVAService at /validate/create'
       p DivaServiceApi.validate_algorithm(algorithm)
+      #TODO What happens if it is no valid?
 
-      p 'Update status to validated'
-      algorithm.update_attribute(:creation_status, :validated)
+      p 'Update status'
+      algorithm.update_attribute(:creation_status, :building)
 
-      p 'Startin publication'
-      CreateDockerJob.perform_later(algorithm.id)
+      PublishAlgorithmJob.perform_later(algorithm.id)
     else
-      p 'Algorithm not found!'
+      p "Algorithm ##{algorithm_id} not found!"
     end
   end
 end

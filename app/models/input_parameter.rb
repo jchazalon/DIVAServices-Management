@@ -7,13 +7,13 @@ class InputParameter < ActiveRecord::Base
   has_many :fields, as: :fieldable, dependent: :destroy
   belongs_to :algorithm
 
-  validates :input_type, presence: { :unless => (input_type = "")}, if: :done_or_step_2?
-  validates :position, presence: true, if: :done_or_step_2?
+  validates :input_type, presence: { :unless => (input_type = "")}, if: :review_or_step_2?
+  validates :position, presence: true, if: :review_or_step_2?
 
   accepts_nested_attributes_for :fields, allow_destroy: :true
 
-  def done_or_step_2?
-    self.algorithm.parameters? || self.algorithm.done?
+  def review_or_step_2?
+    self.algorithm.parameters? || self.algorithm.review?
     return true
   end
 

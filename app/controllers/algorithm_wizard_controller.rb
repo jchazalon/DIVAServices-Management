@@ -43,9 +43,8 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def finish_wizard_path
-    @algorithm.update_attribute(:creation_status, :done)
-    #XXX Currently don't use validate_algorithm_job
-    CreateDockerJob.perform_later(@algorithm.id)
+    @algorithm.update_attribute(:creation_status, :validating)
+    ValidateAlgorithmJob.perform_later(@algorithm.id)
     algorithms_path
   end
 
@@ -82,6 +81,6 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def algorithm_params_step4
-    params.require(:algorithm).permit(:language, :zip_file, :executable_path)
+    params.require(:algorithm).permit(:language, :environment, :zip_file, :executable_path)
   end
 end

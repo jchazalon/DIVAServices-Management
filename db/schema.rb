@@ -18,16 +18,16 @@ ActiveRecord::Schema.define(version: 20160311214907) do
 
   create_table "algorithms", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "creation_status"
+    t.integer  "creation_status", default: 0
     t.string   "name"
     t.string   "namespace"
     t.text     "description"
     t.string   "output"
     t.string   "language"
+    t.string   "environment"
     t.string   "executable_path"
-    t.string   "image"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.string   "zip_file"
   end
 

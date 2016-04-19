@@ -11,7 +11,9 @@
   <%= f.input :executable_path %>
   <%= f.hint 'Path of the executable file in the provided zip file. (e.g. "bin/main.jar")' %>
   <%= f.input :language, collection: DivaServiceApi.available_languages %>
-  <%= f.hint 'Language necessary to execute the provided algorithm' %>
+  <%= f.hint 'Language necessary to execute the provided executable' %>
+  <%= f.input :environment, collection: Algorithm.environments %>
+  <%= f.hint 'Necessary environment to run the algorithm' %>
 
   <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>

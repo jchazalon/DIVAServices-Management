@@ -4,14 +4,14 @@ class PublishAlgorithmJob < ActiveJob::Base
   def perform(algorithm_id)
     algorithm = Algorithm.find(algorithm_id)
     if algorithm
-
-      p 'Calling /management/algorithm'
+      p 'Calling DIVAService at /management/algorithm'
       p DivaServiceApi.publish_algorithm(algorithm)
-      
-      p 'Update status to published'
-      algorithm.update_attribute(:creation_status, :published)
+      #TODO What happens if there is a error?
+
+      p 'Update status to'
+      algorithm.update_attribute(:creation_status, :building)
     else
-      p 'Algorithm not found!'
+      p "Algorithm ##{algorithm_id} not found!"
     end
   end
 end
