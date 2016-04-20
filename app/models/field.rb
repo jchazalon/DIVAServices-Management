@@ -27,8 +27,9 @@ class Field < ActiveRecord::Base
   content_attr :infoText, :text
   content_attr :required, :boolean
 
-  #TODO Add server-side validations only on user actions!
-  #validates :value, presence: true, if: 'self.required && self.persisted?'
+  #TODO Server-side validations are almost impossible since we should only run validation on user-actions, but not on server creation and updates...
+  #validates :value, presence: true, if: 'self.required', on: :update #This wont work since it also validates after server actions!
+  validates :name, presence: true
 
   def self.create_from_hash(k,v)
     params = Hash.new
@@ -49,13 +50,7 @@ class Field < ActiveRecord::Base
       if field.type == 'ObjectField'
         data[field.name] = field.to_schema
       else
-        unless field.value.blank?
-          if field.type == 'ArrayField'
-            data[field.name] = field.value_to_schema
-          else
-            data[field.name] = field.value_to_schema
-          end
-        end
+        data[field.name] = field.value_to_schema unless field.value.blank?
       end
     end
     return data

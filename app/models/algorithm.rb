@@ -129,7 +129,8 @@ class Algorithm < ActiveRecord::Base
       output: self.output,
       file: self.zip_url,
       language: self.language,
-      executable: self.executable_path
+      executable: self.executable_path,
+      base_image: self.environment
     }.to_json
   end
 

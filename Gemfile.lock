@@ -36,6 +36,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    addressable (2.4.0)
     arel (6.0.3)
     awesome_print (1.6.1)
     bcrypt (3.1.11)
@@ -72,12 +73,10 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
-    docker-api (1.28.0)
-      excon (>= 0.38.0)
-      json
+    email_validator (1.6.0)
+      activemodel
     erubis (2.7.0)
     eventmachine (1.2.0.1)
-    excon (0.49.0)
     execjs (2.6.0)
     file_validators (2.1.0)
       activemodel (>= 3.0)
@@ -192,6 +191,9 @@ GEM
       thread_safe (~> 0.1)
     uglifier (3.0.0)
       execjs (>= 0.3.0, < 3)
+    validate_url (1.0.2)
+      activemodel (>= 3.0.0)
+      addressable
     wannabe_bool (0.5.0)
     warden (1.2.6)
       rack (>= 1.0)
@@ -215,7 +217,7 @@ DEPENDENCIES
   daemons
   delayed_job_active_record
   devise
-  docker-api
+  email_validator
   file_validators
   font-awesome-rails
   httparty
@@ -233,6 +235,7 @@ DEPENDENCIES
   turbolinks
   twitter-bootstrap-rails
   uglifier (>= 1.3.0)
+  validate_url
   wannabe_bool
   web-console (~> 2.0)
   wicked
