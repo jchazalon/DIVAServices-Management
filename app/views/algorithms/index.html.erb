@@ -5,7 +5,6 @@
 <table class="table">
   <thead>
     <th>Name</th>
-    <th>Namespace</th>
     <th>Description</th>
     <th>Input parameters</th>
     <th>Creation status</th>
@@ -14,7 +13,6 @@
   <% @algorithms.each do |algorithm| %>
     <tr>
       <td><%= link_to algorithm.name, algorithm_path(algorithm) %></td>
-      <td><%= algorithm.namespace %></td>
       <td><%= algorithm.description %></td>
       <td><%= algorithm.input_parameters.count %> Parameter(s)</td>
       <td><%= algorithm.creation_status %></td>

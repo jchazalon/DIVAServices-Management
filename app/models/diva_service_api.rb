@@ -6,12 +6,12 @@ class DivaServiceApi
 
   #TODO DEV temporary solution
   def self.mock_environments
-    mock_to_hash({ :"java:7" => { infoText: "Java 7" }, :"eigets/image:v5" => { infoText: "Matlab + Java 7" } })
+    mock_to_hash({ :"java:7" => { infoText: "Java 7" }, :"java:8" => { infoText: "Java 8" } })
   end
 
   #TODO DEV temporary solution
   def self.mock_output_types
-    mock_to_hash({ file: { infoText: "Store output into a file" }, console: { infoText: "Return output directly" } })
+    mock_to_hash({ file: { infoText: "Store output into a file. Requires to use a outputFile parameter!" }, console: { infoText: "Returns output to the standard output" } })
   end
 
   def self.mock_to_hash(mock)

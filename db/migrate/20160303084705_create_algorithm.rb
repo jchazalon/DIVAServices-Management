@@ -5,7 +5,6 @@ class CreateAlgorithm < ActiveRecord::Migration
       t.integer :creation_status, default: 0
 
       t.string :name
-      t.string :namespace
       t.text :description
 
       t.string :output

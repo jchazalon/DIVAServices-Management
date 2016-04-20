@@ -21,7 +21,6 @@ class Algorithm < ActiveRecord::Base
 
   validates :creation_status, presence: true
   validates :name, presence: true, format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "cannot contain any special characters" }, if: :review_or_step_1?
-  validates :namespace, presence: true, format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "cannot contain any special characters" }, if: :review_or_step_1?
   validates :description, presence: true, if: :review_or_step_1?
   #TODO validate required additional_information fields
 
@@ -115,7 +114,6 @@ class Algorithm < ActiveRecord::Base
     end
     { name: self.name,
       image_name: self.image_name,
-      namespace: self.namespace,
       description: self.description.gsub("\r\n", ' '),
       info: additional_information,
       input: inputs,

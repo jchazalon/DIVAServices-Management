@@ -63,7 +63,7 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def algorithm_params_step1
-    params.require(:algorithm).permit(:name, :namespace, :description, fields_attributes: [:id, :value])
+    params.require(:algorithm).permit(:name, :description, fields_attributes: [:id, :value])
   end
 
   def algorithm_params_step2

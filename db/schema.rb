@@ -20,7 +20,6 @@ ActiveRecord::Schema.define(version: 20160311214907) do
     t.integer  "user_id"
     t.integer  "creation_status", default: 0
     t.string   "name"
-    t.string   "namespace"
     t.text     "description"
     t.string   "output"
     t.string   "environment"
