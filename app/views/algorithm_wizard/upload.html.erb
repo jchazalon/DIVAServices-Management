@@ -10,9 +10,7 @@
   <%= f.hint 'zip file containing the executables as well as all necessary dependencies' %>
   <%= f.input :executable_path %>
   <%= f.hint 'Path of the executable file in the provided zip file. (e.g. "bin/main.jar")' %>
-  <%= f.input :language, collection: DivaServiceApi.available_languages %>
-  <%= f.hint 'Language necessary to execute the provided executable' %>
-  <%= f.input :environment, collection: Algorithm.environments %>
+  <%= f.input :environment, collection: DivaServiceApi.available_environments %>
   <%= f.hint 'Necessary environment to run the algorithm' %>
 
   <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>

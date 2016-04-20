@@ -22,8 +22,7 @@ algorithm1.additional_information_with('website').value = 'http://www.unifr.ch'
 algorithm1.update_attribute(:zip_file, File.open(File.join(Rails.root, 'cannyedgedetection.zip')))
 algorithm1.update_attribute(:executable_path, 'cannyedgedetection/cannyedgedetection.jar')
 algorithm1.output = DivaServiceApi.available_output_types[1]
-algorithm1.language = DivaServiceApi.available_languages[1]
-algorithm1.update_attribute(:environment, 'java:8')
+algorithm1.environment = DivaServiceApi.available_environments[1]
 algorithm1.update_attribute(:creation_status, :review)
 algorithm1.save!
 
@@ -43,8 +42,7 @@ algorithm2.additional_information_with('website').value = 'http://www.diva.unifr
 algorithm2.update_attribute(:zip_file, File.open(File.join(Rails.root, 'noising.zip')))
 algorithm2.update_attribute(:executable_path, 'noising/noising.jar')
 algorithm2.output = DivaServiceApi.available_output_types[0]
-algorithm2.language = DivaServiceApi.available_languages[0]
-algorithm2.update_attribute(:environment, 'java:8')
+algorithm2.environment = DivaServiceApi.available_environments[1]
 algorithm2.update_attribute(:creation_status, :review)
 algorithm2.save!
 
@@ -61,8 +59,7 @@ algorithm3.additional_information_with('website').value = 'http://www.diva.unifr
 algorithm3.update_attribute(:zip_file, File.open(File.join(Rails.root, 'dummy.zip')))
 algorithm3.update_attribute(:executable_path, 'empty')
 algorithm3.output = DivaServiceApi.available_output_types[0]
-algorithm3.language = DivaServiceApi.available_languages[0]
-algorithm3.update_attribute(:environment, 'ubuntu:15.10')
+algorithm3.environment = DivaServiceApi.available_environments[1]
 algorithm3.update_attribute(:creation_status, :review)
 algorithm3.save!
 

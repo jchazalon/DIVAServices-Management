@@ -3,7 +3,7 @@ class AlgorithmWizardController < ApplicationController
   before_action :algorithm_not_finished_yet!, only: [:show, :update]
   before_action :set_algorithm, only: [:show, :update]
 
-  steps *Algorithm.steps
+  steps *Algorithm.wizard_steps
 
   def show
     case step
@@ -81,6 +81,6 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def algorithm_params_step4
-    params.require(:algorithm).permit(:language, :environment, :zip_file, :executable_path)
+    params.require(:algorithm).permit(:environment, :zip_file, :executable_path)
   end
 end

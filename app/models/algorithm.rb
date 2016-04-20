@@ -2,17 +2,11 @@ class Algorithm < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   require 'zip'
 
-  def self.steps
+  def self.wizard_steps
     [:informations, :parameters, :parameters_details, :upload, :review]
   end
 
-  enum creation_status: [:empty, *Algorithm.steps, :validating, :building, :published, :deactivated, :error]
-
-  ENVIRONMENTS = ['ubuntu:14.04', 'ubuntu:15.10', 'java:6', 'java:7', 'java:8', 'java:9', 'ruby:2.1', 'ruby:2.2', 'ruby:2.3', 'node:5', 'python:2.7', 'python:3.3', 'python:3.5']
-
-  def self.environments
-    ENVIRONMENTS
-  end
+  enum creation_status: [:empty, *Algorithm.wizard_steps, :validating, :building, :published, :deactivated, :error]
 
   mount_uploader :zip_file, AlgorithmUploader
 
@@ -31,7 +25,7 @@ class Algorithm < ActiveRecord::Base
   validates :description, presence: true, if: :review_or_step_1?
   #TODO validate required additional_information fields
 
-  validates :output, presence: true, if: :review_or_step_2?
+  validates :output, presence: true, inclusion: { in: DivaServiceApi.available_output_types.values.map(&:to_s) }, if: :review_or_step_2?
 
   validates :zip_file, presence: true, file_size: { less_than: 100.megabytes }, if: :review_or_step_4?
   validates_integrity_of :zip_file, if: :review_or_step_4?
@@ -40,8 +34,7 @@ class Algorithm < ActiveRecord::Base
   validate :valid_zip_file, if: :review_or_step_4?
   validate :zip_file_includes_executable_path, if: :review_or_step_4?
   validate :executable_path_is_a_file, if: :review_or_step_4?
-  validates :language, presence: true, if: :review_or_step_4?
-  validates :environment, presence: true, inclusion: { in: environments }, if: :review_or_step_4?
+  validates :environment, presence: true, inclusion: { in: DivaServiceApi.available_environments.values.map(&:to_s) }, if: :review_or_step_4?
 
   def review_or_step_1?
     informations? || review?
@@ -128,7 +121,6 @@ class Algorithm < ActiveRecord::Base
       input: inputs,
       output: self.output,
       file: self.zip_url,
-      language: self.language,
       executable: self.executable_path,
       base_image: self.environment
     }.to_json

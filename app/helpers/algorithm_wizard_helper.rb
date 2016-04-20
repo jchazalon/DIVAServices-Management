@@ -9,7 +9,7 @@ module AlgorithmWizardHelper
         content_tag(:div, class: 'connecting-line') do
         end +
         content_tag(:ul, class: 'nav nav-tabs', role: 'tablist') do
-          (1..(Algorithm.steps.size)).collect do |step|
+          (1..(Algorithm.wizard_steps.size)).collect do |step|
             concat progress_icon(names[step - 1], icons[step - 1], step == current_step)
           end
         end

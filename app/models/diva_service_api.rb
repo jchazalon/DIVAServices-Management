@@ -4,21 +4,54 @@ class DivaServiceApi
   default_timeout 15
   format :json
 
-  def self.available_languages
-    #TODO catch if API offline?
-    # begin
-      response = self.get('/info/languages')
-      return response.parsed_response if response.success?
-    # rescue => e
-    #   p "API offline #{e}"
-    #   data = JSON.parse(File.read(Rails.root.join('language_types.json')))
-    #   return [*data]
-    # end
+  #TODO DEV temporary solution
+  def self.mock_environments
+    mock_to_hash({ :"java:7" => { infoText: "Java 7" }, :"eigets/image:v5" => { infoText: "Matlab + Java 7" } })
+  end
+
+  #TODO DEV temporary solution
+  def self.mock_output_types
+    mock_to_hash({ file: { infoText: "Store output into a file" }, console: { infoText: "Return output directly" } })
+  end
+
+  def self.mock_to_hash(mock)
+    hash = Hash.new
+    [*mock.keys].each do |key|
+      hash[key] = mock[key][:infoText]
+    end
+    return hash.invert
+  end
+
+
+  def self.available_environments
+    begin
+      response = self.get('/info/environments')
+      if response.success?
+        return response.parsed_response
+      else #TODO 404, 500 or something like that, what happens?
+        p response
+        return mock_environments
+      end
+    rescue Errno::ECONNREFUSED => e #TODO API offline? what happens?
+      p e
+      return mock_environments
+    end
   end
 
   def self.available_output_types
-    response = self.get('/info/outputs')
-    return response.parsed_response if response.success?
+    begin
+      response = self.get('/info/outputs')
+      if response.success?
+        ############################return response.parsed_response
+        return mock_output_types
+      else #TODO 404, 500 or something like that, what happens?
+        p response
+        return mock_output_types
+      end
+    rescue Errno::ECONNREFUSED => e #TODO API offline? what happens?
+      p e
+      return mock_output_types
+    end
   end
 
   def self.input_types
@@ -27,8 +60,18 @@ class DivaServiceApi
   end
 
   def self.additional_information
-    response = self.get('/info/additional')
-    return response.parsed_response if response.success?
+    begin
+      response = self.get('/info/additional')
+      if response.success?
+        return response.parsed_response
+      else #TODO 404, 500 or something like that, what happens?
+        p response
+        return {}
+      end
+    rescue Errno::ECONNREFUSED => e #TODO API offline? what happens?
+      p e
+      return {}
+    end
   end
 
   def self.available_input_types

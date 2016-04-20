@@ -10,7 +10,6 @@ class CreateAlgorithm < ActiveRecord::Migration
 
       t.string :output
 
-      t.string :language
       t.string :environment
       t.string :executable_path
 
