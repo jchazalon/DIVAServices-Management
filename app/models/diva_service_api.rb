@@ -29,7 +29,6 @@ class DivaServiceApi
       if response.success?
         return response.parsed_response
       else #TODO 404, 500 or something like that, what happens?
-        p response
         return mock_environments
       end
     rescue Errno::ECONNREFUSED => e #TODO API offline? what happens?
@@ -45,7 +44,6 @@ class DivaServiceApi
         ############################return response.parsed_response
         return mock_output_types
       else #TODO 404, 500 or something like that, what happens?
-        p response
         return mock_output_types
       end
     rescue Errno::ECONNREFUSED => e #TODO API offline? what happens?
@@ -65,7 +63,6 @@ class DivaServiceApi
       if response.success?
         return response.parsed_response
       else #TODO 404, 500 or something like that, what happens?
-        p response
         return {}
       end
     rescue Errno::ECONNREFUSED => e #TODO API offline? what happens?
