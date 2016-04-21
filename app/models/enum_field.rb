@@ -2,7 +2,13 @@ class EnumField < Field
 
   content_attr :values, :string
 
-  #TODO validate :values, inclusion: { in: ? }
+  validate :valid_selection
+
+  def valid_selection
+    if !self.value.empty?
+      errors.add(:value, 'cannot be selected!') unless self.values.include?(self.value)
+    end
+  end
 
   def self.create_from_hash(k,v)
     params = super(k,v)
