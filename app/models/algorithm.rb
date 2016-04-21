@@ -33,7 +33,8 @@ class Algorithm < ActiveRecord::Base
   validate :valid_zip_file, if: :review_or_step_4?
   validate :zip_file_includes_executable_path, if: :review_or_step_4?
   validate :executable_path_is_a_file, if: :review_or_step_4?
-  validates :environment, presence: true, inclusion: { in: DivaServiceApi.available_environments.values.map(&:to_s) }, if: :review_or_step_4?
+  validates :language, presence: true, inclusion: { in: DivaServiceApi.languages.values.map(&:to_s) }, if: :review_or_step_4?
+  validates :environment, presence: true, inclusion: { in: DivaServiceApi.environments.values.map(&:to_s) }, if: :review_or_step_4?
 
   def review_or_step_1?
     informations? || review?
@@ -120,6 +121,7 @@ class Algorithm < ActiveRecord::Base
       output: self.output,
       file: self.zip_url,
       executable: self.executable_path,
+      language: self.language,
       base_image: self.environment
     }.to_json
   end

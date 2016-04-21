@@ -15,13 +15,14 @@ user = User.create!(email: 'dev@diva.unifr.ch', password: '12345678')
 ############
 #Algorithm 1
 ############
-algorithm1 = user.algorithms.create!(name: 'Canny Edge Detection', description: 'Who knows, I always onyl read candy detection ;)', creation_status: :empty)
+algorithm1 = user.algorithms.create!(name: 'Canny Edge Detection', description: 'Who knows, I always only read candy detection ;)', creation_status: :empty)
 algorithm1.additional_information_with('author').value = 'DIVA'
 algorithm1.additional_information_with('email').value = 'dev@diva.unifr.ch'
 algorithm1.additional_information_with('website').value = 'http://www.unifr.ch'
 algorithm1.update_attribute(:zip_file, File.open(File.join(Rails.root, 'cannyedgedetection.zip')))
 algorithm1.update_attribute(:executable_path, 'cannyedgedetection/cannyedgedetection.jar')
 algorithm1.output = 'file'
+algorithm1.language = 'java'
 algorithm1.environment = 'java:8'
 algorithm1.update_attribute(:creation_status, :review)
 algorithm1.save!
@@ -42,6 +43,7 @@ algorithm2.additional_information_with('website').value = 'http://www.diva.unifr
 algorithm2.update_attribute(:zip_file, File.open(File.join(Rails.root, 'noising.zip')))
 algorithm2.update_attribute(:executable_path, 'noising/noising.jar')
 algorithm2.output = 'file'
+algorithm2.language = 'java'
 algorithm2.environment = 'java:8'
 algorithm2.update_attribute(:creation_status, :review)
 algorithm2.save!
@@ -59,6 +61,7 @@ algorithm3.additional_information_with('website').value = 'http://www.diva.unifr
 algorithm3.update_attribute(:zip_file, File.open(File.join(Rails.root, 'dummy.zip')))
 algorithm3.update_attribute(:executable_path, 'empty')
 algorithm3.output = 'file'
+algorithm3.language = 'java'
 algorithm3.environment = 'java:8'
 algorithm3.update_attribute(:creation_status, :review)
 algorithm3.save!

@@ -5,6 +5,10 @@ class DivaServiceApi
   format :json
 
   #TODO DEV temporary solution
+  def self.mock_languages
+    mock_to_hash({ java: { infoText: "Java" }, coffeescript: { infoText: "Coffeescript" }, bash: { infoText: "Simple command-line" } })
+  end
+
   def self.mock_environments
     mock_to_hash({ :"java:7" => { infoText: "Java 7" }, :"java:8" => { infoText: "Java 8" } })
   end
@@ -22,8 +26,22 @@ class DivaServiceApi
     return hash.invert
   end
 
+  def self.languages
+    begin
+      response = self.get('/info/languages')
+      if response.success?
+        ############################return response.parsed_response #XXX fix
+        return mock_languages
+      else #TODO 404, 500 or something like that, what happens?
+        return mock_languages
+      end
+    rescue Errno::ECONNREFUSED => e #TODO API offline? what happens?
+      p e
+      return mock_languages
+    end
+  end
 
-  def self.available_environments
+  def self.environments
     begin
       response = self.get('/info/environments')
       if response.success?
@@ -41,7 +59,7 @@ class DivaServiceApi
     begin
       response = self.get('/info/outputs')
       if response.success?
-        ############################return response.parsed_response
+        ############################return response.parsed_response #XXX fix
         return mock_output_types
       else #TODO 404, 500 or something like that, what happens?
         return mock_output_types

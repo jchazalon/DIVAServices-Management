@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20160311214907) do
     t.string   "name"
     t.text     "description"
     t.string   "output"
+    t.string   "language"
     t.string   "environment"
     t.string   "executable_path"
     t.datetime "created_at",                  null: false
