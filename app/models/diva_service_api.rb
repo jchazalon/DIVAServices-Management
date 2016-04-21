@@ -45,7 +45,8 @@ class DivaServiceApi
     begin
       response = self.get('/info/environments')
       if response.success?
-        return response.parsed_response
+        ############################return response.parsed_response #XXX fix
+        return mock_environments
       else #TODO 404, 500 or something like that, what happens?
         return mock_environments
       end
