@@ -1,7 +1,7 @@
 class DivaServiceApi
   include HTTParty
   base_uri 'localhost:8080'
-  default_timeout 15
+  default_timeout 150
   format :json
 
   #TODO DEV temporary solution
