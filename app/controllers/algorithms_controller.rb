@@ -6,13 +6,13 @@ class AlgorithmsController < ApplicationController
   #XXX Dev only
   def dev_unpublish
     algorithm = current_user.algorithms.find(params[:id])
-    algorithm.update_attributes(creation_status: :review)
+    algorithm.update_attributes(status: :review)
     redirect_to algorithms_path
   end
 
   def index
-    @algorithms = current_user.algorithms.where.not(creation_status: [1,2,3,4,5])
-    @unfinished_algorithms = current_user.algorithms.where(creation_status: [1,2,3,4,5])
+    @algorithms = current_user.algorithms.where.not(status: [1,2,3,4,5])
+    @unfinished_algorithms = current_user.algorithms.where(status: [1,2,3,4,5])
   end
 
   def show
@@ -44,7 +44,7 @@ class AlgorithmsController < ApplicationController
   def algorithm_finished_wizard!
     unless @algorithm.finished_wizard?
       flash[:notice] = "Please finish the wizard first"
-      redirect_to algorithm_algorithm_wizard_path(@algorithm, @algorithm.creation_status)
+      redirect_to algorithm_algorithm_wizard_path(@algorithm, @algorithm.status)
     end
   end
 

@@ -6,11 +6,12 @@ class PublishAlgorithmJob < ActiveJob::Base
     algorithm = Algorithm.find(algorithm_id)
     if algorithm
       p response = DivaServiceApi.publish_algorithm(algorithm)
-      if response.success?
-        algorithm.update_attribute(:creation_status, :building)
-      else
-        algorithm.update_attribute(:creation_status, :error)
-      end
+      #TODO only care about errors or first response?
+      # if response.success?
+      #   algorithm.update_attribute(:status, :creating)
+      # else
+      #   algorithm.update_attribute(:status, :error)
+      # end
     end
   end
 end

@@ -15,7 +15,7 @@
       <td><%= link_to algorithm.name, algorithm_path(algorithm) %></td>
       <td><%= algorithm.description %></td>
       <td><%= algorithm.input_parameters.count %> Parameter(s)</td>
-      <td><%= algorithm.creation_status %></td>
+      <td><%= algorithm.status %></td>
       <td><%= link_to 'Delete', algorithm_path(algorithm), method: :delete %></td>
       <td><%= link_to 'Unpublish (dev-function only)', dev_unpublish_algorithm_path(algorithm), method: :post %></td>
     <tr/>
@@ -39,9 +39,9 @@
     <% @unfinished_algorithms.each do |algorithm| %>
       <tr>
         <td><%= algorithm.name.blank? ? 'N/A' : algorithm.name %></td>
-        <td><%= algorithm.creation_status %></td>
+        <td><%= algorithm.status %></td>
         <td><%= algorithm.input_parameters.count %> Parameter(s)</td>
-        <td><%= link_to 'Continue', algorithm_algorithm_wizard_path(algorithm, algorithm.creation_status) %></td>
+        <td><%= link_to 'Continue', algorithm_algorithm_wizard_path(algorithm, algorithm.status) %></td>
         <td><%= link_to 'Delete', algorithm_path(algorithm), method: :delete %></td>
       <tr/>
     <% end %>

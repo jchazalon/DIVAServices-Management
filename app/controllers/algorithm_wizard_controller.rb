@@ -11,7 +11,7 @@ class AlgorithmWizardController < ApplicationController
       @algorithm.input_parameters.build if @algorithm.input_parameters.empty?
     when :parameters_details
       if @algorithm.input_parameters.empty?
-        if @algorithm.creation_status == 'upload'
+        if @algorithm.status == 'upload'
           jump_to :parameters
         else
           flash[:notice] = "Skipped step 3 due to no input parameters set"
@@ -19,12 +19,12 @@ class AlgorithmWizardController < ApplicationController
         end
       end
     end
-    @algorithm.update_attribute(:creation_status, step.to_sym) if steps.include?(step)
+    @algorithm.update_attribute(:status, step.to_sym) if steps.include?(step)
     render_wizard
   end
 
   def create
-    @algorithm = current_user.algorithms.create!(creation_status: :empty)
+    @algorithm = current_user.algorithms.create!(status: :empty)
     redirect_to wizard_path(steps.first, algorithm_id: @algorithm.id)
   end
 
@@ -43,7 +43,7 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def finish_wizard_path
-    @algorithm.update_attribute(:creation_status, :validating)
+    @algorithm.update_attribute(:status, :validating)
     ValidateAlgorithmJob.perform_later(@algorithm.id)
     algorithms_path
   end
@@ -56,7 +56,7 @@ class AlgorithmWizardController < ApplicationController
 
   def algorithm_not_finished_yet!
     @algorithms = set_algorithm
-    if @algorithm.creation_status == :done
+    if @algorithm.status == :done
       flash[:notice] = "The algorithm '#{@algorithm.name}' is already finished!"
       redirect_to algorithms_path
     end

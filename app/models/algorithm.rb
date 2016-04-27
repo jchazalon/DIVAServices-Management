@@ -6,7 +6,7 @@ class Algorithm < ActiveRecord::Base
     [:informations, :parameters, :parameters_details, :upload, :review]
   end
 
-  enum creation_status: { empty: 0, creating: 100, testing: 110, published: 200, error: 500, connection_error: 503 }.merge!(Hash[ Algorithm.wizard_steps.map{ |c| [c, Algorithm.wizard_steps.index(c) + 1] } ])
+  enum status: { empty: 0, validating: 50, creating: 100, testing: 110, published: 200, error: 500, connection_error: 503 }.merge!(Hash[ Algorithm.wizard_steps.map{ |c| [c, Algorithm.wizard_steps.index(c) + 1] } ])
 
   mount_uploader :zip_file, AlgorithmUploader
 
@@ -19,7 +19,7 @@ class Algorithm < ActiveRecord::Base
   accepts_nested_attributes_for :fields, allow_destroy: :true
   accepts_nested_attributes_for :input_parameters, allow_destroy: :true
 
-  validates :creation_status, presence: true
+  validates :status, presence: true
   validates :name, presence: true, format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "cannot contain any special characters" }, if: :review_or_step_1?
   validates :description, presence: true, if: :review_or_step_1?
   #TODO validate required additional_information fields
@@ -53,7 +53,7 @@ class Algorithm < ActiveRecord::Base
   end
 
   def finished_wizard?
-    validating? || building? || published? || deactivated? || error?
+    validating? || creating? || testing? || published? || error? || connection_error? #TODO make it inverse
   end
 
   def valid_zip_file
