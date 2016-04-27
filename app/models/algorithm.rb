@@ -89,7 +89,7 @@ class Algorithm < ActiveRecord::Base
   end
 
   def image_name
-    "#{self.name.downcase.tr(' ', '_')}:1.0"
+    "#{self.name.downcase.tr(' ', '_')}"
   end
 
   @@current_input_parameter_position = 0
