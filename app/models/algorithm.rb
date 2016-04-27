@@ -6,7 +6,7 @@ class Algorithm < ActiveRecord::Base
     [:informations, :parameters, :parameters_details, :upload, :review]
   end
 
-  enum creation_status: [:empty, *Algorithm.wizard_steps, :validating, :building, :published, :deactivated, :error]
+  enum creation_status: { empty: 0, creating: 100, testing: 110, published: 200, error: 500, connection_error: 503 }.merge!(Hash[ Algorithm.wizard_steps.map{ |c| [c, Algorithm.wizard_steps.index(c) + 1] } ])
 
   mount_uploader :zip_file, AlgorithmUploader
 
