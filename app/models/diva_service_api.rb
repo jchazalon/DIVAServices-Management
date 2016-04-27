@@ -109,6 +109,6 @@ class DivaServiceApi
   end
 
   def self.publish_algorithm(algorithm)
-    self.post('/management/algorithms', body: algorithm.to_schema, headers: { 'Content-Type' => 'application/json' })
+    self.post('/algorithms', body: algorithm.to_schema, headers: { 'Content-Type' => 'application/json' })
   end
 end
