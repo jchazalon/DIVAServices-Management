@@ -19,6 +19,7 @@ algorithm1 = user.algorithms.create!(name: 'Canny Edge Detection', description: 
 algorithm1.additional_information_with('author').value = 'DIVA'
 algorithm1.additional_information_with('email').value = 'dev@diva.unifr.ch'
 algorithm1.additional_information_with('website').value = 'http://www.unifr.ch'
+algorithm1.additional_information_with('type').value = 'OCR'
 algorithm1.update_attribute(:zip_file, File.open(File.join(Rails.root, 'cannyedgedetection.zip')))
 algorithm1.update_attribute(:executable_path, 'cannyedgedetection/cannyedgedetection.jar')
 algorithm1.output = 'file'
@@ -40,6 +41,7 @@ algorithm2.additional_information_with('DOI').value = 'doi:10.1000/182'
 algorithm2.additional_information_with('purpose').value = 'Just for fun'
 algorithm2.additional_information_with('email').value = 'dev@diva.unifr.ch'
 algorithm2.additional_information_with('website').value = 'http://www.diva.unifr.ch'
+algorithm2.additional_information_with('type').value = 'OCR'
 algorithm2.update_attribute(:zip_file, File.open(File.join(Rails.root, 'noising.zip')))
 algorithm2.update_attribute(:executable_path, 'noising/noising.jar')
 algorithm2.output = 'file'
@@ -58,6 +60,7 @@ algorithm3 = user.algorithms.create!(name: 'Dummy algorithm 99', description: 'D
 algorithm3.additional_information_with('author').value = 'DIVA'
 algorithm3.additional_information_with('email').value = 'dev@diva.unifr.ch'
 algorithm3.additional_information_with('website').value = 'http://www.diva.unifr.ch'
+algorithm3.additional_information_with('type').value = 'OCR'
 algorithm3.update_attribute(:zip_file, File.open(File.join(Rails.root, 'dummy.zip')))
 algorithm3.update_attribute(:executable_path, 'empty')
 algorithm3.output = 'file'
