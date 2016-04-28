@@ -14,6 +14,8 @@ class CreateAlgorithm < ActiveRecord::Migration
       t.string :environment
       t.string :executable_path
 
+      t.string :diva_id, default: nil
+
       t.timestamps null: false
     end
   end

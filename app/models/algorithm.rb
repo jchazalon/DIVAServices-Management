@@ -52,6 +52,15 @@ class Algorithm < ActiveRecord::Base
     upload? || review?
   end
 
+  def publication_pending?
+    creating? || testing?
+  end
+
+  def pull_status
+    diva_status = DivaServiceApi.status(self.diva_id)
+    self.update_attributes(status: diva_status) if diva_status != self.status
+  end
+
   def finished_wizard?
     !informations? && !parameters? && !parameters_details? && !upload? && !review?
   end

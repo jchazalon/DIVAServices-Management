@@ -104,6 +104,10 @@ class DivaServiceApi
     hash
   end
 
+  def self.status(diva_id)
+    response = self.get("/algorithm/#{diva_id}")
+  end
+
   def self.validate_algorithm(algorithm)
     self.post('/validate/create', body: algorithm.to_schema, headers: { 'Content-Type' => 'application/json' })
   end

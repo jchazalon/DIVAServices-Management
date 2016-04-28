@@ -18,14 +18,13 @@ module ApplicationHelper
   end
 
   def actions(algorithm)
-    case algorithm.status
-    when :validation_error
-      'lol'
-    when :connection_error
+    case algorithm.status.to_sym
+    when :error, :validation_error, :connection_error
+      link_to 'Recover', recover_algorithm_path(algorithm), method: :post
     when :published
       link_to 'Delete', algorithm_path(algorithm), method: :delete
-    else
-      ''
+    when :validating, :creating, :testing
+      'processing...'
     end
   end
 end
