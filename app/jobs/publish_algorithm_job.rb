@@ -18,7 +18,7 @@ class PublishAlgorithmJob < ActiveJob::Base
         algorithm.set_status(:connection_error, 'Connection error during publication, please try again.')
       end
     else
-      algorithm.set_status(:status_message, 'Unknown error during publication, please try again.')
+      algorithm.set_status(:error, 'Unknown error during publication, please try again.')
     end
   end
 end
