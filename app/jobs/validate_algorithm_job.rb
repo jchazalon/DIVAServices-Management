@@ -2,6 +2,7 @@ class ValidateAlgorithmJob < ActiveJob::Base
   queue_as :default
 
   def perform(algorithm_id)
+    p 'Job1'
     algorithm = Algorithm.find(algorithm_id)
     if algorithm
       begin

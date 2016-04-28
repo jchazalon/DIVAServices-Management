@@ -57,7 +57,10 @@ class AlgorithmsController < ApplicationController
   end
 
   def update_status_from_diva
-    @algorithm.pull_status if @algorithm.publication_pending?
+    algorithms = current_user.algorithms.where.not(status: [1,2,3,4,5])
+    algorithms.each do |algorithm|
+      algorithm.pull_status if algorithm.publication_pending?
+    end
   end
 
 end

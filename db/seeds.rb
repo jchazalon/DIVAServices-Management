@@ -16,10 +16,10 @@ user = User.create!(email: 'dev@diva.unifr.ch', password: '12345678')
 #Algorithm 1
 ############
 algorithm1 = user.algorithms.create!(name: 'Canny Edge Detection', description: 'Who knows, I always only read candy detection ;)', status: :empty)
-algorithm1.additional_information_with('author').value = 'DIVA'
+algorithm1.additional_information_with('author').value = 'DIVA' #TODO author is not stored.....why??
 algorithm1.additional_information_with('email').value = 'dev@diva.unifr.ch'
 algorithm1.additional_information_with('website').value = 'http://www.unifr.ch'
-#algorithm1.additional_information_with('type').value = 'OCR'
+algorithm1.additional_information_with('type').value = 'OCR'
 algorithm1.update_attribute(:zip_file, File.open(File.join(Rails.root, 'cannyedgedetection.zip')))
 algorithm1.update_attribute(:executable_path, 'cannyedgedetection/cannyedgedetection.jar')
 algorithm1.output = 'file'

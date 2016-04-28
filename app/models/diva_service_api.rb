@@ -105,7 +105,8 @@ class DivaServiceApi
   end
 
   def self.status(diva_id)
-    response = self.get("/algorithm/#{diva_id}")
+    response = self.get("/algorithms/#{diva_id}")
+    response['statusCode']
   end
 
   def self.validate_algorithm(algorithm)
