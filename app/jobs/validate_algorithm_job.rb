@@ -10,16 +10,13 @@ class ValidateAlgorithmJob < ActiveJob::Base
         if response.success?
           PublishAlgorithmJob.perform_later(algorithm.id)
         else
-          algorithm.update_attribute(:status, :validation_error)
-          algorithm.update_attribute(:status_message, "Validation Error\nMessage: #{response['message']}")
+          algorithm.set_status(:validation_error, "Validation Error\nMessage: #{response['message']}")
         end
         rescue Errno::ECONNREFUSED => e
-          algorithm.update_attribute(:status, :connection_error)
-          algorithm.update_attribute(:status_message, 'Connection error during publication, please try again.')
+          algorithm.set_status(:connection_error, 'Connection error during publication, please try again.')
         end
       else
-        algorithm.update_attribute(:status, :error)
-        algorithm.update_attribute(:status_message, 'Unknown error during publication, please try again.')
+        algorithm.set_status(:status_message, 'Unknown error during publication, please try again.')
     end
   end
 end

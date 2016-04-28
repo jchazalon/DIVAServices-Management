@@ -56,11 +56,15 @@ class Algorithm < ActiveRecord::Base
     creating? || testing?
   end
 
+  def set_status(status, status_message = '')
+    self.update_attributes(status: status)
+    self.update_attributes(status_message: status_message)
+  end
+
   def pull_status
     response = DivaServiceApi.status(self.diva_id)
-    if response.success? && response['statusCode'] != self.status.to_s
-      self.update_attributes(status: response['statusCode'])
-      self.update_attributes(status_message: response['statusMessage'])
+    if response.empty? && response['statusCode'] != self.status.to_s
+      self.set_status(response['statusCode'], response['statusMessage'])
     end
   end
 

@@ -43,7 +43,7 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def finish_wizard_path
-    @algorithm.update_attribute(:status, :validating)
+    @algorithm.set_status(:validating, 'Informations are currently validated.')
     ValidateAlgorithmJob.perform_later(@algorithm.id)
     algorithms_path
   end
@@ -56,7 +56,7 @@ class AlgorithmWizardController < ApplicationController
 
   def algorithm_not_finished_yet!
     @algorithms = set_algorithm
-    if @algorithm.status == :done
+    if !Algorithm.wizard_steps.include?(@algorithm.status.to_s)
       flash[:notice] = "The algorithm '#{@algorithm.name}' is already finished!"
       redirect_to algorithms_path
     end

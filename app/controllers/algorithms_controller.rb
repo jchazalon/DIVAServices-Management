@@ -12,7 +12,7 @@ class AlgorithmsController < ApplicationController
   end
 
   def index
-    @algorithms = current_user.algorithms.where.not(status: [1,2,3,4,5])
+    @algorithms = current_user.algorithms.where.not(status: [0,1,2,3,4,5])
     @unfinished_algorithms = current_user.algorithms.where(status: [1,2,3,4,5])
   end
 
@@ -57,7 +57,7 @@ class AlgorithmsController < ApplicationController
   end
 
   def update_status_from_diva
-    algorithms = current_user.algorithms.where.not(status: [1,2,3,4,5])
+    algorithms = current_user.algorithms.where.not(status: [0,1,2,3,4,5])
     algorithms.each do |algorithm|
       algorithm.pull_status if algorithm.publication_pending?
     end

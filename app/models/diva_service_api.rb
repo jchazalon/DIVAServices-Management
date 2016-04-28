@@ -1,93 +1,93 @@
 class DivaServiceApi
   include HTTParty
   base_uri 'localhost:8080'
-  default_timeout 150
+  default_timeout 300
   format :json
-
-  #TODO DEV temporary solution
-  def self.mock_languages
-    mock_to_hash({ java: { infoText: "Java" }, coffeescript: { infoText: "Coffeescript" }, bash: { infoText: "Simple command-line" } })
-  end
-
-  def self.mock_environments
-    mock_to_hash({ :"java:7" => { infoText: "Java 7" }, :"java:8" => { infoText: "Java 8" } })
-  end
-
-  #TODO DEV temporary solution
-  def self.mock_output_types
-    mock_to_hash({ file: { infoText: "Store output into a file. Requires to use a outputFile parameter!" }, console: { infoText: "Returns output to the standard output" } })
-  end
-
-  def self.mock_to_hash(mock)
-    hash = Hash.new
-    [*mock.keys].each do |key|
-      hash[key] = mock[key][:infoText]
-    end
-    return hash.invert
-  end
 
   def self.languages
     begin
-      response = self.get('/info/languages')
+      response = self.get('/info/language')
       if response.success?
-        ############################return response.parsed_response #XXX fix
-        return mock_languages
-      else #TODO 404, 500 or something like that, what happens?
-        return mock_languages
+        languages = Hash.new
+        response.parsed_response.keys.each do |k|
+          languages[k] = response.parsed_response[k]['infoText']
+        end
+      return languages.invert
       end
-    rescue Errno::ECONNREFUSED => e #TODO API offline? what happens?
-      p e
-      return mock_languages
+    rescue Errno::ECONNREFUSED => e
+      #XXX Catching exceptions and doing nothing is like ignoring global warming
     end
+    return {}
   end
 
   def self.environments
     begin
       response = self.get('/info/environments')
       if response.success?
-        ############################return response.parsed_response #XXX fix
-        return mock_environments
-      else #TODO 404, 500 or something like that, what happens?
-        return mock_environments
+        environments = Hash.new
+        response.parsed_response.keys.each do |k|
+          environments[k] = response.parsed_response[k]['infoText']
+        end
+      return environments.invert
       end
-    rescue Errno::ECONNREFUSED => e #TODO API offline? what happens?
-      p e
-      return mock_environments
+    rescue Errno::ECONNREFUSED => e
+      #XXX Catching exceptions and doing nothing is like ignoring global warming
     end
+    return {}
   end
 
   def self.available_output_types
     begin
       response = self.get('/info/outputs')
       if response.success?
-        ############################return response.parsed_response #XXX fix
-        return mock_output_types
-      else #TODO 404, 500 or something like that, what happens?
-        return mock_output_types
+        outputs = Hash.new
+        response.parsed_response.keys.each do |k|
+          outputs[k] = response.parsed_response[k]['infoText']
+        end
+      return outputs.invert
       end
-    rescue Errno::ECONNREFUSED => e #TODO API offline? what happens?
-      p e
-      return mock_output_types
+    rescue Errno::ECONNREFUSED => e
+      #XXX Catching exceptions and doing nothing is like ignoring global warming
     end
+    return {}
   end
 
   def self.input_types
-    response = self.get('/info/inputs')
-    return response.parsed_response if response.success?
+    begin
+      response = self.get('/info/inputs')
+      return response.parsed_response if response.success?
+    rescue Errno::ECONNREFUSED => e
+      #XXX Catching exceptions and doing nothing is like ignoring global warming
+    end
+    return {}
   end
 
   def self.additional_information
     begin
       response = self.get('/info/additional')
-      if response.success?
-        return response.parsed_response
-      else #TODO 404, 500 or something like that, what happens?
-        return {}
-      end
-    rescue Errno::ECONNREFUSED => e #TODO API offline? what happens?
-      p e
-      return {}
+      return response.parsed_response if response.success?
+    rescue Errno::ECONNREFUSED => e
+      #XXX Catching exceptions and doing nothing is like ignoring global warming
     end
+    return {}
+  end
+
+  def self.status(diva_id)
+    begin
+      response = self.get("/algorithms/#{diva_id}")
+      return response.parsed_response if response.success?
+    rescue Errno::ECONNREFUSED => e
+      #XXX Catching exceptions and doing nothing is like ignoring global warming
+    end
+    return {}
+  end
+
+  def self.validate_algorithm(algorithm)
+    self.post('/validate/create', body: algorithm.to_schema, headers: { 'Content-Type' => 'application/json' })
+  end
+
+  def self.publish_algorithm(algorithm)
+    self.post('/algorithms', body: algorithm.to_schema, headers: { 'Content-Type' => 'application/json' })
   end
 
   def self.available_input_types
@@ -102,17 +102,5 @@ class DivaServiceApi
       hash[input_type] = data[input_type]['infoText']
     end
     hash
-  end
-
-  def self.status(diva_id)
-    response = self.get("/algorithms/#{diva_id}")
-  end
-
-  def self.validate_algorithm(algorithm)
-    self.post('/validate/create', body: algorithm.to_schema, headers: { 'Content-Type' => 'application/json' })
-  end
-
-  def self.publish_algorithm(algorithm)
-    self.post('/algorithms', body: algorithm.to_schema, headers: { 'Content-Type' => 'application/json' })
   end
 end
