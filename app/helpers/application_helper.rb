@@ -16,4 +16,16 @@ module ApplicationHelper
     end
     nil
   end
+
+  def actions(algorithm)
+    case algorithm.status
+    when :validation_error
+      'lol'
+    when :connection_error
+    when :published
+      link_to 'Delete', algorithm_path(algorithm), method: :delete
+    else
+      ''
+    end
+  end
 end

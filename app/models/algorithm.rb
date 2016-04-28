@@ -6,7 +6,7 @@ class Algorithm < ActiveRecord::Base
     [:informations, :parameters, :parameters_details, :upload, :review]
   end
 
-  enum status: { empty: 0, validating: 50, creating: 100, testing: 110, published: 200, error: 500, connection_error: 503 }.merge!(Hash[ Algorithm.wizard_steps.map{ |c| [c, Algorithm.wizard_steps.index(c) + 1] } ])
+  enum status: { empty: 0, validating: 50, creating: 100, testing: 110, published: 200, validation_error: 412, error: 500, connection_error: 503 }.merge!(Hash[ Algorithm.wizard_steps.map{ |c| [c, Algorithm.wizard_steps.index(c) + 1] } ])
 
   mount_uploader :zip_file, AlgorithmUploader
 
@@ -53,7 +53,7 @@ class Algorithm < ActiveRecord::Base
   end
 
   def finished_wizard?
-    validating? || creating? || testing? || published? || error? || connection_error? #TODO make it inverse
+    !informations? && !parameters? && !parameters_details? && !upload? && !review?
   end
 
   def valid_zip_file

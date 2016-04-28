@@ -41,3 +41,13 @@ Rails.application.configure do
 
   routes.default_url_options[:host] = 'localhost:3000'
 end
+
+Rails.application.config.middleware.use ExceptionNotification::Rack,
+  :slack => {
+    :webhook_url => "https://hooks.slack.com/services/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",
+    :channel => "#delayed_jobs",
+    :username => 'Karl der Kühne',
+    :additional_parameters => {
+      :icon_emoji => ':heart:'
+    }
+  }

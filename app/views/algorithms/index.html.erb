@@ -7,7 +7,8 @@
     <th>Name</th>
     <th>Description</th>
     <th>Input parameters</th>
-    <th>Creation status</th>
+    <th>Status</th>
+    <th>Message</th>
     <th colspan="2">Actions</th>
   </thead>
   <% @algorithms.each do |algorithm| %>
@@ -16,7 +17,8 @@
       <td><%= algorithm.description %></td>
       <td><%= algorithm.input_parameters.count %> Parameter(s)</td>
       <td><%= algorithm.status %></td>
-      <td><%= link_to 'Delete', algorithm_path(algorithm), method: :delete %></td>
+      <td><%= algorithm.status_message %></td>
+      <td><%= actions(algorithm) %></td>
       <td><%= link_to 'Unpublish (dev-function only)', dev_unpublish_algorithm_path(algorithm), method: :post %></td>
     <tr/>
   <% end %>

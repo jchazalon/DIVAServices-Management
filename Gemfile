@@ -63,4 +63,6 @@ gem 'rubyzip'
 gem 'file_validators'
 gem 'wannabe_bool'
 gem 'email_validator'
-gem "validate_url"
+gem 'validate_url'
+gem 'exception_notification'
+gem 'slack-notifier'

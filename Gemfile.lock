@@ -77,6 +77,9 @@ GEM
       activemodel
     erubis (2.7.0)
     eventmachine (1.2.0.1)
+    exception_notification (4.1.4)
+      actionmailer (~> 4.0)
+      activesupport (~> 4.0)
     execjs (2.6.0)
     file_validators (2.1.0)
       activemodel (>= 3.0)
@@ -165,6 +168,7 @@ GEM
     simple_form (3.2.1)
       actionpack (> 4, < 5.1)
       activemodel (> 4, < 5.1)
+    slack-notifier (1.5.1)
     spring (1.7.1)
     sprockets (3.6.0)
       concurrent-ruby (~> 1.0)
@@ -218,6 +222,7 @@ DEPENDENCIES
   delayed_job_active_record
   devise
   email_validator
+  exception_notification
   file_validators
   font-awesome-rails
   httparty
@@ -230,6 +235,7 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   simple_form
+  slack-notifier
   spring
   thin
   turbolinks
