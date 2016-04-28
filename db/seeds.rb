@@ -16,7 +16,7 @@ user = User.create!(email: 'dev@diva.unifr.ch', password: '12345678')
 #Algorithm 1
 ############
 algorithm1 = user.algorithms.create!(name: 'Canny Edge Detection', description: 'Who knows, I always only read candy detection ;)', status: :empty)
-algorithm1.additional_information_with('author').value = 'DIVA' #TODO author is not stored.....why??
+algorithm1.additional_information_with('author').value = 'DIVA UniFr'
 algorithm1.additional_information_with('email').value = 'dev@diva.unifr.ch'
 algorithm1.additional_information_with('website').value = 'http://www.unifr.ch'
 algorithm1.additional_information_with('type').value = 'OCR'
@@ -36,7 +36,7 @@ input_parameter2 = algorithm1.input_parameters.create!(input_type: 'outputFolder
 #Algorithm 2
 ############
 algorithm2 = user.algorithms.create!(name: 'Noising', description: 'Noises the image I guess?!', status: :empty)
-algorithm2.additional_information_with('author').value = 'DIVA'
+algorithm2.additional_information_with('author').value = 'DIVA UniFr'
 algorithm2.additional_information_with('DOI').value = 'doi:10.1000/182'
 algorithm2.additional_information_with('purpose').value = 'Just for fun'
 algorithm2.additional_information_with('email').value = 'dev@diva.unifr.ch'
@@ -57,7 +57,7 @@ algorithm2.save!
 #Algorithm 3
 ############
 algorithm3 = user.algorithms.create!(name: 'Dummy algorithm 99', description: 'Doesn\'t work, just for testing', status: :empty)
-algorithm3.additional_information_with('author').value = 'DIVA'
+algorithm3.additional_information_with('author').value = 'DIVA UniFr'
 algorithm3.additional_information_with('email').value = 'dev@diva.unifr.ch'
 algorithm3.additional_information_with('website').value = 'http://www.diva.unifr.ch'
 algorithm3.additional_information_with('type').value = 'OCR'
@@ -70,8 +70,7 @@ algorithm3.update_attribute(:status, :review)
 algorithm3.save!
 
 # InputParameters
-input_parameter1 = algorithm3.input_parameters.create!(input_type: 'highlighter')
-input_parameter1.field_with('type').value = 'circle'
+input_parameter1 = algorithm3.input_parameters.create!(input_type: 'inputImage')
 
 input_parameter2 = algorithm3.input_parameters.create!(input_type: 'text')
 input_parameter2.field_with('name').value = 'bananaPhone'
@@ -111,5 +110,3 @@ input_parameter7.field_with('options').field_with('default').value = 0
 
 input_parameter8 = algorithm3.input_parameters.create!(input_type: 'highlighter')
 input_parameter8.field_with('type').value = 'circle'
-
-input_parameter9 = algorithm3.input_parameters.create!(input_type: 'inputImage')

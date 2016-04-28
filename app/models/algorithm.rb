@@ -57,8 +57,11 @@ class Algorithm < ActiveRecord::Base
   end
 
   def pull_status
-    diva_status = DivaServiceApi.status(self.diva_id)
-    self.update_attributes(status: diva_status) if diva_status != self.status
+    response = DivaServiceApi.status(self.diva_id)
+    if response.success? && response['statusCode'] != self.status.to_s
+      self.update_attributes(status: response['statusCode'])
+      self.update_attributes(status_message: response['statusMessage'])
+    end
   end
 
   def finished_wizard?

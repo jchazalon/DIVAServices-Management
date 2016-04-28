@@ -6,11 +6,12 @@ class PublishAlgorithmJob < ActiveJob::Base
     algorithm = Algorithm.find(algorithm_id)
     if algorithm
       begin
+        algorithm.update_attribute(:status, :creating)
+        algorithm.update_attribute(:status_message, 'Algorithm is currently deploying. This may take several minutes. Grab a coffee.')
         response = DivaServiceApi.publish_algorithm(algorithm)
         if response.success?
           algorithm.update_attribute(:diva_id, response['identifier'])
-          algorithm.update_attribute(:status, :creating)
-          algorithm.update_attribute(:status_message, 'Algorithm is currently deploying. This may take several minutes. Grab a coffee.')
+          algorithm.pull_status
         else
           algorithm.update_attribute(:status, :error)
           algorithm.update_attribute(:status_message, "Unknown error during publication, please try again.\n#{response}")
