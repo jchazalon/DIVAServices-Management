@@ -63,7 +63,7 @@ class Algorithm < ActiveRecord::Base
 
   def pull_status
     response = DivaServiceApi.status(self.diva_id)
-    if response.empty? && response['statusCode'] != self.status.to_s
+    if !response.empty? && response['statusCode'] != Algorithm.statuses[self.status]
       self.set_status(response['statusCode'], response['statusMessage'])
     end
   end
