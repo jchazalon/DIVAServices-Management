@@ -43,9 +43,12 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  # Added by uzysset
+  gem "better_errors"
 end
 
-# Added by urs zysset
+# Added by uzysset
 gem 'simple_form'
 gem 'thin'
 gem 'devise'
@@ -66,3 +69,4 @@ gem 'email_validator'
 gem 'validate_url'
 gem 'exception_notification'
 gem 'slack-notifier'
+gem 'binding_of_caller'
