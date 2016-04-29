@@ -69,7 +69,7 @@ class Algorithm < ActiveRecord::Base
   end
 
   def finished_wizard?
-    !informations? && !parameters? && !parameters_details? && !upload? && !review?
+    !empty? && !informations? && !parameters? && !parameters_details? && !upload? && !review?
   end
 
   def valid_zip_file
