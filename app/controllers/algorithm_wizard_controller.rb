@@ -56,7 +56,7 @@ class AlgorithmWizardController < ApplicationController
 
   def algorithm_not_finished_yet!
     @algorithms = set_algorithm
-    if !Algorithm.wizard_steps.include?(@algorithm.status.to_s)
+    if !Algorithm.wizard_steps.include?(@algorithm.status.to_sym)
       flash[:notice] = "The algorithm '#{@algorithm.name}' is already finished!"
       redirect_to algorithms_path
     end
