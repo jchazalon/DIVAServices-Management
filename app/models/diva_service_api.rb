@@ -82,6 +82,17 @@ class DivaServiceApi
     return {}
   end
 
+  def self.delete_algorithm(algorithm)
+    #TODO What happens if there is no diva_id??
+    begin
+      response = self.delete("/algorithms/#{algorithm.diva_id}")
+      return true if response.success?
+    rescue Errno::ECONNREFUSED => e
+      #XXX Catching exceptions and doing nothing is like ignoring global warming
+    end
+    return false
+  end
+
   def self.validate_algorithm(algorithm)
     self.post('/validate/create', body: algorithm.to_schema, headers: { 'Content-Type' => 'application/json' })
   end
