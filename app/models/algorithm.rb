@@ -115,7 +115,7 @@ class Algorithm < ActiveRecord::Base
   end
 
   def additional_information_with(name)
-    fields = Field.where(fieldable_id: self.id)#, fieldable_type: result.class.name)
+    fields = self.fields.where(fieldable_id: self.id)#, fieldable_type: result.class.name)
     field = fields.where("payload->>'name' = ?", name).first
   end
 
