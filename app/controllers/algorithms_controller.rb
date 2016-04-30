@@ -28,9 +28,14 @@ class AlgorithmsController < ApplicationController
   end
 
   def destroy
-    if DivaServiceApi.delete_algorithm(@algorithm)
+    if @algorithm.finished_wizard?
+      if DivaServiceApi.delete_algorithm(@algorithm) && @algorithm.destroy
+        flash[:notice] = "Deleted algorithm #{@algorithm.name} from DIVAService"
+      else
+        flash[:error] = "Could not delete algorithm #{@algorithm.name} from DIVAService"
+      end
+    elsif @algorithm.destroy
       flash[:notice] = "Deleted algorithm #{@algorithm.name}"
-      @algorithm.destroy
     else
       flash[:error] = "Could not delete algorithm #{@algorithm.name}"
     end

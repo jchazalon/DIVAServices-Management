@@ -19,7 +19,7 @@
 
 
   <h3>Output</h3>
-  <%= f.input :output, collection: DivaServiceApi.available_output_types %>
+  <%= f.input :output, collection: DivaServiceApi.output_types %>
   <%= f.hint 'Type of the output' %>
 
   <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>

@@ -1,5 +1,5 @@
 <%= simple_form_for([@algorithm, @input_parameter]) do |f| %>
-    <%= f.input :input_type, collection: DivaServiceApi.available_input_types, disabled: true %>
+    <%= f.input :input_type, collection: DivaServiceApi.available_input_type_keys, disabled: true %>
     <%= f.simple_fields_for :fields do |ff| %>
       <%= render partial: 'field', locals: { f: ff } %>
     <% end %>

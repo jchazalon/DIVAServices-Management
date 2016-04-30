@@ -1,5 +1,6 @@
 class AlgorithmWizardController < ApplicationController
   include Wicked::Wizard
+  before_action :diva_service_online!
   before_action :algorithm_not_finished_yet!, only: [:show, :update]
   before_action :set_algorithm, only: [:show, :update]
 
@@ -83,4 +84,12 @@ class AlgorithmWizardController < ApplicationController
   def algorithm_params_step4
     params.require(:algorithm).permit(:language, :environment, :zip_file, :executable_path)
   end
+
+  def diva_service_online!
+    unless DivaServiceApi.is_online?
+      flash[:error] = "DIVAService is currently not reachable. Please stand by until we are able to reconnect."
+      redirect_to algorithms_path
+    end
+  end
+
 end

@@ -24,7 +24,7 @@ class Algorithm < ActiveRecord::Base
   validates :description, presence: true, if: :review_or_step_1?
   #TODO validate required additional_information fields
 
-  validates :output, presence: true, inclusion: { in: DivaServiceApi.available_output_types.values.map(&:to_s) }, if: :review_or_step_2?
+  validates :output, presence: true, inclusion: { in: DivaServiceApi.output_types.values.map(&:to_s) }, if: :review_or_step_2?
 
   validates :zip_file, presence: true, file_size: { less_than: 100.megabytes }, if: :review_or_step_4?
   validates_integrity_of :zip_file, if: :review_or_step_4?
