@@ -2,6 +2,7 @@ class CreateAlgorithm < ActiveRecord::Migration
   def change
     create_table :algorithms do |t|
       t.references :user, index: true
+      t.integer :version, default: 1
       t.integer :status, default: 0
       t.string :status_message
 

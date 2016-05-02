@@ -7,7 +7,9 @@ class AlgorithmsController < ApplicationController
 
   def copy #XXX DEV only
     set_algorithm
-    @algorithm.update_attributes(next: @algorithm.deep_copy)
+    new_algorithm = @algorithm.deep_copy
+    @algorithm.update_attributes(next: new_algorithm)
+    new_algorithm.update_attributes(version: @algorithm.version + 1)
     redirect_to algorithms_path
   end
 
@@ -18,7 +20,7 @@ class AlgorithmsController < ApplicationController
   end
 
   def index
-    @algorithms = current_user.algorithms.paginate(page: params[:page], per_page: 15)
+    @algorithms = current_user.algorithms.where(next: nil).paginate(page: params[:page], per_page: 15)
   end
 
   def show

@@ -38,6 +38,12 @@
             <td><%= algorithm.updated_at.to_formatted_s(:db) %></td>
             <td><span class="label label-info"><%= algorithm.status %></span></br><%= algorithm.status_message %></td>
           </tr>
+          <% previous_versions(algorithm).each do |older_algorithm| %>
+            <tr>
+              <td><%= older_algorithm.version if older_algorithm %></td>
+              <td colspan="5"><%= older_algorithm.name %></td>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>

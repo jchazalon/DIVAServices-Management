@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20160311214907) do
 
   create_table "algorithms", force: :cascade do |t|
     t.integer  "user_id"
+    t.integer  "version",         default: 1
     t.integer  "status",          default: 0
     t.string   "status_message"
     t.string   "name"
