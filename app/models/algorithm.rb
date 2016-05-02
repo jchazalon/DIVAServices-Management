@@ -60,6 +60,14 @@ class Algorithm < ActiveRecord::Base
   def set_status(status, status_message = '')
     self.update_attributes(status: status)
     self.update_attributes(status_message: status_message)
+    self.update_version if self.status == 'published'
+  end
+
+  def update_version
+    new_algorithm = self.deep_copy
+    self.update_attributes(next: new_algorithm)
+    new_algorithm.update_attributes(version: self.version + 1)
+    return new_algorithm
   end
 
   def deep_copy

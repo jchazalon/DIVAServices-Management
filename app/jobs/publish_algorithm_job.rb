@@ -7,7 +7,7 @@ class PublishAlgorithmJob < ActiveJob::Base
     if algorithm
       begin
         algorithm.set_status(:creating, 'Algorithm is currently deploying. This may take several minutes. Grab a coffee.')
-        response = DivaServiceApi.publish_algorithm(algorithm)
+        p response = DivaServiceApi.publish_algorithm(algorithm)
         if response.success?
           algorithm.update_attribute(:diva_id, response['identifier'])
           algorithm.pull_status

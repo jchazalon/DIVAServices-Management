@@ -7,9 +7,7 @@ class AlgorithmsController < ApplicationController
 
   def copy #XXX DEV only
     set_algorithm
-    new_algorithm = @algorithm.deep_copy
-    @algorithm.update_attributes(next: new_algorithm)
-    new_algorithm.update_attributes(version: @algorithm.version + 1)
+    @algorithm.update_version
     redirect_to algorithms_path
   end
 
