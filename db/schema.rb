@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20160311214907) do
     t.string   "environment"
     t.string   "executable_path"
     t.string   "diva_id"
+    t.integer  "next_id"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.string   "zip_file"

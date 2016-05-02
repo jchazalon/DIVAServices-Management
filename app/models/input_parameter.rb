@@ -68,4 +68,14 @@ class InputParameter < ActiveRecord::Base
     end
     return data
   end
+
+  def deep_copy
+    input_parameter_copy = self.dup
+    self.fields.each do |field|
+      input_parameter_copy.fields << field.deep_copy
+    end
+    input_parameter_copy.save!
+    input_parameter_copy
+  end
+
 end

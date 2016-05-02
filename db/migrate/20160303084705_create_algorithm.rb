@@ -16,6 +16,8 @@ class CreateAlgorithm < ActiveRecord::Migration
 
       t.string :diva_id, default: nil
 
+      t.belongs_to :next, default: nil
+
       t.timestamps null: false
     end
   end

@@ -47,7 +47,7 @@ class Field < ActiveRecord::Base
 
   def to_schema
     data = Hash.new
-    self.fields.each do |field|
+    self.fields.each do |field| #TODO why fields??? copy paste error from input parameters?
       if field.type == 'ObjectField'
         data[field.name] = field.to_schema
       else
@@ -55,6 +55,21 @@ class Field < ActiveRecord::Base
       end
     end
     return data
+  end
+
+  def deep_copy
+    if self.type == 'ObjectField'
+      field_copy = self.dup
+      self.fields.each do |field|
+        field_copy.fields << field.deep_copy
+      end
+      field_copy.save!
+      field_copy
+    else
+      field_copy = self.dup
+      field_copy.save!
+      field_copy
+    end
   end
 
   def value_to_schema

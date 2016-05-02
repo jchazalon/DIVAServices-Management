@@ -5,6 +5,12 @@ class AlgorithmsController < ApplicationController
   before_action :update_status_from_diva, only: [:index, :show]
   respond_to :html
 
+  def copy #XXX DEV only
+    set_algorithm
+    @algorithm.update_attributes(next: @algorithm.deep_copy)
+    redirect_to algorithms_path
+  end
+
   def recover
     @algorithm.update_attributes(status: :review)
     flash[:notice] = @algorithm.status_message

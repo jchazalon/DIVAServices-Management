@@ -32,7 +32,7 @@
         <% @algorithms.each do |algorithm| %>
           <tr>
             <td align="center"><%= actions(algorithm) %></td>
-            <td><%= algorithm.name.blank? ? 'N/A' : algorithm.name %></td>
+            <td><%= algorithm.name.blank? ? 'N/A' : algorithm.name %></br><%= link_to 'COPY!', copy_algorithm_path(algorithm), method: :post %></td>
             <td>?</td>
             <td>?</td>
             <td><%= algorithm.updated_at.to_formatted_s(:db) %></td>

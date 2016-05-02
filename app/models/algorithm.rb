@@ -12,6 +12,7 @@ class Algorithm < ActiveRecord::Base
 
   after_validation :create_fields, if: 'self.errors.empty? && self.fields.empty?'
 
+  belongs_to :next, class_name: 'Algorithm', dependent: :destroy
   has_many :fields, as: :fieldable, dependent: :destroy
   has_many :input_parameters, dependent: :destroy
   belongs_to :user
@@ -59,6 +60,18 @@ class Algorithm < ActiveRecord::Base
   def set_status(status, status_message = '')
     self.update_attributes(status: status)
     self.update_attributes(status_message: status_message)
+  end
+
+  def deep_copy
+    algorithm_copy = self.dup
+    self.fields.each do |field|
+      algorithm_copy.fields << field.deep_copy
+    end
+    self.input_parameters.each do |input_parameter|
+      algorithm_copy.input_parameters << input_parameter.deep_copy
+    end
+    algorithm_copy.save!
+    algorithm_copy
   end
 
   def pull_status
