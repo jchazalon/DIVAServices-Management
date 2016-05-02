@@ -1,10 +1,4 @@
 
-<% if @algorithms.empty? %>
-<div style="padding: 15px;">
-  <p class="bg-info">You haven't uploaded any algorithm yet. Click on 'New algorithm' to start now!</p>
-</div>
-<% end %>
-
 <div class="panel panel-default panel-table">
   <div class="panel-heading">
     <div class="row">
@@ -17,13 +11,14 @@
     </div>
   </div>
   <div class="panel-body">
-    <table class="table table-striped table-bordered table-list">
+    <table class="table table-bordered table-list main-table">
       <thead>
         <tr>
           <th><em class="fa fa-cog"></em></th>
           <th>Name</th>
           <th>Used</th>
           <th>Errors</th>
+          <th>Version</th>
           <th>Last update</th>
           <th>Status</th>
         </tr>
@@ -35,18 +30,42 @@
             <td><%= algorithm.name.blank? ? 'N/A' : algorithm.name %></br><%= link_to 'COPY!', copy_algorithm_path(algorithm), method: :post %></td>
             <td>?</td>
             <td>?</td>
+            <td><%= algorithm.version %></td>
             <td><%= algorithm.updated_at.to_formatted_s(:db) %></td>
             <td><span class="label label-info"><%= algorithm.status %></span></br><%= algorithm.status_message %></td>
           </tr>
-          <% previous_versions(algorithm).each do |older_algorithm| %>
+          <% if algorithm.version > 1 %>
+            <tr class="versions-toggle">
+              <td colspan="7">
+                <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapse<%= algorithm.id %>" aria-expanded="false" aria-controls="collapse<%= algorithm.id %>">
+                  <em class="fa fa-plus-circle"></em> Show older versions
+                </button>
+              </td>
+            </tr>
             <tr>
-              <td><%= older_algorithm.version if older_algorithm %></td>
-              <td colspan="5"><%= older_algorithm.name %></td>
+              <td class="versions-panel" colspan="7">
+                <div class="collapse" id="collapse<%= algorithm.id %>">
+                  <table class="table table-striped">
+                    <% previous_versions(algorithm).each do |older_algorithm| %>
+                      <tr>
+                        <td><%= older_algorithm.version %></td>
+                        <td><%= older_algorithm.updated_at.to_formatted_s(:db) %></td>
+                        <td><span class="label label-info"><%= older_algorithm.status %></span></td>
+                      </tr>
+                    <% end %>
+                  </table>
+                </div>
+              </td>
             </tr>
           <% end %>
         <% end %>
       </tbody>
     </table>
+    <% if @algorithms.empty? %>
+      <div style="padding: 15px;">
+        <p class="bg-info">You haven't uploaded any algorithm yet. Click on 'New algorithm' to start now!</p>
+      </div>
+    <% end %>
   </div>
   <div class="panel-footer">
     <div class="row">

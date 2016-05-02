@@ -67,7 +67,7 @@ algorithm3.output = 'file'
 algorithm3.language = 'java'
 algorithm3.environment = 'java:8'
 algorithm3.diva_id = '00000000000000000'
-algorithm3.update_attribute(:status, :published)
+algorithm3.update_attribute(:status, :review)
 algorithm3.save!
 
 # InputParameters

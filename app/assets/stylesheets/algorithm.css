@@ -26,11 +26,25 @@
   margin-right: 2px;
 }
 
-.panel-table .panel-body .table-bordered > tbody > tr:first-of-type > td{
+.panel-table .panel-body .table-bordered > tbody > tr:first-of-type > td {
   border-bottom: 0px;
 }
 
-.panel-table .panel-body .table-bordered > thead > tr:first-of-type > th{
+.panel-table .panel-body .table-bordered > tbody > tr.versions-toggle > td {
+  padding: 3px 10px;
+}
+
+.panel-table .panel-body .table-bordered > tbody > tr > td.versions-panel {
+  padding: 0 0 0 0;
+}
+
+.versions-panel > div > table {
+  margin-bottom: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+
+.panel-table .panel-body .table-bordered > thead > tr:first-of-type > th {
   border-top: 0px;
 }
 
