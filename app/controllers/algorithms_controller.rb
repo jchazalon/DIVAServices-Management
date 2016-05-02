@@ -12,8 +12,7 @@ class AlgorithmsController < ApplicationController
   end
 
   def index
-    @algorithms = current_user.algorithms.where.not(status: [0,1,2,3,4,5])
-    @unfinished_algorithms = current_user.algorithms.where(status: [1,2,3,4,5])
+    @algorithms = current_user.algorithms.paginate(page: params[:page], per_page: 15)
   end
 
   def show
@@ -67,9 +66,13 @@ class AlgorithmsController < ApplicationController
   end
 
   def update_status_from_diva
-    algorithms = current_user.algorithms.where.not(status: [0,1,2,3,4,5])
-    algorithms.each do |algorithm|
-      algorithm.pull_status if algorithm.publication_pending?
+    if DivaServiceApi.is_online?
+      algorithms = current_user.algorithms.where.not(status: [0,1,2,3,4,5])
+      algorithms.each do |algorithm|
+        algorithm.pull_status if algorithm.publication_pending?
+      end
+    else
+      flash[:error] = "DIVAService currently not reachable"
     end
   end
 
