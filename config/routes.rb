@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root to: 'algorithms#index'
   devise_for :users
   resources :algorithms do
+    get '/status', to: 'algorithms#status', on: :member
     get '/edit', to: 'algorithms#edit', on: :member
     post '/publish', to: 'algorithms#publish', on: :member
     post '/recover', to: 'algorithms#recover', on: :member

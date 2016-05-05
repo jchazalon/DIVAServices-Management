@@ -5,6 +5,11 @@ class AlgorithmsController < ApplicationController
   before_action :update_status_from_diva, only: [:index, :show]
   respond_to :html
 
+  def status
+    set_algorithm
+    render :json => { status: @algorithm.status, status_message: @algorithm.status_message }
+  end
+
   def copy #XXX DEV only
     set_algorithm
     @algorithm.update_version
