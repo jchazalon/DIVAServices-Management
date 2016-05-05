@@ -69,7 +69,6 @@ class Algorithm < ActiveRecord::Base
 
   def deep_copy
     algorithm_copy = self.dup
-    #TODO Need do copy algorithm file as well!!!
     self.fields.each do |field|
       algorithm_copy.fields << field.deep_copy
     end
@@ -77,6 +76,9 @@ class Algorithm < ActiveRecord::Base
       algorithm_copy.input_parameters << input_parameter.deep_copy
     end
     algorithm_copy.save!
+    #algorithm_copy.update_attribute(:zip_file, nil)
+    #algorithm_copy.update_attribute(:zip_file, File.open(self.zip_file.file.file))
+    AlgorithmUploader.copy_file(self.id, algorithm_copy.id)
     algorithm_copy
   end
 

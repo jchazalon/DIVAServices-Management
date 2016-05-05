@@ -13,9 +13,9 @@ class AlgorithmUploader < CarrierWave::Uploader::Base
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
-  # def store_dir
-  #   "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
-  # end
+  def store_dir
+    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+  end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url
@@ -46,7 +46,13 @@ class AlgorithmUploader < CarrierWave::Uploader::Base
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
   def filename
-    "algorithm_#{model.id}.#{file.extension}" if original_filename
+    "algorithm.#{file.extension}" if original_filename
+  end
+
+  #XXX this is just weak...
+  def self.copy_file(src_id, dst_id)
+    FileUtils.mkdir_p("#{Rails.root}/public/uploads/algorithm/zip_file/#{dst_id}/")
+    FileUtils.cp(File.join(Rails.root, "public/uploads/algorithm/zip_file/#{src_id}/algorithm.zip"), "#{Rails.root}/public/uploads/algorithm/zip_file/#{dst_id}/")
   end
 
 end
