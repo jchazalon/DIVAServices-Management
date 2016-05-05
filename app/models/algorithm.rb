@@ -1,12 +1,13 @@
 class Algorithm < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   require 'zip'
+  default_scope { order('updated_at DESC') }
 
   def self.wizard_steps
     [:informations, :parameters, :parameters_details, :upload, :review]
   end
 
-  enum status: { empty: 0, validating: 50, creating: 100, testing: 110, published: 200, validation_error: 412, error: 500, connection_error: 503 }.merge!(Hash[ Algorithm.wizard_steps.map{ |c| [c, Algorithm.wizard_steps.index(c) + 1] } ])
+  enum status: { empty: 0, validating: 50, unpublished_changes: 51, creating: 100, testing: 110, published: 200, validation_error: 412, error: 500, connection_error: 503 }.merge!(Hash[ Algorithm.wizard_steps.map{ |c| [c, Algorithm.wizard_steps.index(c) + 1] } ])
 
   mount_uploader :zip_file, AlgorithmUploader
 
@@ -21,36 +22,32 @@ class Algorithm < ActiveRecord::Base
   accepts_nested_attributes_for :input_parameters, allow_destroy: :true
 
   validates :status, presence: true
-  validates :name, presence: true, format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "cannot contain any special characters" }, if: :review_or_step_1?
-  validates :description, presence: true, if: :review_or_step_1?
+  validates :name, presence: true, format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "cannot contain any special characters" }, if: :validate_informations?
+  validates :description, presence: true, if: :validate_informations?
   #TODO validate required additional_information fields
 
-  validates :output, presence: true, inclusion: { in: DivaServiceApi.output_types.values.map(&:to_s) }, if: :review_or_step_2?
+  validates :output, presence: true, inclusion: { in: DivaServiceApi.output_types.values.map(&:to_s) }, if: :validate_parameters?
 
-  validates :zip_file, presence: true, file_size: { less_than: 100.megabytes }, if: :review_or_step_4?
-  validates_integrity_of :zip_file, if: :review_or_step_4?
-  validates_processing_of :zip_file, if: :review_or_step_4?
-  validates :executable_path, presence: true, format: { with: /\A[a-zA-Z0-9\.\-\s\/\_]+\z/, message: "contains invalid characters" }, if: :review_or_step_4?
-  validate :valid_zip_file, if: :review_or_step_4?
-  validate :zip_file_includes_executable_path, if: :review_or_step_4?
-  validate :executable_path_is_a_file, if: :review_or_step_4?
-  validates :language, presence: true, inclusion: { in: DivaServiceApi.languages.values.map(&:to_s) }, if: :review_or_step_4?
-  validates :environment, presence: true, inclusion: { in: DivaServiceApi.environments.values.map(&:to_s) }, if: :review_or_step_4?
+  validates :zip_file, presence: true, file_size: { less_than: 100.megabytes }, if: :validate_upload?
+  validates_integrity_of :zip_file, if: :validate_upload?
+  validates_processing_of :zip_file, if: :validate_upload?
+  validates :executable_path, presence: true, format: { with: /\A[a-zA-Z0-9\.\-\s\/\_]+\z/, message: "contains invalid characters" }, if: :validate_upload?
+  validate :valid_zip_file, if: :validate_upload?
+  validate :zip_file_includes_executable_path, if: :validate_upload?
+  validate :executable_path_is_a_file, if: :validate_upload?
+  validates :language, presence: true, inclusion: { in: DivaServiceApi.languages.values.map(&:to_s) }, if: :validate_upload?
+  validates :environment, presence: true, inclusion: { in: DivaServiceApi.environments.values.map(&:to_s) }, if: :validate_upload?
 
-  def review_or_step_1?
-    informations? || review?
+  def validate_informations?
+    informations? || review? || published? || unpublished_changes?
   end
 
-  def review_or_step_2?
-    parameters? || review?
+  def validate_parameters?
+    parameters? || review? || published? || unpublished_changes?
   end
 
-  def review_or_step_3?
-    parameters_details? || review?
-  end
-
-  def review_or_step_4?
-    upload? || review?
+  def validate_upload?
+    upload? || review? || published? || unpublished_changes?
   end
 
   def publication_pending?
@@ -66,7 +63,7 @@ class Algorithm < ActiveRecord::Base
   def update_version
     new_algorithm = self.deep_copy
     self.update_attributes(next: new_algorithm)
-    new_algorithm.update_attributes(version: self.version + 1)
+    self.update_attributes(version: self.version + 1)
     return new_algorithm
   end
 
@@ -161,6 +158,17 @@ class Algorithm < ActiveRecord::Base
       language: self.language,
       base_image: self.environment
     }.to_json
+  end
+
+  def anything_changed?
+    return true if self.changed?
+    self.fields.each do |field|
+      return true if field.anything_changed?
+    end
+    self.input_parameters.each do |input_parameter|
+      return true if input_parameter.anything_changed?
+    end
+    return false;
   end
 
   private

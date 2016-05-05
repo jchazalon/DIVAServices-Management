@@ -30,16 +30,7 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def update
-    case step
-    when :informations
-      @algorithm.assign_attributes(algorithm_params_step1)
-    when :parameters
-      @algorithm.assign_attributes(algorithm_params_step2)
-    when :parameters_details
-      @algorithm.assign_attributes(algorithm_params_step3)
-    when :upload
-      @algorithm.assign_attributes(algorithm_params_step4)
-    end
+    @algorithm.assign_attributes(algorithm_params(step))
     render_wizard @algorithm
   end
 
@@ -58,31 +49,13 @@ class AlgorithmWizardController < ApplicationController
   def algorithm_not_finished_yet!
     @algorithms = set_algorithm
     if @algorithm && @algorithm.finished_wizard?
-      flash[:notice] = "The algorithm '#{@algorithm.name}' is already finished!"
+      flash[:notice] = "The algorithm '#{@algorithm.name}' is already finished! The wizard can only be accessed during creation. Use the edit routes to update an exising algorithm."
       redirect_to algorithms_path
     end
   end
 
-  def algorithm_params_step1
-    params.require(:algorithm).permit(:name, :description, fields_attributes: [:id, :value])
-  end
-
-  def algorithm_params_step2
-    params.require(:algorithm).permit(:output, input_parameters_attributes: [:id, :input_type, :_destroy])
-  end
-
-  # Accepts up to 7 level deep nested fields
-  def algorithm_params_step3
-    field_attributes_base = [:id, :value]
-    fields = []
-    (1..7).each do
-      fields = field_attributes_base + [fields_attributes: fields]
-    end
-    params.require(:algorithm).permit(input_parameters_attributes: [:id, fields_attributes: fields])
-  end
-
-  def algorithm_params_step4
-    params.require(:algorithm).permit(:language, :environment, :zip_file, :executable_path)
+  def algorithm_params(step)
+    params.require(:algorithm).permit(permitted_params(step))
   end
 
   def diva_service_online!
@@ -91,5 +64,4 @@ class AlgorithmWizardController < ApplicationController
       redirect_to algorithms_path
     end
   end
-
 end

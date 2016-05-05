@@ -1,0 +1,14 @@
+<%= simple_form_for(@algorithm, url: algorithm_path(@algorithm, step: :informations), method: :put) do |f| %>
+
+  <h3>General information</h3>
+  <%= f.input :name, required: true %>
+  <%= f.input :description, as: :text, required: true %>
+
+  <h3>Additional information</h3>
+  <%= f.simple_fields_for :fields do |ff| %>
+    <%= render partial: 'field', locals: { f: ff } %>
+  <% end %>
+
+  <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
+  <%= f.submit 'Save', class: 'btn btn-primary' %>
+<% end %>

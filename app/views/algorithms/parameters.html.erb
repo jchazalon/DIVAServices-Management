@@ -1,0 +1,31 @@
+<%= simple_form_for(@algorithm, url: algorithm_path(@algorithm, step: :parameters), method: :put) do |f| %>
+
+  <h3>Input</h3>
+  <div class="input_parameters">
+    <%= f.simple_fields_for :input_parameters do |ff| %>
+      <%= render partial: 'input_parameter_fields', locals: { f: ff } %>
+    <% end %>
+    <div class="links">
+      <%= link_to_add_association '<i class="fa fa-plus"></i> New input parameter'.html_safe, f, :input_parameters, class: 'btn btn-default' %>
+    </div>
+  </div>
+
+
+  <h3>Output</h3>
+  <%= f.input :output, collection: DivaServiceApi.output_types %>
+  <%= f.hint 'Type of the output' %>
+
+  <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
+  <%= f.submit 'Save', class: 'btn btn-primary' %>
+<% end %>
+
+<script type="text/javascript">
+  function update_infotext(select) {
+    var descriptions = <%= raw(DivaServiceApi.input_type_descriptions.to_json) %>;
+    var description = '';
+    if (descriptions[select.value] != null) {
+      description = descriptions[select.value];
+    }
+    $(select).parent().parent().parent().find('.help-block').text(description);
+  }
+</script>

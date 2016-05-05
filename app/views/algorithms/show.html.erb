@@ -1,8 +1,5 @@
 <h1><%= @algorithm.name %></h1>
 
-<h2>Schema</h2>
-<pre><%= @algorithm.to_schema %></pre>
-
 <h2>General</h2>
 <table class="table">
   <tr>
@@ -24,6 +21,10 @@
     </tr>
   <% end %>
 </table>
+
+<div class="row pull-right">
+  <%= link_to 'Edit algorithm informations', edit_algorithm_path(@algorithm, step: :informations), class: 'btn btn-default' %>
+</div>
 
 <div class="row">
 <h2>Input</h2>
@@ -55,12 +56,24 @@
 </ol>
 </div>
 
+<div class="col-md-12">
+  <div class="pull-right">
+    <%= link_to 'Edit input parameters', edit_algorithm_path(@algorithm, step: :parameters_details), class: 'btn btn-default' %>
+  </div>
+</div>
+
 <h2>Output</h2>
 <table class="table">
     <tr>
       <td><%= @algorithm.output %></td>
     </tr>
 </table>
+
+<div class="col-md-12">
+  <div class="pull-right">
+    <%= link_to 'Edit output', edit_algorithm_path(@algorithm, step: :parameters), class: 'btn btn-default' %>
+  </div>
+</div>
 
 <h2>Upload</h2>
 <table class="table">
@@ -81,3 +94,12 @@
       <td><%= @algorithm.environment %></td>
     </tr>
 </table>
+
+<div class="col-md-12">
+  <div class="pull-right">
+    <%= link_to 'Edit upload', edit_algorithm_path(@algorithm, step: :upload), class: 'btn btn-default' %>
+  </div>
+</div>
+
+<%= link_to 'Back', algorithms_path, class: 'btn btn-default' %>
+<%= link_to 'Publish', algorithms_path, class: 'btn btn-primary' %>

@@ -72,6 +72,17 @@ class Field < ActiveRecord::Base
     end
   end
 
+  def anything_changed?
+    if self.type == 'ObjectField'
+      self.fields.each do |field|
+        return true if field.anything_changed?
+      end
+    else
+      return true if self.changed?
+    end
+    return false;
+  end
+
   def value_to_schema
     self.value
   end

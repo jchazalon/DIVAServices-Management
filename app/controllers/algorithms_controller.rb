@@ -1,6 +1,7 @@
 class AlgorithmsController < ApplicationController
-  before_action :set_algorithm, only: [:recover, :show, :update, :destroy]
-  before_action :algorithm_finished_wizard!, only: :show
+  before_action :set_algorithm, only: [:recover, :show, :edit, :update, :destroy]
+  before_action :algorithm_finished_wizard!, only:  [:show, :edit, :update]
+  before_action :algorithm_is_published, only: [:edit, :update]
   before_action :can_recover, only: :recover
   before_action :update_status_from_diva, only: [:index, :show]
   respond_to :html
@@ -24,11 +25,18 @@ class AlgorithmsController < ApplicationController
   def show
   end
 
+  def edit
+    render view(params[:step])
+  end
+
   def update
-    if @algorithm.update(algorithm_params)
-      redirect_to algorithms_path
+    @algorithm.assign_attributes(algorithm_params(params[:step]))
+    changed = @algorithm.anything_changed?
+    if @algorithm.save
+      @algorithm.set_status(:unpublished_changes, 'There are unpublished changes.') if changed
+      redirect_to algorithm_path(@algorithm)
     else
-      render :edit
+      render view(params[:step])
     end
   end
 
@@ -53,14 +61,34 @@ class AlgorithmsController < ApplicationController
     @algorithm = current_user.algorithms.find(params[:id])
   end
 
-  def algorithm_params
-    params.require(:algorithm).permit!
+  def algorithm_params(step)
+    params.require(:algorithm).permit(permitted_params(step))
   end
 
   def algorithm_finished_wizard!
     unless @algorithm.finished_wizard?
       flash[:notice] = "Please finish the wizard first"
       redirect_to algorithm_algorithm_wizard_path(@algorithm, @algorithm.status)
+    end
+  end
+
+  def view(step)
+    case step.to_sym
+    when :informations
+      'algorithms/informations'
+    when :parameters
+      'algorithms/parameters'
+    when :parameters_details
+      'algorithms/parameters_details'
+    when :upload
+      'algorithms/upload'
+    end
+  end
+
+  def algorithm_is_published
+    unless @algorithm.status == 'published' || @algorithm.status == 'unpublished_changes'
+      flash[:notice] = "First publish your algorithm"
+      redirect_to algorithms_path(@algorithm)
     end
   end
 
@@ -81,5 +109,4 @@ class AlgorithmsController < ApplicationController
       flash[:error] = "DIVAService currently not reachable"
     end
   end
-
 end

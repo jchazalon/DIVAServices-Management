@@ -78,4 +78,12 @@ class InputParameter < ActiveRecord::Base
     input_parameter_copy
   end
 
+  def anything_changed?
+    return true if self.changed?
+    self.fields.each do |field|
+      return true if field.anything_changed?
+    end
+    return false;
+  end
+
 end

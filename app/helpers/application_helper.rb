@@ -20,15 +20,20 @@ module ApplicationHelper
   def actions(algorithm)
     case algorithm.status.to_sym
     when :error, :validation_error, :connection_error
-      link_to('<em class="fa fa-exclamation-triangle"></em>'.html_safe, recover_algorithm_path(algorithm), method: :post, class: 'btn btn-default')
+      link_to('<em class="fa fa-exclamation-triangle"></em>'.html_safe, recover_algorithm_path(algorithm), method: :post, class: 'btn btn-primary')
     when :published
-      html = link_to('<em class="fa fa-pencil"></em>'.html_safe, algorithm_path(algorithm), class: 'btn btn-default')
+      html = link_to('<em class="fa fa-pencil"></em>'.html_safe, algorithm_path(algorithm), class: 'btn btn-primary')
+      html << link_to('<em class="fa fa-trash"></em>'.html_safe, algorithm_path(algorithm), class: 'btn btn-danger', method: :delete)
+      return html
+    when :unpublished_changes
+      html = link_to('<em class="fa fa-pencil"></em>'.html_safe, algorithm_path(algorithm), class: 'btn btn-primary')
+      html << link_to('<em class="fa fa-undo"></em>'.html_safe, algorithm_path(algorithm), class: 'btn btn-warning') #TODO implement undo path
       html << link_to('<em class="fa fa-trash"></em>'.html_safe, algorithm_path(algorithm), class: 'btn btn-danger', method: :delete)
       return html
     when :validating, :creating, :testing
       '<i class="fa fa-refresh fa-spin fa-fw" aria-hidden="true"></i>'.html_safe
     when *Algorithm.wizard_steps
-      html = link_to('<em class="fa fa-chevron-circle-right"></em>'.html_safe, algorithm_algorithm_wizard_path(algorithm, algorithm.status), class: 'btn btn-default')
+      html = link_to('<em class="fa fa-chevron-circle-right"></em>'.html_safe, algorithm_algorithm_wizard_path(algorithm, algorithm.status), class: 'btn btn-primary')
       html << link_to('<em class="fa fa-trash"></em>'.html_safe, algorithm_path(algorithm), class: 'btn btn-danger', method: :delete)
       return html
     end
