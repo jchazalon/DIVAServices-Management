@@ -1,4 +1,4 @@
-$( document ).ready(function worker() {
+function status_updater() {
   $('span').each(function(){
     if($(this) && $(this).attr('id') && $(this).attr('id').match(/status_\d+/) ) {
       var id = $(this).attr('id').match(/\d+/)
@@ -26,4 +26,7 @@ $( document ).ready(function worker() {
        });
      }
    });
-});
+}
+
+$('.algorithms.index').ready(status_updater);
+$('.algorithms.index').on('page:load', status_updater);
