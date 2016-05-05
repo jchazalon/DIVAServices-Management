@@ -61,14 +61,15 @@ class Algorithm < ActiveRecord::Base
   end
 
   def update_version
+    self.update_attributes(version: self.version + 1)
     new_algorithm = self.deep_copy
     self.update_attributes(next: new_algorithm)
-    self.update_attributes(version: self.version + 1)
     return new_algorithm
   end
 
   def deep_copy
     algorithm_copy = self.dup
+    #TODO Need do copy algorithm file as well!!!
     self.fields.each do |field|
       algorithm_copy.fields << field.deep_copy
     end

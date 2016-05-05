@@ -1,3 +1,6 @@
+#NOTE Remove all previously uploaded files
+FileUtils.rm_rf(Dir["#{Rails.root}/public/uploads"])
+CarrierWave.clean_cached_files!
 User.destroy_all
 Algorithm.destroy_all
 InputParameter.destroy_all
