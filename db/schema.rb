@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 20160311214907) do
 
   create_table "fields", force: :cascade do |t|
     t.string   "type"
+    t.string   "category"
     t.integer  "fieldable_id"
     t.string   "fieldable_type"
     t.json     "payload"
@@ -61,6 +62,7 @@ ActiveRecord::Schema.define(version: 20160311214907) do
     t.datetime "updated_at",     null: false
   end
 
+  add_index "fields", ["category"], name: "index_fields_on_category", using: :btree
   add_index "fields", ["fieldable_type", "fieldable_id"], name: "index_fields_on_fieldable_type_and_fieldable_id", using: :btree
   add_index "fields", ["type"], name: "index_fields_on_type", using: :btree
 

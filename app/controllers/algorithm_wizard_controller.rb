@@ -1,8 +1,8 @@
 class AlgorithmWizardController < ApplicationController
   include Wicked::Wizard
   before_action :diva_service_online!
-  before_action :algorithm_not_finished_yet!, only: [:show, :update]
   before_action :set_algorithm, only: [:show, :update]
+  before_action :algorithm_not_finished_yet!, only: [:show, :update]
 
   steps *Algorithm.wizard_steps
 
@@ -11,8 +11,8 @@ class AlgorithmWizardController < ApplicationController
     when :parameters
       @algorithm.input_parameters.build if @algorithm.input_parameters.empty?
     when :parameters_details
-      if @algorithm.input_parameters.empty?
-        if @algorithm.status == 'upload'
+      if @algorithm.input_parameters.empty? #XXX is that even allowed?
+        if @algorithm.upload?
           jump_to :parameters
         else
           flash[:notice] = "Skipped step 3 due to no input parameters set"
@@ -47,8 +47,7 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def algorithm_not_finished_yet!
-    @algorithms = set_algorithm
-    if @algorithm && @algorithm.finished_wizard?
+    if @algorithm.finished_wizard?
       flash[:notice] = "The algorithm '#{@algorithm.name}' is already finished! The wizard can only be accessed during creation. Use the edit routes to update an exising algorithm."
       redirect_to algorithms_path
     end

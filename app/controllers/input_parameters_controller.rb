@@ -9,7 +9,6 @@ class InputParametersController < ApplicationController
      input_parameter.position = pos
      input_parameter.save!
    end
-
    render nothing: true
   end
 
@@ -21,7 +20,6 @@ class InputParametersController < ApplicationController
   end
 
   def create
-
   end
 
   def update

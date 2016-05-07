@@ -1,8 +1,8 @@
 class AlgorithmsController < ApplicationController
   before_action :set_algorithm, only: [:recover, :show, :edit, :update, :destroy, :publish]
-  before_action :algorithm_finished_wizard!, only:  [:show, :edit, :update]
-  before_action :algorithm_is_published, only: [:edit, :update]
-  before_action :update_status_from_diva, only: [:index, :show]
+  before_action :algorithm_published!, only: [:show, :edit, :update]
+  before_action :update_status_from_diva, only: :index
+  before_action :needs_recover, only: :recover
   respond_to :html
 
   def status
@@ -17,12 +17,8 @@ class AlgorithmsController < ApplicationController
   end
 
   def recover
-    unless @algorithm.validation_error? || @algorithm.connection_error? || @algorithm.error?
-      flash[:notice] = "Cannot recover from valid status"
-      redirect_to algorithms_path(@algorithm)
-    end
     @algorithm.update_attributes(status: :review)
-    flash[:notice] = @algorithm.status_message
+    flash[:notice] = "Latest status: #{@algorithm.status_message}"
     redirect_to algorithm_algorithm_wizard_path(@algorithm, :review)
   end
 
@@ -41,7 +37,7 @@ class AlgorithmsController < ApplicationController
     @algorithm.assign_attributes(algorithm_params(params[:step]))
     changed = @algorithm.anything_changed?
     if @algorithm.save
-      @algorithm.set_status(:unpublished_changes, 'There are unpublished changes.') if changed
+      @algorithm.set_status(:unpublished_changes, 'There are unpublished changes.') if changed #NOTE Because only published algorithms can be edited
       redirect_to algorithm_path(@algorithm)
     else
       render view(params[:step])
@@ -66,7 +62,7 @@ class AlgorithmsController < ApplicationController
   def publish
     unless @algorithm.review? || @algorithm.unpublished_changes?
       flash[:notice] = "Algorithm not yet ready for publishing"
-      redirect_to algorithms_path(@algorithm)
+      redirect_to algorithms_path
     end
     @algorithm.set_status(:validating, 'Informations are currently validated.')
     ValidateAlgorithmJob.perform_later(@algorithm.id)
@@ -82,13 +78,6 @@ class AlgorithmsController < ApplicationController
     params.require(:algorithm).permit(permitted_params(step))
   end
 
-  def algorithm_finished_wizard!
-    unless @algorithm.finished_wizard?
-      flash[:notice] = "Please finish the wizard first"
-      redirect_to algorithm_algorithm_wizard_path(@algorithm, @algorithm.status)
-    end
-  end
-
   def view(step)
     case step.to_sym
     when :informations
@@ -102,10 +91,17 @@ class AlgorithmsController < ApplicationController
     end
   end
 
-  def algorithm_is_published
-    unless @algorithm.status == 'published' || @algorithm.status == 'unpublished_changes'
+  def algorithm_published!
+    unless @algorithm.finished_wizard? || @algorithm.published? || @algorithm.unpublished_changes?
       flash[:notice] = "First publish your algorithm"
-      redirect_to algorithms_path(@algorithm)
+      redirect_to algorithms_path
+    end
+  end
+  
+  def needs_recover
+    unless @algorithm.validation_error? || @algorithm.connection_error? || @algorithm.error?
+      flash[:notice] = "Cannot recover from valid status"
+      redirect_to algorithms_path
     end
   end
 

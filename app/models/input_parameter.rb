@@ -31,7 +31,7 @@ class InputParameter < ActiveRecord::Base
   end
 
   def create_fields
-    data = DivaServiceApi.input_types
+    data = DivaServiceApi.input_information
     data = data[self.input_type]
     self.description = data['infoText']
     if data.has_key?('properties')

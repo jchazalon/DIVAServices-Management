@@ -2,6 +2,7 @@ class CreateFields < ActiveRecord::Migration
   def change
     create_table :fields do |t|
       t.string :type, index: true
+      t.string :category, index: true
       t.references :fieldable, polymorphic: true, index: true
       t.json :payload
 

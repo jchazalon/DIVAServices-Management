@@ -11,32 +11,37 @@ class Algorithm < ActiveRecord::Base
 
   mount_uploader :zip_file, AlgorithmUploader
 
-  after_validation :create_fields, if: 'self.errors.empty? && self.fields.empty?'
+  after_validation :create_fields, if: 'self.errors.empty? && self.general_fields.empty?'
 
   belongs_to :next, class_name: 'Algorithm', dependent: :destroy
-  has_many :fields, as: :fieldable, dependent: :destroy
-  has_many :input_parameters, dependent: :destroy
   belongs_to :user
 
-  accepts_nested_attributes_for :fields, allow_destroy: :true
+  has_many :general_fields, -> { where category: :general }, class_name: 'Field', as: :fieldable, dependent: :destroy
+  has_many :input_parameters, dependent: :destroy
+  has_many :output_fields, -> { where category: :output }, class_name: 'Field', as: :fieldable, dependent: :destroy
+  has_many :method_fields, -> { where category: :method }, class_name: 'Field', as: :fieldable, dependent: :destroy
+
+  accepts_nested_attributes_for :general_fields, allow_destroy: :true
   accepts_nested_attributes_for :input_parameters, allow_destroy: :true
+  accepts_nested_attributes_for :output_fields, allow_destroy: :true
+  accepts_nested_attributes_for :method_fields, allow_destroy: :true
 
   validates :status, presence: true
-  validates :name, presence: true, format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "cannot contain any special characters" }, if: :validate_informations?
-  validates :description, presence: true, if: :validate_informations?
+  #validates :name, presence: true, format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "cannot contain any special characters" }, if: :validate_informations?
+  #validates :description, presence: true, if: :validate_informations?
   #TODO validate required additional_information fields
 
-  validates :output, presence: true, inclusion: { in: DivaServiceApi.output_types.values.map(&:to_s) }, if: :validate_parameters?
+  #validates :output, presence: true, inclusion: { in: DivaServiceApi.output_types.values.map(&:to_s) }, if: :validate_parameters?
 
   validates :zip_file, presence: true, file_size: { less_than: 100.megabytes }, if: :validate_upload?
   validates_integrity_of :zip_file, if: :validate_upload?
   validates_processing_of :zip_file, if: :validate_upload?
-  validates :executable_path, presence: true, format: { with: /\A[a-zA-Z0-9\.\-\s\/\_]+\z/, message: "contains invalid characters" }, if: :validate_upload?
+  #validates :executable_path, presence: true, format: { with: /\A[a-zA-Z0-9\.\-\s\/\_]+\z/, message: "contains invalid characters" }, if: :validate_upload?
   validate :valid_zip_file, if: :validate_upload?
-  validate :zip_file_includes_executable_path, if: :validate_upload?
-  validate :executable_path_is_a_file, if: :validate_upload?
-  validates :language, presence: true, inclusion: { in: DivaServiceApi.languages.values.map(&:to_s) }, if: :validate_upload?
-  validates :environment, presence: true, inclusion: { in: DivaServiceApi.environments.values.map(&:to_s) }, if: :validate_upload?
+  #validate :zip_file_includes_executable_path, if: :validate_upload?
+  #validate :executable_path_is_a_file, if: :validate_upload?
+  #validates :language, presence: true, inclusion: { in: DivaServiceApi.languages.values.map(&:to_s) }, if: :validate_upload?
+  #validates :environment, presence: true, inclusion: { in: DivaServiceApi.environments.values.map(&:to_s) }, if: :validate_upload?
 
   def validate_informations?
     informations? || review? || published? || unpublished_changes?
@@ -69,9 +74,9 @@ class Algorithm < ActiveRecord::Base
 
   def deep_copy
     algorithm_copy = self.dup
-    self.fields.each do |field|
-      algorithm_copy.fields << field.deep_copy
-    end
+    #XXX self.fields.each do |field|
+    #XXX   algorithm_copy.fields << field.deep_copy
+    #XXX end
     self.input_parameters.each do |input_parameter|
       algorithm_copy.input_parameters << input_parameter.deep_copy
     end
@@ -135,9 +140,20 @@ class Algorithm < ActiveRecord::Base
     @@current_input_parameter_position += 1
   end
 
-  def additional_information_with(name)
-    fields = self.fields.where(fieldable_id: self.id)#, fieldable_type: result.class.name)
-    field = fields.where("payload->>'name' = ?", name).first
+  def name
+    self.general_fields.where(fieldable_id: self.id).where("payload->>'name' = 'name'").first.value
+  end
+
+  def general_field(name)
+    self.general_fields.where(fieldable_id: self.id).where("payload->>'name' = ?", name).first
+  end
+
+  def output_field(name)
+    self.output_fields.where(fieldable_id: self.id).where("payload->>'name' = ?", name).first
+  end
+
+  def method_field(name)
+    self.method_fields.where(fieldable_id: self.id).where("payload->>'name' = ?", name).first
   end
 
   def zip_url
@@ -145,31 +161,37 @@ class Algorithm < ActiveRecord::Base
   end
 
   def to_schema
-    additional_information = self.fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact.reduce(:merge) || {}
+    #XXX additional_information = self.fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact.reduce(:merge) || {}
     inputs = Array.new
     self.input_parameters.each do |input_parameter|
       inputs << { input_parameter.input_type => input_parameter.to_schema }
     end
     { name: self.name,
-      image_name: self.image_name,
-      description: self.description.gsub("\r\n", ' '),
-      info: additional_information,
+      #XXX description: self.description.gsub("\r\n", ' '),
+      #XXX info: additional_information,
       input: inputs,
       output: self.output,
       file: self.zip_url,
       executable: self.executable_path,
       language: self.language,
-      base_image: self.environment
+      base_image: self.environment,
+      image_name: self.image_name
     }.to_json
   end
 
   def anything_changed?
     return true if self.changed?
-    self.fields.each do |field|
+    self.general_fields.each do |field|
       return true if field.anything_changed?
     end
     self.input_parameters.each do |input_parameter|
       return true if input_parameter.anything_changed?
+    end
+    self.output_fields.each do |field|
+      return true if field.anything_changed?
+    end
+    self.method_fields.each do |field|
+      return true if field.anything_changed?
     end
     return false;
   end
@@ -177,11 +199,26 @@ class Algorithm < ActiveRecord::Base
   private
 
   def create_fields
-    data = DivaServiceApi.additional_information
+    data = DivaServiceApi.general_information
     data.each do |k, v|
       params = Field.class_name_for_type(v['type']).constantize.create_from_hash(k, v)
+      params.merge!(category: :general)
       field = Field.class_name_for_type(v['type']).constantize.create!(params)
-      self.fields << field
+      self.general_fields << field
+    end
+    data = DivaServiceApi.output_information
+    data.each do |k, v|
+      params = Field.class_name_for_type(v['type']).constantize.create_from_hash(k, v)
+      params.merge!(category: :output)
+      field = Field.class_name_for_type(v['type']).constantize.create!(params)
+      self.output_fields << field
+    end
+    data = DivaServiceApi.method_information
+    data.each do |k, v|
+      params = Field.class_name_for_type(v['type']).constantize.create_from_hash(k, v)
+      params.merge!(category: :method)
+      field = Field.class_name_for_type(v['type']).constantize.create!(params)
+      self.method_fields << field
     end
   end
 end

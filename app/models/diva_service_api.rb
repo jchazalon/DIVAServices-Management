@@ -6,7 +6,7 @@ class DivaServiceApi
 
   def self.is_online?
     begin
-      response = self.get('/info/language')
+      response = self.get('/')
       return true if response.success?
     rescue Errno::ECONNREFUSED => e
       #XXX Catching exceptions and doing nothing is like ignoring global warming
@@ -14,47 +14,35 @@ class DivaServiceApi
     return false
   end
 
-  def self.languages
-    response = self.get('/info/language')
+  def self.general_information
+    response = self.get('/informations/general')
     if response.success?
-      languages = Hash.new
-      response.parsed_response.keys.each do |k|
-        languages[k] = response.parsed_response[k]['infoText']
-      end
-      return languages.invert
+      return response.parsed_response
     else
       raise DivaServiceError
     end
   end
 
-  def self.environments
-    response = self.get('/info/environments')
+  def self.input_information
+    response = self.get('/informations/input')
     if response.success?
-      environments = Hash.new
-      response.parsed_response.keys.each do |k|
-        environments[k] = response.parsed_response[k]['infoText']
-      end
-      return environments.invert
+      return response.parsed_response
     else
       raise DivaServiceError
     end
   end
 
-  def self.output_types
-    response = self.get('/info/outputs')
+  def self.output_information
+    response = self.get('/informations/output')
     if response.success?
-      outputs = Hash.new
-      response.parsed_response.keys.each do |k|
-        outputs[k] = response.parsed_response[k]['infoText']
-      end
-      return outputs.invert
+      return response.parsed_response
     else
       raise DivaServiceError
     end
   end
 
-  def self.input_types
-    response = self.get('/info/inputs')
+  def self.method_information
+    response = self.get('/informations/method')
     if response.success?
       return response.parsed_response
     else
@@ -63,25 +51,16 @@ class DivaServiceApi
   end
 
   def self.input_type_keys
-    DivaServiceApi.input_types.keys
+    DivaServiceApi.input_information.keys
   end
 
   def self.input_type_descriptions
-    data = DivaServiceApi.input_types
+    data = DivaServiceApi.input_information
     hash = Hash.new
     input_types.keys.each do |input_type|
       hash[input_type] = data[input_type]['infoText']
     end
     hash
-  end
-
-  def self.additional_information
-    response = self.get('/info/additional')
-    if response.success?
-      return response.parsed_response
-    else
-      raise DivaServiceError
-    end
   end
 
   def self.status(diva_id)
@@ -108,5 +87,6 @@ class DivaServiceApi
 
   def self.publish_algorithm(algorithm)
     self.post('/algorithms', body: algorithm.to_schema, headers: { 'Content-Type' => 'application/json' })
+    self.post("/algorithms/#{algorithm.diva_id}", body: algorithm.to_schema, headers: { 'Content-Type' => 'application/json' })
   end
 end
