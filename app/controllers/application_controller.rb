@@ -10,9 +10,9 @@ class ApplicationController < ActionController::Base
   def permitted_params(step)
     case step.to_sym
     when :informations
-      [:name, :description, fields_attributes: [:id, :value]]
+      [general_fields_attributes: [:id, :value]]
     when :parameters
-      [:output, input_parameters_attributes: [:id, :input_type, :_destroy]]
+      [output_fields_attributes: [:id, :value], input_parameters_attributes: [:id, :input_type, :_destroy]]
     when :parameters_details
       field_attributes_base = [:id, :value]
       fields = []
@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
       end
       [input_parameters_attributes: [:id, fields_attributes: fields]]
     when :upload
-      [:language, :environment, :zip_file, :executable_path]
+      [:zip_file, method_fields_attributes: [:id, :value]]
     end
   end
 end

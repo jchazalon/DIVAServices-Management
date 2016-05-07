@@ -27,29 +27,13 @@ class Algorithm < ActiveRecord::Base
   accepts_nested_attributes_for :method_fields, allow_destroy: :true
 
   validates :status, presence: true
-  #validates :name, presence: true, format: { with: /\A[a-zA-Z0-9\s]+\z/, message: "cannot contain any special characters" }, if: :validate_informations?
-  #validates :description, presence: true, if: :validate_informations?
-  #TODO validate required additional_information fields
-
-  #validates :output, presence: true, inclusion: { in: DivaServiceApi.output_types.values.map(&:to_s) }, if: :validate_parameters?
 
   validates :zip_file, presence: true, file_size: { less_than: 100.megabytes }, if: :validate_upload?
   validates_integrity_of :zip_file, if: :validate_upload?
   validates_processing_of :zip_file, if: :validate_upload?
-  #validates :executable_path, presence: true, format: { with: /\A[a-zA-Z0-9\.\-\s\/\_]+\z/, message: "contains invalid characters" }, if: :validate_upload?
   validate :valid_zip_file, if: :validate_upload?
-  #validate :zip_file_includes_executable_path, if: :validate_upload?
-  #validate :executable_path_is_a_file, if: :validate_upload?
-  #validates :language, presence: true, inclusion: { in: DivaServiceApi.languages.values.map(&:to_s) }, if: :validate_upload?
-  #validates :environment, presence: true, inclusion: { in: DivaServiceApi.environments.values.map(&:to_s) }, if: :validate_upload?
-
-  def validate_informations?
-    informations? || review? || published? || unpublished_changes?
-  end
-
-  def validate_parameters?
-    parameters? || review? || published? || unpublished_changes?
-  end
+  validate :zip_file_includes_executable_path, if: :validate_upload?
+  validate :executable_path_is_a_file, if: :validate_upload?
 
   def validate_upload?
     upload? || review? || published? || unpublished_changes?
@@ -74,20 +58,24 @@ class Algorithm < ActiveRecord::Base
 
   def deep_copy
     algorithm_copy = self.dup
-    #XXX self.fields.each do |field|
-    #XXX   algorithm_copy.fields << field.deep_copy
-    #XXX end
+    self.general_fields.each do |field|
+      algorithm_copy.general_fields << field.deep_copy
+    end
     self.input_parameters.each do |input_parameter|
       algorithm_copy.input_parameters << input_parameter.deep_copy
     end
+    self.output_fields.each do |field|
+      algorithm_copy.output_fields << field.deep_copy
+    end
+    self.method_fields.each do |field|
+      algorithm_copy.method_fields << field.deep_copy
+    end
     algorithm_copy.save!
-    #algorithm_copy.update_attribute(:zip_file, nil)
-    #algorithm_copy.update_attribute(:zip_file, File.open(self.zip_file.file.file))
     AlgorithmUploader.copy_file(self.id, algorithm_copy.id)
     algorithm_copy
   end
 
-  def pull_status
+  def pull_status #XXX movw to controller
     response = DivaServiceApi.status(self.diva_id)
     if !response.empty? && response['statusCode'] != Algorithm.statuses[self.status]
       self.set_status(response['statusCode'], response['statusMessage'])
@@ -101,8 +89,8 @@ class Algorithm < ActiveRecord::Base
   def valid_zip_file
     begin
       zip = Zip::File.open(self.zip_file.file.file)
-    rescue StandardError
-      errors.add(:zip_file, 'is not a valid zip')
+    rescue StandardError => e
+      errors.add(:zip_file, "is not a valid zip.\nError: #{e}")
     ensure
       zip.close if zip
     end
@@ -111,9 +99,9 @@ class Algorithm < ActiveRecord::Base
   def zip_file_includes_executable_path
     begin
       zip = Zip::File.open(self.zip_file.file.file)
-      errors.add(:zip_file, "doesn't contain the executable '#{self.executable_path}'") unless zip.find_entry(self.executable_path)
-    rescue StandardError
-      errors.add(:zip_file, 'is not a valid zip')
+      errors.add(:zip_file, "doesn't contain the executable '#{self.method_field('executable_path').value}'") unless zip.find_entry(self.method_field('executable_path').value)
+    rescue StandardError => e
+      errors.add(:zip_file, "is not a valid zip.\nError: #{e}")
     ensure
       zip.close if zip
     end
@@ -122,16 +110,12 @@ class Algorithm < ActiveRecord::Base
   def executable_path_is_a_file
     begin
       zip = Zip::File.open(self.zip_file.file.file)
-      errors.add(:executable_path, "doesn't point to a file") unless zip.find_entry(self.executable_path).ftype == :file
-    rescue StandardError
-      errors.add(:zip_file, 'is not a valid zip')
+      errors.add(:executable_path, "doesn't point to a file") unless zip.find_entry(self.method_field('executable_path').value).ftype == :file
+    rescue StandardError => e
+      errors.add(:zip_file, "is not a valid zip.\nError: #{e}")
     ensure
       zip.close if zip
     end
-  end
-
-  def image_name
-    "#{self.name.downcase.tr(' ', '_')}"
   end
 
   @@current_input_parameter_position = 0
@@ -160,65 +144,48 @@ class Algorithm < ActiveRecord::Base
      root_url[0..-2] + self.zip_file.url if self.zip_file.file
   end
 
+  #TODO use a cleaner json structure! change on divaservice
   def to_schema
-    #XXX additional_information = self.fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact.reduce(:merge) || {}
-    inputs = Array.new
+    inputs_information = Array.new
     self.input_parameters.each do |input_parameter|
-      inputs << { input_parameter.input_type => input_parameter.to_schema }
+      inputs_information << { input_parameter.input_type => input_parameter.to_schema }
     end
-    { name: self.name,
-      #XXX description: self.description.gsub("\r\n", ' '),
-      #XXX info: additional_information,
-      input: inputs,
-      output: self.output,
-      file: self.zip_url,
-      executable: self.executable_path,
-      language: self.language,
-      base_image: self.environment,
-      image_name: self.image_name
+    #XXX find better division
+    { general: self.general_fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact.reduce(:merge) || {},
+      input: inputs_information,
+      output: self.output_fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact.reduce(:merge) || {},
+      method: {file: self.zip_url}.merge!(self.method_fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact.reduce(:merge) || {})
     }.to_json
   end
 
   def anything_changed?
     return true if self.changed?
-    self.general_fields.each do |field|
-      return true if field.anything_changed?
-    end
-    self.input_parameters.each do |input_parameter|
-      return true if input_parameter.anything_changed?
-    end
-    self.output_fields.each do |field|
-      return true if field.anything_changed?
-    end
-    self.method_fields.each do |field|
-      return true if field.anything_changed?
-    end
+    return true if collection_anything_changed([self.general_fields, self.input_parameters, self.output_fields, self.method_fields])
     return false;
   end
 
   private
 
+  def collection_anything_changed(collections)
+    collections.each do |collection|
+      collection.each do |field|
+        return true if field.anything_changed?
+      end
+    end
+  end
+
   def create_fields
-    data = DivaServiceApi.general_information
+    create_fields_of(DivaServiceApi.general_information, :general)
+    create_fields_of(DivaServiceApi.output_information, :output)
+    create_fields_of(DivaServiceApi.method_information, :method)
+  end
+
+  def create_fields_of(data, category)
     data.each do |k, v|
       params = Field.class_name_for_type(v['type']).constantize.create_from_hash(k, v)
-      params.merge!(category: :general)
+      params.merge!(category: category)
       field = Field.class_name_for_type(v['type']).constantize.create!(params)
-      self.general_fields << field
-    end
-    data = DivaServiceApi.output_information
-    data.each do |k, v|
-      params = Field.class_name_for_type(v['type']).constantize.create_from_hash(k, v)
-      params.merge!(category: :output)
-      field = Field.class_name_for_type(v['type']).constantize.create!(params)
-      self.output_fields << field
-    end
-    data = DivaServiceApi.method_information
-    data.each do |k, v|
-      params = Field.class_name_for_type(v['type']).constantize.create_from_hash(k, v)
-      params.merge!(category: :method)
-      field = Field.class_name_for_type(v['type']).constantize.create!(params)
-      self.method_fields << field
+      self.general_fields << field #XXX why doesn't this control the category field? Shouldn't it set it back to 'general'??
     end
   end
 end

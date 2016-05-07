@@ -9,18 +9,24 @@ function status_updater() {
          dataType: 'json',
          url: '/algorithms/' + id + '/status',
          success: function(data) {
+           if($('#status_' + id).text() != 'published' && $('#status_' + id).text() != 'error' && $('#status_' + id).text() != 'connection_error' && $('#status_' + id).text() != 'validation_error') {
+             if(data['status'] == 'published' || data['status'] == 'error', data['status'] == 'connection_error', data['status'] == 'validation_error') {
+               location.reload();
+             }
+           }
            $('#status_' + id).text(data['status']);
-           $('#status_message_' + id).text(data['status_message']);
+           if(data['status_message']) {
+             $('#status_message_' + id).text(data['status_message']);
+           } else {
+             $('#status_message_' + id).text('');
+           }
            if(data['status'] == 'creating' || data['status'] == 'validating' || data['status'] == 'testing') {
              update = true;
-           }
-           if(data['status'] == 'published' && $('#status_' + id).text() != 'published') {
-             location.reload();
            }
          },
          complete: function() {
            if(update) {
-             setTimeout(worker, 10000);
+             setTimeout(status_updater, 10000);
            }
          }
        });

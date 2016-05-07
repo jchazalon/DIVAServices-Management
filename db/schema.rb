@@ -18,19 +18,13 @@ ActiveRecord::Schema.define(version: 20160311214907) do
 
   create_table "algorithms", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "version",         default: 0
-    t.integer  "status",          default: 0
+    t.integer  "version",        default: 0
+    t.integer  "status",         default: 0
     t.string   "status_message"
-    t.string   "name"
-    t.text     "description"
-    t.string   "output"
-    t.string   "language"
-    t.string   "environment"
-    t.string   "executable_path"
     t.string   "diva_id"
     t.integer  "next_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.string   "zip_file"
   end
 

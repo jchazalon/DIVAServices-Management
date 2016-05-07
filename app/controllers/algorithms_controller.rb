@@ -47,14 +47,10 @@ class AlgorithmsController < ApplicationController
   def destroy
     if @algorithm.finished_wizard?
       if DivaServiceApi.delete_algorithm(@algorithm) && @algorithm.destroy
-        flash[:notice] = "Deleted algorithm #{@algorithm.name} from DIVAService"
-      else
-        flash[:error] = "Could not delete algorithm #{@algorithm.name} from DIVAService"
+        flash[:notice] = "Deleted algorithm from DIVAService"
       end
     elsif @algorithm.destroy
-      flash[:notice] = "Deleted algorithm #{@algorithm.name}"
-    else
-      flash[:error] = "Could not delete algorithm #{@algorithm.name}"
+      flash[:notice] = "Deleted algorithm"
     end
     redirect_to algorithms_path
   end
@@ -97,7 +93,7 @@ class AlgorithmsController < ApplicationController
       redirect_to algorithms_path
     end
   end
-  
+
   def needs_recover
     unless @algorithm.validation_error? || @algorithm.connection_error? || @algorithm.error?
       flash[:notice] = "Cannot recover from valid status"

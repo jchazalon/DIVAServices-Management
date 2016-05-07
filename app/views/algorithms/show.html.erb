@@ -1,20 +1,11 @@
 <h1><%= @algorithm.name %></h1>
 
-<h2>General</h2>
-<table class="table">
-  <tr>
-    <td>Name</td>
-    <td><%= @algorithm.name %></td>
-  </tr>
-  <tr>
-    <td>Description</td>
-    <td><%= @algorithm.description %></td>
-  </tr>
-</table>
+<h2>Schema</h2>
+<pre><%= @algorithm.to_schema %></pre>
 
-<h2>Additional Information</h2>
+<h2>General Information</h2>
 <table class="table">
-  <% @algorithm.fields.each do |field| %>
+  <% @algorithm.general_fields.each do |field| %>
     <tr>
       <td><%= field.name %></td>
       <td><%= field.value %></td>
@@ -64,9 +55,12 @@
 
 <h2>Output</h2>
 <table class="table">
+  <% @algorithm.output_fields.each do |field| %>
     <tr>
-      <td><%= @algorithm.output %></td>
+      <td><%= field.name %></td>
+      <td><%= field.value %></td>
     </tr>
+  <% end %>
 </table>
 
 <div class="col-md-12">
@@ -81,18 +75,12 @@
       <td>File</td>
       <td><%= link_to 'Download', @algorithm.zip_file.url %></td>
     </tr>
-    <tr>
-      <td>Executable path</td>
-      <td><%= @algorithm.executable_path %></td>
-    </tr>
-    <tr>
-      <td>Language</td>
-      <td><%= @algorithm.language %></td>
-    </tr>
-    <tr>
-      <td>Environment</td>
-      <td><%= @algorithm.environment %></td>
-    </tr>
+    <% @algorithm.method_fields.each do |field| %>
+      <tr>
+        <td><%= field.name %></td>
+        <td><%= field.value %></td>
+      </tr>
+    <% end %>
 </table>
 
 <div class="col-md-12">

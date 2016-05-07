@@ -57,7 +57,7 @@ class DivaServiceApi
   def self.input_type_descriptions
     data = DivaServiceApi.input_information
     hash = Hash.new
-    input_types.keys.each do |input_type|
+    self.input_type_keys.each do |input_type|
       hash[input_type] = data[input_type]['infoText']
     end
     hash
