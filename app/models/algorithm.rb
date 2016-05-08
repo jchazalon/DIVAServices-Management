@@ -70,8 +70,9 @@ class Algorithm < ActiveRecord::Base
     self.method_fields.each do |field|
       algorithm_copy.method_fields << field.deep_copy
     end
-    algorithm_copy.save!
+    algorithm_copy.save(validate: false) #XXX Can't do validations before the fields are saved(created!) the first time
     AlgorithmUploader.copy_file(self.id, algorithm_copy.id)
+    algorithm_copy.save!
     algorithm_copy
   end
 

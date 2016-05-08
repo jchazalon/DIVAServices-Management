@@ -1,12 +1,9 @@
 <%= simple_form_for(@algorithm, url: algorithm_path(@algorithm, step: :upload), method: :put) do |f| %>
   <%= f.input :zip_file %>
   <%= f.hint 'zip file containing the executables as well as all necessary dependencies' %>
-  <%= f.input :executable_path %>
-  <%= f.hint 'Path of the executable file in the provided zip file. (e.g. "bin/main.jar")' %>
-  <%= f.input :language, collection: DivaServiceApi.languages %>
-  <%= f.hint 'Language of the executable' %>
-  <%= f.input :environment, collection: DivaServiceApi.environments %>
-  <%= f.hint 'Necessary environment to run the algorithm' %>
+  <%= f.simple_fields_for :method_fields do |ff| %>
+    <%= render partial: 'field', locals: { f: ff } %>
+  <% end %>
 
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
   <%= f.submit 'Save', class: 'btn btn-primary' %>
