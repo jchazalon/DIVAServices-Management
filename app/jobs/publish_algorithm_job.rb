@@ -10,7 +10,10 @@ class PublishAlgorithmJob < ActiveJob::Base
         p response = DivaServiceApi.publish_algorithm(algorithm)
         if response.success?
           algorithm.update_attribute(:diva_id, response['identifier'])
-          algorithm.pull_status
+          response = DivaServiceApi.status(algorithm.diva_id)
+          if !response.empty? && response['statusCode'] != Algorithm.statuses[algorithm.status]
+            algorithm.set_status(response['statusCode'], response['statusMessage'])
+          end
         else
           algorithm.set_status(:error, "Unknown error during publication, please try again.\n#{response}")
         end

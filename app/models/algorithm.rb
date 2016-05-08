@@ -75,13 +75,6 @@ class Algorithm < ActiveRecord::Base
     algorithm_copy
   end
 
-  def pull_status #XXX movw to controller
-    response = DivaServiceApi.status(self.diva_id)
-    if !response.empty? && response['statusCode'] != Algorithm.statuses[self.status]
-      self.set_status(response['statusCode'], response['statusMessage'])
-    end
-  end
-
   def finished_wizard?
     !empty? && !informations? && !parameters? && !parameters_details? && !upload? && !review?
   end
