@@ -1,9 +1,7 @@
 <%= simple_form_for(@algorithm, url: algorithm_path(@algorithm, step: :upload), method: :put) do |f| %>
   <%= f.input :zip_file %>
   <%= f.hint 'zip file containing the executables as well as all necessary dependencies' %>
-  <%= f.simple_fields_for :method_fields do |ff| %>
-    <%= render partial: 'field', locals: { f: ff } %>
-  <% end %>
+  <%= render partial: 'algorithms/method_fields', locals: { f: f } %>
 
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
   <%= f.submit 'Save', class: 'btn btn-primary' %>

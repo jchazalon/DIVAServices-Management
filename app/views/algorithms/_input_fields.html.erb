@@ -1,0 +1,8 @@
+<div class="input_parameters">
+  <%= f.simple_fields_for :input_parameters do |ff| %>
+    <%= render partial: 'input_parameters/input_parameter_fields', locals: { f: ff } %>
+  <% end %>
+  <div class="links">
+    <%= link_to_add_association '<i class="fa fa-plus"></i> New input parameter'.html_safe, f, :input_parameters, class: 'btn btn-default', partial: 'input_parameters/input_parameter_fields' %>
+  </div>
+</div>

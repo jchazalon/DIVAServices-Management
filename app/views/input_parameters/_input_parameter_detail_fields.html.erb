@@ -1,0 +1,13 @@
+<div class="input_parameters">
+  <%= f.simple_fields_for :input_parameters do |ff| %>
+    <div class="list-group-item" data-id="<%= ff.object.id %>">
+      <span style="display:inline;" class="handle">☰</span>
+      <h3 style="display:inline;" >Parameter <%= ff.index + 1 %></h3>
+      <%= ff.input :input_type, collection: DivaServiceApi.input_type_keys, disabled: true %>
+      <%= f.hint ff.object.description %>
+      <%= ff.simple_fields_for :fields do |fff| %>
+        <%= render partial: 'fields/field', locals: { f: fff } %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

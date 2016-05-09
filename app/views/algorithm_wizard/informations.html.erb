@@ -8,9 +8,7 @@
 <%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
 
   <h3>General information</h3>
-  <%= f.simple_fields_for :general_fields do |ff| %>
-    <%= render partial: 'field', locals: { f: ff } %>
-  <% end %>
+  <%= render partial: 'algorithms/general_fields', locals: { f: f } %>
 
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
   <%= f.submit 'Next', class: 'btn btn-primary' %>

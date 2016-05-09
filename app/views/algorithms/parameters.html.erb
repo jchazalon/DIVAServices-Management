@@ -1,20 +1,10 @@
 <%= simple_form_for(@algorithm, url: algorithm_path(@algorithm, step: :parameters), method: :put) do |f| %>
 
   <h3>Input</h3>
-  <div class="input_parameters">
-    <%= f.simple_fields_for :input_parameters do |ff| %>
-      <%= render partial: 'input_parameter_fields', locals: { f: ff } %>
-    <% end %>
-    <div class="links">
-      <%= link_to_add_association '<i class="fa fa-plus"></i> New input parameter'.html_safe, f, :input_parameters, class: 'btn btn-default' %>
-    </div>
-  </div>
-
+  <%= render partial: 'algorithms/input_fields', locals: { f: f } %>
 
   <h3>Output</h3>
-  <%= f.simple_fields_for :output_fields do |ff| %>
-    <%= render partial: 'field', locals: { f: ff } %>
-  <% end %>
+  <%= render partial: 'algorithms/output_fields', locals: { f: f } %>
 
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
   <%= f.submit 'Save', class: 'btn btn-primary' %>
