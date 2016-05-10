@@ -7,6 +7,7 @@ class AlgorithmsController < ApplicationController
 
   def status
     set_algorithm
+    update_status(@algorithm) if @algorithm.publication_pending?
     render :json => { status: @algorithm.status, status_message: @algorithm.status_message }
   end
 
@@ -102,18 +103,16 @@ class AlgorithmsController < ApplicationController
   end
 
   def update_status_from_diva
-    if DivaServiceApi.is_online?
-      algorithms = current_user.algorithms.where.not(status: [0,1,2,3,4,5])
-      algorithms.each do |algorithm|
-       if algorithm.publication_pending?
-         response = DivaServiceApi.status(@algorithm.diva_id)
-         if !response.empty? && response['statusCode'] != Algorithm.statuses[@algorithm.status]
-           @algorithm.set_status(response['statusCode'], response['statusMessage'])
-         end
-       end
-      end
-    else
-      flash[:error] = "DIVAService currently not reachable"
+    algorithms = current_user.algorithms.where.not(status: [0,1,2,3,4,5])
+    algorithms.each do |algorithm|
+      update_status(algorithm) if algorithm.publication_pending?
+    end
+  end
+
+  def update_status(algorithm)
+    response = DivaServiceApi.status(algorithm.diva_id)
+    if !response.empty? && response['statusCode'] != Algorithm.statuses[algorithm.status]
+      algorithm.set_status(response['statusCode'], response['statusMessage'])
     end
   end
 end
