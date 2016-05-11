@@ -34,56 +34,32 @@ class InputParameter < ActiveRecord::Base
     data = DivaServiceApi.input_information
     data = data[self.input_type]
     self.description = data['infoText']
-    if data.has_key?('properties')
-      data['properties'].each do |k, v|
-        create_recurive_field(self,k,v)
-      end
-    end
+    data['properties'].each{ |k, v| create_recursive_field(self,k,v) } if data.has_key?('properties')
   end
 
-  def create_recurive_field(parent,k,v)
+  def create_recursive_field(parent,k,v)
     params = Field.class_name_for_type(v['type']).constantize.create_from_hash(k, v)
     field = Field.class_name_for_type(v['type']).constantize.create!(params)
     parent.fields << field
-    if v.has_key?('properties')
-      v['properties'].each do |k, v|
-        create_recurive_field(field,k,v)
-      end
-    end
-  end
-
-  def field_with(name)
-    fields = Field.where(fieldable_id: self.id)#, fieldable_type: result.class.name)
-    field = fields.where("payload->>'name' = ?", name).first
+    v['properties'].each{ |k, v| create_recursive_field(field,k,v) } if v.has_key?('properties')
   end
 
   def to_schema
     data = Hash.new
-    self.fields.each do |field|
-      if field.type == 'ObjectField'
-        data[field.name] = field.to_schema
-      else
-        data[field.name] = field.value unless field.value.blank?
-      end
-    end
+    self.fields.each{ |field| data[field.name] = field.to_schema }
     return data
   end
 
   def deep_copy
     input_parameter_copy = self.dup
-    self.fields.each do |field|
-      input_parameter_copy.fields << field.deep_copy
-    end
+    self.fields.each{ |field| input_parameter_copy.fields << field.deep_copy }
     input_parameter_copy.save!
     input_parameter_copy
   end
 
   def anything_changed?
     return true if self.changed?
-    self.fields.each do |field|
-      return true if field.anything_changed?
-    end
+    self.fields.each{ |field| return true if field.anything_changed? }
     return false;
   end
-
 end

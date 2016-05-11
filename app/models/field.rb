@@ -30,6 +30,7 @@ class Field < ActiveRecord::Base
 
   #TODO Server-side validations are almost impossible since we should only run validation on user-actions, but not on server creation and updates...
   #validates :value, presence: true, if: 'self.required', on: :update #This wont work since it also validates after server actions!
+  #It would be nice to validate value on server-side. However, it's not necessary, since we peform a DIVAServices validation anyway
   validates :name, presence: true
 
   def self.create_from_hash(k,v)
@@ -46,41 +47,17 @@ class Field < ActiveRecord::Base
   end
 
   def to_schema
-    data = Hash.new
-    self.fields.each do |field| #TODO why fields??? copy paste error from input parameters?
-      if field.type == 'ObjectField'
-        data[field.name] = field.to_schema
-      else
-        data[field.name] = field.value_to_schema unless field.value.blank?
-      end
-    end
-    return data
+    self.value_to_schema unless self.value.blank?
   end
 
   def deep_copy
-    if self.type == 'ObjectField'
-      field_copy = self.dup
-      self.fields.each do |field|
-        field_copy.fields << field.deep_copy
-      end
-      field_copy.save!
-      field_copy
-    else
-      field_copy = self.dup
-      field_copy.save!
-      field_copy
-    end
+    field_copy = self.dup
+    field_copy.save!
+    field_copy
   end
 
   def anything_changed?
-    if self.type == 'ObjectField'
-      self.fields.each do |field|
-        return true if field.anything_changed?
-      end
-    else
-      return true if self.changed?
-    end
-    return false;
+    self.changed?;
   end
 
   def value_to_schema

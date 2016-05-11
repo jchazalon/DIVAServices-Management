@@ -19,8 +19,11 @@ class EnumField < Field
   end
 
   def object_type
-    #TODO don't use radio_buttons if there are too many options
-    'radio_buttons'
+    if self.values.size > 4
+      'select'
+    else
+      'radio_buttons'
+    end
   end
 
   def collection

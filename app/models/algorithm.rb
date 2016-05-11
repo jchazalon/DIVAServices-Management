@@ -53,26 +53,18 @@ class Algorithm < ActiveRecord::Base
     self.update_attributes(version: self.version + 1)
     new_algorithm = self.deep_copy
     self.update_attributes(next: new_algorithm)
-    return new_algorithm
+    new_algorithm
   end
 
   def deep_copy
     algorithm_copy = self.dup
-    self.general_fields.each do |field|
-      algorithm_copy.general_fields << field.deep_copy
-    end
-    self.input_parameters.each do |input_parameter|
-      algorithm_copy.input_parameters << input_parameter.deep_copy
-    end
-    self.output_fields.each do |field|
-      algorithm_copy.output_fields << field.deep_copy
-    end
-    self.method_fields.each do |field|
-      algorithm_copy.method_fields << field.deep_copy
-    end
-    algorithm_copy.save(validate: false) #XXX Can't do validations before the fields are saved(created!) the first time
-    AlgorithmUploader.copy_file(self.id, algorithm_copy.id)
-    algorithm_copy.save!
+    self.general_fields.each{ |field| algorithm_copy.general_fields << field.deep_copy }
+    self.input_parameters.each{ |input_parameter| algorithm_copy.input_parameters << input_parameter.deep_copy }
+    self.output_fields.each{ |field| algorithm_copy.output_fields << field.deep_copy }
+    self.method_fields.each{ |field| algorithm_copy.method_fields << field.deep_copy }
+    algorithm_copy.save(validate: false) #NOTE Can't do validations before the fields are saved(created!) the first time
+    AlgorithmUploader.copy_file(self.id, algorithm_copy.id) #XXX Need to copy the file, since CarrierWave won't do that for us...
+    algorithm_copy.save! #NOTE Save it for real!
     algorithm_copy
   end
 
@@ -118,6 +110,7 @@ class Algorithm < ActiveRecord::Base
     @@current_input_parameter_position += 1
   end
 
+  #NOTE Since the name will be used a lot, we create a virtual accessor
   def name
     self.general_fields.where(fieldable_id: self.id).where("payload->>'name' = 'name'").first.value
   end
@@ -134,28 +127,21 @@ class Algorithm < ActiveRecord::Base
     self.method_fields.where(fieldable_id: self.id).where("payload->>'name' = ?", name).first
   end
 
+  #TODO Pretty sure that will break in production (since root_url isn't set)
   def zip_url
      root_url[0..-2] + self.zip_file.url if self.zip_file.file
   end
 
-  #TODO use a cleaner json structure! change on divaservice
   def to_schema
-    inputs_information = Array.new
-    self.input_parameters.each do |input_parameter|
-      inputs_information << { input_parameter.input_type => input_parameter.to_schema }
-    end
-    #XXX find better division
     { general: self.general_fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact.reduce(:merge) || {},
-      input: inputs_information,
+      input: self.input_parameters.map{ |input_parameter| { input_parameter.input_type => input_parameter.to_schema } } || [],
       output: self.output_fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact.reduce(:merge) || {},
       method: {file: self.zip_url}.merge!(self.method_fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact.reduce(:merge) || {})
     }.to_json
   end
 
   def anything_changed?
-    return true if self.changed?
-    return true if collection_anything_changed([self.general_fields, self.input_parameters, self.output_fields, self.method_fields])
-    return false;
+    self.changed? || collection_anything_changed([self.general_fields, self.input_parameters, self.output_fields, self.method_fields])
   end
 
   private
@@ -179,7 +165,7 @@ class Algorithm < ActiveRecord::Base
       params = Field.class_name_for_type(v['type']).constantize.create_from_hash(k, v)
       params.merge!(category: category)
       field = Field.class_name_for_type(v['type']).constantize.create!(params)
-      self.general_fields << field #XXX why doesn't this control the category field? Shouldn't it set it back to 'general'??
+      self.general_fields << field #NOTE Since we have already created the object, the category attribute will not change if we add it to the incorrect set of fields. Hence, just add all to general_fields
     end
   end
 end

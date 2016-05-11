@@ -11,7 +11,8 @@ class AlgorithmsController < ApplicationController
     render :json => { status: @algorithm.status, status_message: @algorithm.status_message }
   end
 
-  def copy #XXX DEV only
+  #XXX DEV only
+  def copy
     set_algorithm
     @algorithm.update_version
     redirect_to algorithms_path
