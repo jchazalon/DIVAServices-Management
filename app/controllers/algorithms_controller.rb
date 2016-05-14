@@ -111,9 +111,7 @@ class AlgorithmsController < ApplicationController
   end
 
   def update_status(algorithm)
-    response = DivaServiceApi.status(algorithm.diva_id)
-    if !response.empty? && response['statusCode'] != Algorithm.statuses[algorithm.status]
-      algorithm.set_status(response['statusCode'], response['statusMessage'])
-    end
+    status = DivaServiceApi.status(algorithm.diva_id)
+    algorithm.set_status(status[:status_code], status[:status_message]) if status[:status_code] != Algorithm.statuses[algorithm.status]
   end
 end

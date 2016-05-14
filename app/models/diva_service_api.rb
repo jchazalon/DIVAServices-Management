@@ -1,4 +1,5 @@
 class DivaServiceApi
+  include Exceptions
   include HTTParty
   base_uri 'localhost:8080'
   default_timeout 300 #XXX Way too long
@@ -19,7 +20,7 @@ class DivaServiceApi
     if response.success?
       return response.parsed_response
     else
-      raise DivaServiceError
+      raise DivaServiceError.new("Unsuccessful response: #{response.parsed_response}")
     end
   end
 
@@ -53,7 +54,12 @@ class DivaServiceApi
   end
 
   def self.status(diva_id)
-    self.get_information("/algorithms/#{diva_id}")
+    response = self.get_information("/algorithms/#{diva_id}")
+    if response['status']
+      { status_code: response['status']['statusCode'], status_message: response['status']['statusMessage']}
+    else
+      raise DivaServiceError.new("GET /algorithms/#{diva_id} didn't contain any status!")
+    end
   end
 
   def self.delete_algorithm(algorithm)
