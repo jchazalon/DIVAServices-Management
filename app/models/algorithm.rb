@@ -155,9 +155,9 @@ class Algorithm < ActiveRecord::Base
   end
 
   def create_fields
-    create_fields_of(DivaServiceApi.general_information, :general)
-    create_fields_of(DivaServiceApi.output_information, :output)
-    create_fields_of(DivaServiceApi.method_information, :method)
+    create_fields_of(DivaServicesApi::Algorithm.general_information, :general)
+    create_fields_of(DivaServicesApi::Algorithm.output_information, :output)
+    create_fields_of(DivaServicesApi::Algorithm.method_information, :method)
   end
 
   def create_fields_of(data, category)

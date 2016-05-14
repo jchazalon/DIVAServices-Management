@@ -28,7 +28,7 @@
           <tr>
             <td align="center"><%= actions(algorithm) %></td>
             <td><%= algorithm.name.blank? ? 'N/A' : algorithm.name %></br><%= link_to 'COPY!', copy_algorithm_path(algorithm), method: :post %></td>
-            <td><%= DivaServiceApi.executions(algorithm.diva_id) %></td>
+            <td><%= diva_algo.executions if diva_algo = DivaServicesApi::Algorithm.by_id(algorithm.diva_id) %></td>
             <td>?</td>
             <td><%= algorithm.version %></td>
             <td><%= algorithm.updated_at.to_formatted_s(:db) %></td>

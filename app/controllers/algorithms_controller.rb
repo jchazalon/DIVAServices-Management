@@ -48,7 +48,7 @@ class AlgorithmsController < ApplicationController
 
   def destroy
     if @algorithm.finished_wizard?
-      if DivaServiceApi.delete_algorithm(@algorithm) && @algorithm.destroy
+      if DivaServicesApi::Algorithm.by_id(@algorithm.diva_id).delete && @algorithm.destroy
         flash[:notice] = "Deleted algorithm from DIVAService"
       end
     elsif @algorithm.destroy
@@ -111,7 +111,7 @@ class AlgorithmsController < ApplicationController
   end
 
   def update_status(algorithm)
-    status = DivaServiceApi.status(algorithm.diva_id)
-    algorithm.set_status(status[:status_code], status[:status_message]) if status[:status_code] != Algorithm.statuses[algorithm.status]
+    diva_algorithm = DivaServicesApi::Algorithm.by_id(algorithm.diva_id)
+    algorithm.set_status(diva_algorithm.status_code, diva_algorithm.status_message) if diva_algorithm.status_code != Algorithm.statuses[algorithm.status]
   end
 end

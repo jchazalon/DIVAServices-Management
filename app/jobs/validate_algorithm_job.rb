@@ -6,7 +6,7 @@ class ValidateAlgorithmJob < ActiveJob::Base
     algorithm = Algorithm.find(algorithm_id)
     if algorithm
       begin
-        p response = DivaServiceApi.validate_algorithm(algorithm)
+        p response = DivaServicesApi::Algorithm.validate(algorithm.to_schema)
         if response.success?
           PublishAlgorithmJob.perform_later(algorithm.id)
         else

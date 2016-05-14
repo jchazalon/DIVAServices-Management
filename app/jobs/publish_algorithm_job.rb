@@ -7,12 +7,12 @@ class PublishAlgorithmJob < ActiveJob::Base
     if algorithm
       begin
         algorithm.set_status(:creating, 'Algorithm is currently deploying. This may take several minutes. Grab a coffee.')
-        p response = DivaServiceApi.publish_algorithm(algorithm)
-        if response.success?
-          algorithm.update_attribute(:diva_id, response['identifier'])
-          response = DivaServiceApi.status(algorithm.diva_id)
-          if !response.empty? && response['statusCode'] != Algorithm.statuses[algorithm.status]
-            algorithm.set_status(response['statusCode'], response['statusMessage'])
+
+        if diva_algorithm = DivaServicesApi::Algorithm.publish(algorithm.to_schema)
+          algorithm.update_attribute(:diva_id, diva_algorithm.id)
+          diva_algorithm = DivaServicesApi::Algorithm.by_id(algorithm.diva_id)
+          if diva_algorithm.status_code != Algorithm.statuses[algorithm.status]
+            algorithm.set_status(diva_algorithm.status_code, diva_algorithm.status_message)
           end
         else
           algorithm.set_status(:error, "Unknown error during publication, please try again.\n#{response}")
