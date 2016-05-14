@@ -12,7 +12,7 @@ class StringField < Field
   validates :value, url: { allow_nil: true, allow_blank: true, no_local: true }, if: '!self.value.empty? && self.format && self.format.eql?("uri")'
 
   def match_regex
-    if !self.value.empty? && self.format && self.format.eql?("regex") && self.regex
+    if !self.value.empty? && self.regex
       errors.add(:value, 'is a invalid value') unless self.value =~ Regexp.new(self.regex)
     end
   end
