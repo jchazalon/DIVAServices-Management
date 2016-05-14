@@ -34,7 +34,6 @@ module DivaAlgorithm
 
     config.active_job.queue_adapter = :delayed_job
 
-    config.autoload_paths << Rails.root.join('lib/exceptions')
-    config.autoload_paths << Rails.root.join('lib/utils')
+    config.autoload_paths << Rails.root.join('lib')
   end
 end
