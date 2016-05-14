@@ -62,6 +62,15 @@ class DivaServiceApi
     end
   end
 
+  def self.executions(diva_id)
+    begin
+      response = self.get_information("/algorithms/#{diva_id}")
+      response['statistics']['executions']
+    rescue Exception
+      '-'
+    end
+  end
+
   def self.delete_algorithm(algorithm)
     response = self.delete("/algorithms/#{algorithm.diva_id}")
     if response.success? && algorithm.diva_id != nil
