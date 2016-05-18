@@ -42,7 +42,7 @@ else
   algorithm1.general_field('type').value = 'OCR'
   algorithm1.update_attribute(:zip_file, File.open(File.join(Rails.root, 'cannyedgedetection.zip')))
   algorithm1.output_field('output_type').value = 'file'
-  algorithm1.method_field('language').value = 'java'
+  algorithm1.method_field('executableType').value = 'java'
   algorithm1.method_field('environment').value = 'java:8'
   algorithm1.method_field('executable_path').value = 'cannyedgedetection/cannyedgedetection.jar'
   algorithm1.update_attribute(:status, :review)
@@ -65,7 +65,7 @@ else
   algorithm2.general_field('type').value = 'OCR'
   algorithm2.update_attribute(:zip_file, File.open(File.join(Rails.root, 'noising.zip')))
   algorithm2.output_field('output_type').value = 'file'
-  algorithm2.method_field('language').value = 'java'
+  algorithm2.method_field('executableType').value = 'java'
   algorithm2.method_field('environment').value = 'java:8'
   algorithm2.method_field('executable_path').value = 'noising/noising.jar'
   algorithm2.update_attribute(:status, :review)
@@ -83,7 +83,7 @@ else
   algorithm3.general_field('type').value = 'OCR'
   algorithm3.update_attribute(:zip_file, File.open(File.join(Rails.root, 'dummy.zip')))
   algorithm3.output_field('output_type').value = 'file'
-  algorithm3.method_field('language').value = 'java'
+  algorithm3.method_field('executableType').value = 'java'
   algorithm3.method_field('environment').value = 'java:8'
   algorithm3.method_field('executable_path').value = 'empty'
   algorithm3.update_attribute(:status, :review)
