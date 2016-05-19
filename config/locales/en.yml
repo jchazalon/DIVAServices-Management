@@ -21,3 +21,7 @@
 
 en:
   hello: "Hello world"
+en:
+  errors:
+    messages:
+      recaptcha: 'Please enter the captcha correctly'

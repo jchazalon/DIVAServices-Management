@@ -73,3 +73,15 @@ Run the delayed_job daemon:
 ```sh
 $ ./bin/delayed_job start
 ```
+
+
+##Produtction
+
+###Environment values
+
+* RECAPTCHA_PUBLIC_KEY
+* RECAPTCHA_PRIVATE_KEY
+* RAILS_DB_USER
+* RAILS_DB_PASSWORD
+* HOST_URL
+* SECRET_KEY_BASE

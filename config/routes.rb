@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   root to: 'algorithms#index'
-  devise_for :users
+  devise_for :users, controllers: { registrations: "registrations" }
   resources :algorithms do
     get '/status', to: 'algorithms#status', on: :member
     get '/edit', to: 'algorithms#edit', on: :member
