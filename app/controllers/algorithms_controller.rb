@@ -19,9 +19,14 @@ class AlgorithmsController < ApplicationController
   end
 
   def recover
-    @algorithm.update_attributes(status: :review)
-    flash[:notice] = "Latest status: #{@algorithm.status_message}"
-    redirect_to algorithm_algorithm_wizard_path(@algorithm, :review)
+    flash[:notice] = "Latest error: #{@algorithm.status_message}"
+    if @algorithm.already_published?
+      @algorithm.set_status(:unpublished_changes)
+      redirect_to algorithm_path(@algorithm)
+    else
+      @algorithm.set_status(:review)
+      redirect_to algorithm_algorithm_wizard_path(@algorithm, :review)
+    end
   end
 
   def index
@@ -64,6 +69,7 @@ class AlgorithmsController < ApplicationController
     end
     @algorithm.set_status(:validating, 'Informations are currently validated.')
     ValidateAlgorithmJob.perform_later(@algorithm.id)
+    redirect_to algorithms_path
   end
 
   private

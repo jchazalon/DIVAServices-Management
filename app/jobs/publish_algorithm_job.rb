@@ -6,10 +6,10 @@ class PublishAlgorithmJob < ActiveJob::Base
     algorithm = Algorithm.find(algorithm_id)
     if algorithm
       begin
-        if algorithm.diva_id.nil?
-          publish(algorithm)
-        else
+        if algorithm.already_published?
           update(algorithm)
+        else
+          publish(algorithm)
         end
       rescue Errno::ECONNREFUSED => e
         algorithm.set_status(:connection_error, 'Connection error, please try again.')

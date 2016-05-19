@@ -72,6 +72,10 @@ class Algorithm < ActiveRecord::Base
     !empty? && !informations? && !parameters? && !parameters_details? && !upload? && !review?
   end
 
+  def already_published?
+    !self.diva_id.nil?
+  end
+
   def valid_zip_file
     begin
       zip = Zip::File.open(self.zip_file.file.file)
