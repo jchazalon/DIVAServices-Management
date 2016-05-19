@@ -6,6 +6,9 @@ class AlgorithmWizardController < ApplicationController
 
   steps *Algorithm.wizard_steps
 
+  def terms
+  end
+
   def show
     case step
     when :parameters

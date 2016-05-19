@@ -31,7 +31,13 @@ class AlgorithmsController < ApplicationController
   end
 
   def index
-    @algorithms = current_user.algorithms.where(next: nil).order(:updated_at).sort{ |a,b| a.already_published? ? -1 : 1 }.paginate(page: params[:page], per_page: 15)
+    @algorithms = current_user.algorithms.where(next: nil).order(:updated_at).sort do |a,b|
+      if a.already_published? && b.already_published? || !a.already_published? && !b.already_published?
+        b.updated_at <=> a.updated_at
+      else
+        a.already_published? && !b.already_published? ? -1 : 1
+      end
+    end.paginate(page: params[:page], per_page: 15)
   end
 
   def show
