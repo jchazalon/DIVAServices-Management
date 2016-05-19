@@ -39,6 +39,7 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
+  # uzysset: set root_url
   routes.default_url_options[:host] = 'localhost:3000'
 end
 

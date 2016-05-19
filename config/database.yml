@@ -17,3 +17,5 @@ test:
 production:
   <<: *default
   database: divaa_production
+  username: <%= ENV["RAILS_DB_USER"] %>
+  password: <%= ENV["RAILS_DB_PASSWORD"] %>

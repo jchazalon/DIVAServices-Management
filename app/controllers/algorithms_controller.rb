@@ -1,4 +1,5 @@
 class AlgorithmsController < ApplicationController
+  require 'will_paginate/array'
   before_action :set_algorithm, only: [:recover, :show, :edit, :update, :destroy, :publish]
   before_action :algorithm_published!, only: [:show, :edit, :update]
   before_action :update_status_from_diva, only: :index
@@ -30,7 +31,7 @@ class AlgorithmsController < ApplicationController
   end
 
   def index
-    @algorithms = current_user.algorithms.where(next: nil).paginate(page: params[:page], per_page: 15)
+    @algorithms = current_user.algorithms.where(next: nil).order(:updated_at).sort{ |a,b| a.already_published? ? -1 : 1 }.paginate(page: params[:page], per_page: 15)
   end
 
   def show
@@ -66,10 +67,11 @@ class AlgorithmsController < ApplicationController
     unless @algorithm.review? || @algorithm.unpublished_changes?
       flash[:notice] = "Algorithm not yet ready for publishing"
       redirect_to algorithms_path
+    else
+      @algorithm.set_status(:validating, 'Informations are currently validated.')
+      ValidateAlgorithmJob.perform_later(@algorithm.id)
+      redirect_to algorithms_path
     end
-    @algorithm.set_status(:validating, 'Informations are currently validated.')
-    ValidateAlgorithmJob.perform_later(@algorithm.id)
-    redirect_to algorithms_path
   end
 
   private
