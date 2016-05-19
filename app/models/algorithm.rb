@@ -34,6 +34,7 @@ class Algorithm < ActiveRecord::Base
   validate :valid_zip_file, if: :validate_upload?
   validate :zip_file_includes_executable_path, if: :validate_upload?
   validate :executable_path_is_a_file, if: :validate_upload?
+  validate :check_for_virus
 
   def validate_upload?
     upload? || review? || published? || unpublished_changes?
@@ -74,6 +75,15 @@ class Algorithm < ActiveRecord::Base
 
   def already_published?
     !self.diva_id.nil?
+  end
+
+  def check_for_virus
+    if self.zip_file.file.present?
+      if !ClamScan::Client.scan(location: self.zip_file.path).safe?
+        File.delete(self.zip_file.file.path)
+        errors.add(:zip_file, 'Please don\'t upload any viruses')
+      end
+    end
   end
 
   def valid_zip_file

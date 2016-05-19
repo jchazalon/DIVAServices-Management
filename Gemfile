@@ -74,3 +74,4 @@ gem 'binding_of_caller'
 gem 'will_paginate', '~> 3.1.0'
 gem 'will_paginate-bootstrap'
 gem "recaptcha", require: "recaptcha/rails"
+gem 'clam_scan'

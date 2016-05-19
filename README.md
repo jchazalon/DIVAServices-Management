@@ -65,6 +65,24 @@ RECAPTCHA_PRIVATE_KEY=6Lc6BAAAAAAAAKN3DRm6VA_xxxxxxxxxxxxxxxxx
 ```
 These are dummy keys, use your own.
 
+#### 8. Install ClamAV
+```sh
+$ sudo apt-get update
+$ sudo apt-get install clamav
+$ sudo apt-get install clamav-daemon
+```
+
+Install the newest databases for clamscan
+```sh
+$ freshclam
+```
+
+Ensure that clamscan is installed under '/usr/bin/clamdscan', otherwise alter the entry under /config/initializers/clam_scan.rb. Check the current install directory with:
+```sh
+$ which clamscan
+```
+
+
 ## Run the server
 
 Create database on first run:
