@@ -4,6 +4,7 @@ class StringField < Field
   content_attr :maxLength, :integer
   content_attr :format, :string
   content_attr :regex, :string
+  content_attr :multiline, :boolean
 
   validate :minimal_length
   validate :maximal_length
@@ -35,10 +36,15 @@ class StringField < Field
     params['maxLength'] = v['maxLength']
     params['format'] = v['format']
     params['regex'] = v['regex']
+    params['multiline'] = v['multiline']
     return params
   end
 
   def object_type
-    'string'
+    if self.multiline
+      'text'
+    else
+      'string'
+    end
   end
 end
