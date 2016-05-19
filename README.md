@@ -57,6 +57,14 @@ $ cd /diva_algorithm
 $ bundle install
 ```
 
+#### 7. Create .env file
+Create a new file called '.env' inside the root folder (/diva_algorithm) and append to it:
+```
+RECAPTCHA_PUBLIC_KEY=6Lc6BAAAAAAAAChqRbQZcn_yyyyyyyyyyyyyyyyy
+RECAPTCHA_PRIVATE_KEY=6Lc6BAAAAAAAAKN3DRm6VA_xxxxxxxxxxxxxxxxx
+```
+These are dummy keys, use your own.
+
 ## Run the server
 
 Create database on first run:
