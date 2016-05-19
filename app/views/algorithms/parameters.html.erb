@@ -1,7 +1,22 @@
 <%= simple_form_for(@algorithm, url: algorithm_path(@algorithm, step: :parameters), method: :put) do |f| %>
 
-  <h3>Input</h3>
-  <%= render partial: 'algorithms/input_fields', locals: { f: f } %>
+  <div class="inputs_wrapper">
+    <div class="inputs_left">
+      <h3>Input</h3>
+      <%= render partial: 'algorithms/input_fields', locals: { f: f } %>
+    </div>
+
+    <div class="inputs_right">
+      <h3>Available Input types</h3>
+      <div class="well">
+        <% DivaServicesApi::Algorithm.input_type_descriptions.each do |input_type| %>
+          <h4><%= input_type[0].humanize %> <small>(<%= input_type[0] %>)</small></h4>
+          <p><%= input_type[1] %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <p style="clear: both;"></p>
 
   <h3>Output</h3>
   <%= render partial: 'algorithms/output_fields', locals: { f: f } %>

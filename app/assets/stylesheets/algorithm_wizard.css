@@ -1,3 +1,21 @@
+div.inputs_left {
+  float: left;
+  width: 48%
+}
+
+div.inputs_right {
+  float: left;
+  width: 48%
+}
+
+div.inputs_right h4 {
+  margin-bottom: 1px;
+}
+
+div.inputs_wrapper::after {
+  clear: both;
+}
+
 li.input_parameter {
   font-size: 18px;
 }
