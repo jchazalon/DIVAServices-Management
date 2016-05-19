@@ -6,22 +6,37 @@ class PublishAlgorithmJob < ActiveJob::Base
     algorithm = Algorithm.find(algorithm_id)
     if algorithm
       begin
-        algorithm.set_status(:creating, 'Algorithm is currently deploying. This may take several minutes. Grab a coffee.')
-
-        if diva_algorithm = DivaServicesApi::Algorithm.publish(algorithm.to_schema)
-          algorithm.update_attribute(:diva_id, diva_algorithm.id)
-          diva_algorithm = DivaServicesApi::Algorithm.by_id(algorithm.diva_id)
-          if diva_algorithm.status_code != Algorithm.statuses[algorithm.status]
-            algorithm.set_status(diva_algorithm.status_code, diva_algorithm.status_message)
-          end
+        if algorithm.diva_id.nil?
+          publish(algorithm)
         else
-          algorithm.set_status(:error, "Unknown error during publication, please try again.\n#{response}")
+          update(algorithm)
         end
       rescue Errno::ECONNREFUSED => e
-        algorithm.set_status(:connection_error, 'Connection error during publication, please try again.')
+        algorithm.set_status(:connection_error, 'Connection error, please try again.')
       end
     else
-      algorithm.set_status(:error, 'Unknown error during publication, please try again.')
+      algorithm.set_status(:error, 'Algorithm not found, does it still exist?')
+    end
+  end
+
+  def publish(algorithm)
+    diva_algorithm = DivaServicesApi::Algorithm.publish(algorithm.to_schema)
+    if diva_algorithm
+      algorithm.update_attribute(:diva_id, diva_algorithm.id)
+      algorithm.set_status(diva_algorithm.status_code, diva_algorithm.status_message)
+    else
+      algorithm.set_status(:error, "Unknown error during publication, please try again.\n#{diva_algorithm}")
+    end
+  end
+
+  def update(algorithm)
+    old_diva_algorithm = DivaServicesApi::Algorithm.by_id(algorithm.diva_id)
+    diva_algorithm = old_diva_algorithm.update(algorithm.diva_id, algorithm.to_schema)
+    if diva_algorithm
+      algorithm.update_attribute(:diva_id, diva_algorithm.id)
+      algorithm.set_status(diva_algorithm.status_code, diva_algorithm.status_message)
+    else
+      algorithm.set_status(:error, "Unknown error during update, please try again.\n#{diva_algorithm}")
     end
   end
 end

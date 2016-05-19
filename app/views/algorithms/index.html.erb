@@ -28,7 +28,7 @@
           <tr>
             <td align="center"><%= actions(algorithm) %></td>
             <td><%= algorithm.name.blank? ? 'N/A' : algorithm.name %></br><%= link_to 'COPY!', copy_algorithm_path(algorithm), method: :post %></td>
-            <td><%= diva_algo.executions if diva_algo = DivaServicesApi::Algorithm.by_id(algorithm.diva_id) %></td>
+            <td><%= executions(algorithm) %></td>
             <td>?</td>
             <td><%= algorithm.version %></td>
             <td><%= algorithm.updated_at.to_formatted_s(:db) %></td>
@@ -37,7 +37,7 @@
           <% if !previous_versions(algorithm).empty? %>
             <tr class="versions-toggle">
               <td colspan="7">
-                <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapse<%= algorithm.id %>" aria-expanded="false" aria-controls="collapse<%= algorithm.id %>">
+                <button class="btn btn-sm btn-default" type="button" data-toggle="collapse" data-target="#collapse<%= algorithm.id %>" aria-expanded="false" aria-controls="collapse<%= algorithm.id %>">
                   <em class="fa fa-plus-circle"></em> Show older versions
                 </button>
               </td>

@@ -1,16 +1,26 @@
 module DivaServicesApi
   class Algorithm
 
-    attr_accessor :status_code, :status_message, :id, :executions
+    attr_accessor :id, :status_code, :status_message, :executions
+
+    def status_code
+      DivaServicesApi::Algorithm.by_id(self.id, self) if @status_code == nil
+      @status_code
+    end
+
+    def status_message
+      DivaServicesApi::Algorithm.by_id(self.id, self) if @status_message == nil
+      @status_message
+    end
 
     def initialize(id)
       self.id = id
     end
 
-    def self.by_id(id)
+    def self.by_id(id, algorithm = nil)
       response = DivaServicesApi.get("/algorithms/#{id}")
       if response.success?
-        algorithm = self.new(id);
+        algorithm = self.new(id) unless algorithm
         algorithm.status_code = response['status']['statusCode']
         algorithm.status_message = response['status']['statusMessage']
         algorithm.executions = response['statistics']['executions']
@@ -49,7 +59,6 @@ module DivaServicesApi
       hash
     end
 
-
     def self.validate(json)
       DivaServicesApi.post('/validate/create', body: json, headers: { 'Content-Type' => 'application/json' })
     end
@@ -57,6 +66,11 @@ module DivaServicesApi
     def self.publish(json)
       response = DivaServicesApi.post('/algorithms', body: json, headers: { 'Content-Type' => 'application/json' })
       self.new(response['identifier'])
+    end
+
+    def update(id, json)
+      response = DivaServicesApi.put("/algorithms/#{id}", body: json, headers: { 'Content-Type' => 'application/json' })
+      DivaServicesApi::Algorithm.new(response['identifier'])
     end
 
     def delete
