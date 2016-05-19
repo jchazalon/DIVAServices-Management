@@ -58,7 +58,7 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def diva_service_online!
-    unless DivaServiceApi.is_online?
+    unless DivaServicesApi.is_online?
       flash[:error] = "DIVAService is currently not reachable. Please stand by until we are able to reconnect."
       redirect_to algorithms_path
     end

@@ -8,4 +8,13 @@ module AlgorithmHelper
     end while(algorithm)
     versions
   end
+
+  def executions(algorithm)
+    diva_algorithm = DivaServicesApi::Algorithm.by_id(algorithm.diva_id)
+    if diva_algorithm
+      diva_algorithm.executions
+    else
+      '-'
+    end
+  end
 end

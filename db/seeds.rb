@@ -1,4 +1,5 @@
 include SeedUtil
+include DivaServicesApi
 
 ############
 #Clean up first
@@ -23,7 +24,7 @@ Delayed::Job.destroy_all
 ############
 user = User.create!(email: 'dev@diva.unifr.ch', password: '12345678')
 
-if !DivaServiceApi.is_online?
+if !DivaServicesApi.is_online?
   p '----------------------------------------------'
   p '--------          WARNING!!           --------'
   p '----------------------------------------------'

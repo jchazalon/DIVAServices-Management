@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
   function update_infotext(select) {
-    var descriptions = <%= raw(DivaServiceApi.input_type_descriptions.to_json) %>;
+    var descriptions = <%= raw(DivaServicesApi::Algorithm.input_type_descriptions.to_json) %>;
     var description = '';
     if (descriptions[select.value] != null) {
       description = descriptions[select.value];

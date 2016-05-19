@@ -31,7 +31,7 @@ class InputParameter < ActiveRecord::Base
   end
 
   def create_fields
-    data = DivaServiceApi.input_information
+    data = DivaServicesApi::Algorithm.input_information
     data = data[self.input_type]
     self.description = data['infoText']
     data['properties'].each{ |k, v| create_recursive_field(self,k,v) } if data.has_key?('properties')
