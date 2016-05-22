@@ -11,7 +11,7 @@
   <% @algorithm.general_fields.each do |field| %>
     <tr>
       <td style="width: 30%"><%= field.name.humanize %></td>
-      <td style="width: 70%"><%= field.value %></td>
+      <td style="width: 70%"><%= humanize_value(field) %></td>
     </tr>
   <% end %>
 </table>
@@ -40,7 +40,7 @@
             <tr>
               <td><%= field.name.humanize %> <br/> <p class="help-block"><%= field.infoText %></p></td>
               <td><span class="label label-primary"><%= field.object_type %></span></td>
-              <td><%= field.value.blank? ? '-' : field.value %></td>
+              <td><%= field.value.blank? ? '-' : humanize_value(field) %></td>
             </tr>
           <% end %>
         <% end %>
@@ -52,6 +52,9 @@
 </div>
 <div class="col-md-12 edit-button">
   <div class="pull-right">
+    <%= link_to 'Edit input details', wizard_path(:parameters_details), class: 'btn btn-default' %>
+  </div>
+  <div class="pull-right">
     <%= link_to 'Edit input information', wizard_path(:parameters), class: 'btn btn-default' %>
   </div>
 </div>
@@ -62,7 +65,7 @@
   <% @algorithm.output_fields.each do |field| %>
     <tr>
       <td style="width: 30%"><%= field.name.humanize %></td>
-      <td style="width: 70%"><%= field.value %></td>
+      <td style="width: 70%"><%= humanize_value(field) %></td>
     </tr>
   <% end %>
 </table>
@@ -77,12 +80,12 @@
   <% @algorithm.method_fields.each do |field| %>
     <tr>
       <td style="width: 30%"><%= field.name.humanize %></td>
-      <td style="width: 70"><%= field.value %></td>
+      <td style="width: 70"><%= humanize_value(field) %></td>
     </tr>
   <% end %>
     <tr>
       <td>File</td>
-      <td><%= @algorithm.zip_file.file.content_type %></td>
+      <td><%= "#{@algorithm.zip_file.file.content_type} - #{number_to_human_size(File.size(@algorithm.zip_file.file.file).to_f)}" %></td>
     </tr>
 </table>
 <div class="col-md-12 edit-button">

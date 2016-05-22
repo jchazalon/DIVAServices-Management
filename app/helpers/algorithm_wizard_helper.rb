@@ -27,4 +27,13 @@ module AlgorithmWizardHelper
       end
     end
   end
+
+  def humanize_value(field)
+    case field.type
+    when 'EnumField'
+      field.keys[field.values.index(field.value)]
+    else
+      field.value
+    end
+  end
 end

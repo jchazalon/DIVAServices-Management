@@ -1,8 +1,9 @@
+<h3>General information</h3>
+
 <%= simple_form_for(@algorithm, url: algorithm_path(@algorithm, step: :informations), method: :put) do |f| %>
-
-  <h3>General information</h3>
   <%= render partial: 'algorithms/general_fields', locals: { f: f } %>
-
+  <hr>
+  <br/>
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
   <%= f.submit 'Save', class: 'btn btn-primary' %>
 <% end %>
