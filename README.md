@@ -74,7 +74,7 @@ $ sudo apt-get install clamav-daemon
 
 Install the newest databases for clamscan
 ```sh
-$ freshclam
+$ sudo freshclam
 ```
 
 Ensure that clamscan is installed under '/usr/bin/clamdscan', otherwise alter the entry under /config/initializers/clam_scan.rb. Check the current install directory with:

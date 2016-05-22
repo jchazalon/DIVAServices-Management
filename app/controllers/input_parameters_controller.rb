@@ -1,4 +1,5 @@
 class InputParametersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_algorithm, only: :sort
   respond_to :html
 

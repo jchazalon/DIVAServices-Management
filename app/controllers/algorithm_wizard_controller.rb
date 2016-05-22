@@ -1,5 +1,6 @@
 class AlgorithmWizardController < ApplicationController
   include Wicked::Wizard
+  before_action :authenticate_user!
   before_action :diva_service_online!
   before_action :set_algorithm, only: [:show, :update]
   before_action :algorithm_not_finished_yet!, only: [:show, :update]
@@ -38,7 +39,7 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def finish_wizard_path
-    @algorithm.set_status(:validating, 'Informations are currently validated.')
+    @algorithm.set_status(:validating, 'Information are currently validated.')
     ValidateAlgorithmJob.perform_later(@algorithm.id)
     algorithms_path
   end
@@ -62,7 +63,7 @@ class AlgorithmWizardController < ApplicationController
 
   def diva_service_online!
     unless DivaServicesApi.is_online?
-      flash[:error] = "DIVAService is currently not reachable. Please stand by until we are able to reconnect."
+      flash[:error] = "DIVAServices is currently not reachable. Please stand by until we are able to reconnect."
       redirect_to algorithms_path
     end
   end

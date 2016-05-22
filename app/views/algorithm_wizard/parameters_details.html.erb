@@ -1,14 +1,17 @@
 <h1>Algorithm Wizard - Step 3/5</h1>
 <%= progress_bar(3) %>
 
-<h2>Input details</h2>
+<h2>Input parameter details</h2>
 
-<p>Please configure each previously selected input parameter. Unrequired fields can be left out:</p>
+<p>
+  If necessary, please provide additional information to the input parameters you have selected in the previous step.
+  Note that you can reorder the parameter to fit the input arguments of your CLI algorithm/script.
+</p>
 
 <%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
-
+  <hr/>
   <%= render partial: 'input_parameters/input_parameter_detail_fields', locals: { f: f } %>
-
+  <hr/>
   </br>
   <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>

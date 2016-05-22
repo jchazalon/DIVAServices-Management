@@ -1,5 +1,6 @@
 class AlgorithmsController < ApplicationController
   require 'will_paginate/array'
+  before_action :authenticate_user!
   before_action :set_algorithm, only: [:recover, :show, :edit, :update, :destroy, :publish]
   before_action :algorithm_published!, only: [:show, :edit, :update]
   before_action :update_status_from_diva, only: :index
@@ -74,7 +75,7 @@ class AlgorithmsController < ApplicationController
       flash[:notice] = "Algorithm not yet ready for publishing"
       redirect_to algorithms_path
     else
-      @algorithm.set_status(:validating, 'Informations are currently validated.')
+      @algorithm.set_status(:validating, 'Information are currently validated.')
       ValidateAlgorithmJob.perform_later(@algorithm.id)
       redirect_to algorithms_path
     end

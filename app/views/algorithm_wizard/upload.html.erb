@@ -1,16 +1,17 @@
 <h1>Algorithm Wizard - Step 4/5</h1>
 <%= progress_bar(4) %>
 
-<h2>Algorithm</h2>
+<h2>Algorithm details</h2>
 
-<p>Please upload your algorithm</p>
+<p>Please upload your algorithm and select the necessary option in order to successfuly run it on the D<span class="small-caps">iva</span>Services</p>
 
 <%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
-
+  <hr/>
   <%= f.input :zip_file %>
   <%= f.hint 'zip file containing the executables as well as all necessary dependencies' %>
   <%= render partial: 'algorithms/method_fields', locals: { f: f } %>
-
+  <hr/>
+  <br/>
   <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
   <%= f.submit 'Next', class: 'btn btn-primary' %>

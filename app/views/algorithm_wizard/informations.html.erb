@@ -1,15 +1,18 @@
 <h1>Algorithm Wizard - Step 1/5</h1>
 <%= progress_bar(1) %>
 
-<h2>Information</h2>
+<h2>General Information</h2>
 
-<p>Thanks for your interest in contributing to the DIVAService. This wizard will guide you throuh the process of uploading your own Algorithm. First we need some general information about the algorithm and its author(s):</p>
+<p>Thanks for your interest in contributing to the D<span class="small-caps">iva</span>Services.
+  <br/>
+  This wizard will guide you through the process of uploading and integrating your own algorithm into the D<span class="small-caps">iva</span>Services. In a first instance, please fill out the required forms below:
+</p>
 
 <%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
-
-  <h3>General information</h3>
+  <hr>
   <%= render partial: 'algorithms/general_fields', locals: { f: f } %>
-
+  <hr>
+  <br/>
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
   <%= f.submit 'Next', class: 'btn btn-primary' %>
 <% end %>

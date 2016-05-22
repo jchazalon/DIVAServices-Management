@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
 
-  root to: 'algorithms#index'
+  root to: 'home#index'
   devise_for :users, controllers: { registrations: "registrations" }
+  authenticated :user do
+    root to: 'algorithms#index', as: :authenticated_root
+  end
   resources :algorithms do
     get '/status', to: 'algorithms#status', on: :member
     get '/edit', to: 'algorithms#edit', on: :member
@@ -14,4 +17,5 @@ Rails.application.routes.draw do
        put :sort, on: :collection
     end
   end
+  get '/faq', to:'home#faq'
 end

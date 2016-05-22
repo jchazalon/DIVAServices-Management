@@ -1,18 +1,20 @@
 <h1>Algorithm Wizard - Step 2/5</h1>
 <%= progress_bar(2) %>
 
-<h2>Information</h2>
+<h2>Input/Output information</h2>
 
-<p>Please select the necessary input and output parameters to run your algorithm. Note that the order of the input parameter matters, the most top one is the first parameter used in the execution query. Further details of the parameters can be set in the next step:</p>
+<p>To make sure that your algorithm will run correctly please select all necessary input parameters.
+  The topmost parameter will be used as the first and the bottommost used as the last input parameter when running your algorithm.<br/>
+  Once you have selected all parameter, you can define further details in the next step.
+</p>
 
 <%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
-
   <div class="inputs_wrapper">
+    <hr style="margin-bottom: 0;">
     <div class="inputs_left">
       <h3>Input</h3>
       <%= render partial: 'algorithms/input_fields', locals: { f: f } %>
     </div>
-
     <div class="inputs_right">
       <h3>Available Input types</h3>
       <div class="well">
@@ -24,10 +26,11 @@
     </div>
   </div>
   <p style="clear: both;"></p>
-
+  <hr>
   <h3>Output</h3>
   <%= render partial: 'algorithms/output_fields', locals: { f: f } %>
-
+  <hr>
+  <br/>
   <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
   <%= f.submit 'Next', class: 'btn btn-primary' %>
