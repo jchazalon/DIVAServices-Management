@@ -35,12 +35,14 @@ else
   #Algorithm 1
   ############
   algorithm1 = user.algorithms.create!(status: :empty)
-  algorithm1.general_field('name').value = 'Canny Edge Detection'
-  algorithm1.general_field('description').value = 'Who knows, I always only read candy detection ;)'
-  algorithm1.general_field('author').value = 'DIVA UniFr'
+  algorithm1.general_field('Algorithm Name').value = 'Canny Edge Detection'
+  algorithm1.general_field('Description').value = 'Who knows, I always only read candy detection ;)'
+  algorithm1.general_field('Contact Author').value = 'DIVA UniFr'
+  algorithm1.general_field('Affiliation').value = 'UniFr'
   algorithm1.general_field('email').value = 'dev@diva.unifr.ch'
   algorithm1.general_field('website').value = 'http://www.unifr.ch'
   algorithm1.general_field('type').value = 'OCR'
+  algorithm1.general_field('license').value = 'MIT'
   algorithm1.update_attribute(:zip_file, File.open(File.join(Rails.root, 'cannyedgedetection.zip')))
   algorithm1.output_field('output_type').value = 'file'
   algorithm1.method_field('executableType').value = 'java'
@@ -57,13 +59,15 @@ else
   #Algorithm 2
   ############
   algorithm2 = user.algorithms.create!(status: :empty)
-  algorithm2.general_field('name').value = 'Noising'
-  algorithm2.general_field('description').value = 'Noises the image I guess?!'
-  algorithm2.general_field('author').value = 'DIVA UniFr'
+  algorithm2.general_field('Algorithm Name').value = 'Noising'
+  algorithm2.general_field('Description').value = 'Noises the image I guess?!'
+  algorithm2.general_field('Contact Author').value = 'DIVA UniFr'
+  algorithm2.general_field('Affiliation').value = 'UniFr'
   algorithm2.general_field('DOI').value = 'doi:10.1000/182'
   algorithm2.general_field('email').value = 'dev@diva.unifr.ch'
   algorithm2.general_field('website').value = 'http://www.unifr.ch'
   algorithm2.general_field('type').value = 'OCR'
+  algorithm2.general_field('license').value = 'MIT'
   algorithm2.update_attribute(:zip_file, File.open(File.join(Rails.root, 'noising.zip')))
   algorithm2.output_field('output_type').value = 'file'
   algorithm2.method_field('executableType').value = 'java'
@@ -76,12 +80,13 @@ else
   #Algorithm 3
   ############
   algorithm3 = user.algorithms.create!(status: :empty)
-  algorithm3.general_field('name').value = 'Canny Edge Detection'
-  algorithm3.general_field('description').value = 'Who knows, I always only read candy detection ;)'
-  algorithm3.general_field('author').value = 'DIVA UniFr'
+  algorithm3.general_field('Algorithm Name').value = 'Canny Edge Detection'
+  algorithm3.general_field('Description').value = 'Who knows, I always only read candy detection ;)'
+  algorithm3.general_field('Contact Author').value = 'DIVA UniFr'
   algorithm3.general_field('email').value = 'dev@diva.unifr.ch'
   algorithm3.general_field('website').value = 'http://www.unifr.ch'
   algorithm3.general_field('type').value = 'OCR'
+  algorithm3.general_field('license').value = 'MIT'
   algorithm3.update_attribute(:zip_file, File.open(File.join(Rails.root, 'dummy.zip')))
   algorithm3.output_field('output_type').value = 'file'
   algorithm3.method_field('executableType').value = 'java'
