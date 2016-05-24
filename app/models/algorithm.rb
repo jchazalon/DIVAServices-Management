@@ -126,7 +126,7 @@ class Algorithm < ActiveRecord::Base
 
   #NOTE Since the name will be used a lot, we create a virtual accessor
   def name
-    self.general_fields.where(fieldable_id: self.id).where("payload->>'name' = 'name'").first.value
+    self.general_fields.where(fieldable_id: self.id).where("payload->>'name' = 'Algorithm Name'").first.value
   end
 
   def general_field(name)
