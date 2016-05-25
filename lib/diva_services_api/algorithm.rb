@@ -46,17 +46,17 @@ module DivaServicesApi
       DivaServicesApi.get('/information/method').parsed_response
     end
 
-    def self.input_type_keys
-      DivaServicesApi::Algorithm.input_information.keys
+    def self.input_type_keys_with_names
+      DivaServicesApi::Algorithm.input_information.map do |input_type|
+        [input_type[1]['displayText'], input_type[0]]
+      end
     end
 
-    def self.input_type_descriptions
-      data = DivaServicesApi::Algorithm.input_information
-      hash = Hash.new
-      DivaServicesApi::Algorithm.input_type_keys.each do |input_type|
-        hash[input_type] = data[input_type]['infoText']
+    def self.list_input_types
+      info = DivaServicesApi::Algorithm.input_information
+      DivaServicesApi::Algorithm.input_information.keys.map do |input_type|
+        { hint: info[input_type]['infoText'], name: info[input_type]['displayText'] }
       end
-      hash
     end
 
     def self.validate(json)

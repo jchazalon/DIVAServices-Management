@@ -33,6 +33,7 @@ class InputParameter < ActiveRecord::Base
   def create_fields
     data = DivaServicesApi::Algorithm.input_information
     data = data[self.input_type]
+    self.name = data['displayText']
     self.description = data['infoText']
     data['properties'].each{ |k, v| create_recursive_field(self,k,v) } if data.has_key?('properties')
   end
@@ -46,7 +47,7 @@ class InputParameter < ActiveRecord::Base
 
   def to_schema
     data = Hash.new
-    self.fields.each{ |field| data[field.name] = field.to_schema }
+    self.fields.each{ |field| data[field.key] = field.to_schema }
     return data
   end
 

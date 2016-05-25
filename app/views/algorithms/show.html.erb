@@ -23,7 +23,7 @@
   <ol>
     <% @algorithm.input_parameters.each do |input_parameter| %>
     <div class="col-md-12">
-      <li class="input_parameter"><h4><%= input_parameter.input_type.to_s.humanize %></h4></li>
+      <li class="input_parameter"><h4><%= input_parameter.name %></h4></li>
       <p class="help-block"><%= input_parameter.description %></p>
         <% unless input_parameter.fields.empty? %>
         <table class="table table-striped table-bordered">

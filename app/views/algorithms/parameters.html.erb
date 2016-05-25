@@ -9,9 +9,9 @@
     <div class="inputs_right">
       <h3>Available Input types</h3>
       <div class="well">
-        <% DivaServicesApi::Algorithm.input_type_descriptions.each do |input_type| %>
-          <h4><%= input_type[0].humanize %> <small>(<%= input_type[0] %>)</small></h4>
-          <p><%= input_type[1] %></p>
+        <% DivaServicesApi::Algorithm.list_input_types.each do |input_type| %>
+          <h4><%= input_type[:name] %></h4>
+          <p><%= input_type[:hint] %></p>
         <% end %>
       </div>
     </div>
@@ -25,14 +25,3 @@
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
   <%= f.submit 'Save', class: 'btn btn-primary' %>
 <% end %>
-
-<script type="text/javascript">
-  function update_infotext(select) {
-    var descriptions = <%= raw(DivaServicesApi::Algorithm.input_type_descriptions.to_json) %>;
-    var description = '';
-    if (descriptions[select.value] != null) {
-      description = descriptions[select.value];
-    }
-    $(select).parent().parent().parent().find('.help-block').text(description);
-  }
-</script>
