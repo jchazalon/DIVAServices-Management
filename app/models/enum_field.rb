@@ -6,7 +6,7 @@ class EnumField < Field
   validate :valid_selection
 
   def valid_selection
-    if !self.value.empty?
+    if !self.value.blank?
       errors.add(:value, 'cannot be selected!') unless self.values.include?(self.value)
     end
   end

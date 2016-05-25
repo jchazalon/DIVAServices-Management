@@ -35,10 +35,10 @@ else
   #Algorithm 1
   ############
   algorithm1 = user.algorithms.create!(status: :empty)
-  algorithm1.general_field('Algorithm Name').value = 'Canny Edge Detection'
-  algorithm1.general_field('Description').value = 'Who knows, I always only read candy detection ;)'
-  algorithm1.general_field('Contact Author').value = 'DIVA UniFr'
-  algorithm1.general_field('Affiliation').value = 'UniFr'
+  algorithm1.general_field('name').value = 'Canny Edge Detection'
+  algorithm1.general_field('description').value = 'Who knows, I always only read candy detection ;)'
+  algorithm1.general_field('author').value = 'DIVA UniFr'
+  algorithm1.general_field('affiliation').value = 'UniFr'
   algorithm1.general_field('email').value = 'dev@diva.unifr.ch'
   algorithm1.general_field('website').value = 'http://www.unifr.ch'
   algorithm1.general_field('type').value = 'OCR'
@@ -59,10 +59,10 @@ else
   #Algorithm 2
   ############
   algorithm2 = user.algorithms.create!(status: :empty)
-  algorithm2.general_field('Algorithm Name').value = 'Noising'
-  algorithm2.general_field('Description').value = 'Noises the image I guess?!'
-  algorithm2.general_field('Contact Author').value = 'DIVA UniFr'
-  algorithm2.general_field('Affiliation').value = 'UniFr'
+  algorithm2.general_field('name').value = 'Noising'
+  algorithm2.general_field('description').value = 'Noises the image I guess?!'
+  algorithm2.general_field('author').value = 'DIVA UniFr'
+  algorithm2.general_field('affiliation').value = 'UniFr'
   algorithm2.general_field('DOI').value = 'doi:10.1000/182'
   algorithm2.general_field('email').value = 'dev@diva.unifr.ch'
   algorithm2.general_field('website').value = 'http://www.unifr.ch'
@@ -80,9 +80,10 @@ else
   #Algorithm 3
   ############
   algorithm3 = user.algorithms.create!(status: :empty)
-  algorithm3.general_field('Algorithm Name').value = 'Canny Edge Detection'
-  algorithm3.general_field('Description').value = 'Who knows, I always only read candy detection ;)'
-  algorithm3.general_field('Contact Author').value = 'DIVA UniFr'
+  algorithm3.general_field('name').value = 'Canny Edge Detection'
+  algorithm3.general_field('description').value = 'Who knows, I always only read candy detection ;)'
+  algorithm3.general_field('author').value = 'DIVA UniFr'
+  algorithm3.general_field('affiliation').value = 'UniFr'
   algorithm3.general_field('email').value = 'dev@diva.unifr.ch'
   algorithm3.general_field('website').value = 'http://www.unifr.ch'
   algorithm3.general_field('type').value = 'OCR'

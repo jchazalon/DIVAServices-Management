@@ -7,7 +7,7 @@
 <table class="table table-striped table-bordered">
   <% @algorithm.general_fields.each do |field| %>
     <tr>
-      <td style="width: 30%"><%= field.name.humanize %></td>
+      <td style="width: 30%"><%= field.name %></td>
       <td style="width: 70%"><%= humanize_value(field) %></td>
     </tr>
   <% end %>
@@ -35,7 +35,7 @@
           <% input_parameter.all_fields.each do |field| %>
             <% unless field.type == 'ObjectField' %>
               <tr>
-                <td><%= field.name.humanize %> <br/> <p class="help-block"><%= field.infoText %></p></td>
+                <td><%= field.name %> <br/> <p class="help-block"><%= field.infoText %></p></td>
                 <td><span class="label label-primary"><%= field.object_type %></span></td>
                 <td><%= field.value.blank? ? '-' : humanize_value(field) %></td>
               </tr>
@@ -57,7 +57,7 @@
 <table class="table table-striped table-bordered">
   <% @algorithm.output_fields.each do |field| %>
     <tr>
-      <td style="width: 30%"><%= field.name.humanize %></td>
+      <td style="width: 30%"><%= field.name %></td>
       <td style="width: 70%"><%= humanize_value(field) %></td>
     </tr>
   <% end %>
@@ -72,7 +72,7 @@
 <table class="table table-striped table-bordered">
   <% @algorithm.method_fields.each do |field| %>
     <tr>
-      <td style="width: 30%"><%= field.name.humanize %></td>
+      <td style="width: 30%"><%= field.name %></td>
       <td style="width: 70"><%= humanize_value(field) %></td>
     </tr>
   <% end %>

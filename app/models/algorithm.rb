@@ -126,19 +126,19 @@ class Algorithm < ActiveRecord::Base
 
   #NOTE Since the name will be used a lot, we create a virtual accessor
   def name
-    self.general_fields.where(fieldable_id: self.id).where("payload->>'name' = 'Algorithm Name'").first.value
+    self.general_fields.where(fieldable_id: self.id).where("payload->>'key' = 'name'").first.value
   end
 
   def general_field(name)
-    self.general_fields.where(fieldable_id: self.id).where("payload->>'name' = ?", name).first
+    self.general_fields.where(fieldable_id: self.id).where("payload->>'key' = ?", name).first
   end
 
   def output_field(name)
-    self.output_fields.where(fieldable_id: self.id).where("payload->>'name' = ?", name).first
+    self.output_fields.where(fieldable_id: self.id).where("payload->>'key' = ?", name).first
   end
 
   def method_field(name)
-    self.method_fields.where(fieldable_id: self.id).where("payload->>'name' = ?", name).first
+    self.method_fields.where(fieldable_id: self.id).where("payload->>'key' = ?", name).first
   end
 
   #TODO Pretty sure that will break in production (since root_url isn't set)
@@ -147,10 +147,10 @@ class Algorithm < ActiveRecord::Base
   end
 
   def to_schema
-    { general: self.general_fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact.reduce(:merge) || {},
+    { general: self.general_fields.map{ |field| {field.key => field.value} unless field.value.blank? }.compact.reduce(:merge) || {},
       input: self.input_parameters.map{ |input_parameter| { input_parameter.input_type => input_parameter.to_schema } } || [],
-      output: self.output_fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact.reduce(:merge) || {},
-      method: {file: self.zip_url}.merge!(self.method_fields.map{ |field| {field.name => field.value} unless field.value.blank? }.compact.reduce(:merge) || {})
+      output: self.output_fields.map{ |field| {field.key => field.value} unless field.value.blank? }.compact.reduce(:merge) || {},
+      method: {file: self.zip_url}.merge!(self.method_fields.map{ |field| {field.key => field.value} unless field.value.blank? }.compact.reduce(:merge) || {})
     }.to_json
   end
 

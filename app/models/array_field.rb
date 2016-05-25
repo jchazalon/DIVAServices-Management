@@ -7,13 +7,13 @@ class ArrayField < Field
   validate :unique_items
 
   def unique_items
-    if !self.value.empty? && self.minItems
+    if !self.value.blank? && self.minItems
       errors.add(:value, "cannot contain a element twice!") if self.value.split(';').uniq.length != self.value.split(';').length
     end
   end
 
   def minimal_items
-    if !self.value.empty? && self.minItems
+    if !self.value.blank? && self.minItems
       errors.add(:value, "must contain at least #{self.minItems} element(s)!") if self.value.split(';').size < self.minItems
     end
   end
@@ -28,7 +28,7 @@ class ArrayField < Field
 
   def value
       value = super()
-      value.join(';')
+      value.join(';') unless value.blank?
   end
 
   def value=(value)
