@@ -67,13 +67,15 @@ task :deploy => :environment do
 end
 
 task :seed => :environment do
-  queue! "RAILS_ENV=production bundle exec rake db:seed"
+  in_directory "#{deploy_to}/#{current_path!}" do
+    queue! "RAILS_ENV=production bundle exec rake db:seed"
+  end
 end
 
 task :start => :environment do
   log "Starting thin"
   in_directory "#{deploy_to}/#{current_path!}" do
-    queue "echo '-----> Starting Thin on socket"
+    queue "echo '-----> Starting Thin on socket'"
     queue "bundle exec thin start -C /etc/thin/#{application}.yml"
   end
 end

@@ -1,7 +1,7 @@
 module DivaServicesApi
   include HTTParty
 
-  base_uri 'localhost:8080' #TODO make this configurable
+  base_uri ENV['DIVA_SERVICES_HOST'] #TODO make this configurable
   format :json
 
   # Returns true if the DIVAServices API is accessable, otherwise returns false
