@@ -34,7 +34,7 @@ class Algorithm < ActiveRecord::Base
   validate :valid_zip_file, if: :validate_upload?
   validate :zip_file_includes_executable_path, if: :validate_upload?
   validate :executable_path_is_a_file, if: :validate_upload?
-  validate :check_for_virus
+  #validate :check_for_virus #TODO temporally deactivated until not everythin is a virus on production....
 
   def validate_upload?
     upload? || review? || published? || unpublished_changes?

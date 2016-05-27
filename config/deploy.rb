@@ -72,6 +72,16 @@ task :seed => :environment do
   end
 end
 
+task :reset_db => :environment do
+  in_directory "#{deploy_to}/#{current_path!}" do
+    queue "echo '-----> Stopping Thin'"
+    queue "bundle exec thin stop -C /etc/thin/#{application}.yml"
+    queue! "RAILS_ENV=production bundle exec rake db:drop db:create db:migrate"
+    queue "echo '-----> Starting Thin on socket'"
+    queue "bundle exec thin start -C /etc/thin/#{application}.yml"
+  end
+end
+
 task :start => :environment do
   log "Starting thin"
   in_directory "#{deploy_to}/#{current_path!}" do
