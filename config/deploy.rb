@@ -87,6 +87,7 @@ task :start => :environment do
   in_directory "#{deploy_to}/#{current_path!}" do
     queue "echo '-----> Starting Thin on socket'"
     queue "bundle exec thin start -C /etc/thin/#{application}.yml"
+    queue "RAILS_ENV=production bin/delayed_job start"
   end
 end
 
@@ -95,6 +96,7 @@ task :stop => :environment do
   in_directory "#{deploy_to}/#{current_path!}" do
     queue "echo '-----> Stopping Thin'"
     queue "bundle exec thin stop -C /etc/thin/#{application}.yml"
+    queue "RAILS_ENV=production bin/delayed_job stop"
   end
 end
 
@@ -103,5 +105,6 @@ task :restart => :environment do
   in_directory "#{deploy_to}/#{current_path!}" do
     queue "echo '-----> Restarting Thin'"
     queue "bundle exec thin restart -C /etc/thin/#{application}.yml"
+    queue "RAILS_ENV=production bin/delayed_job restart"
   end
 end
