@@ -17,4 +17,13 @@ module AlgorithmHelper
       '-'
     end
   end
+
+  def exceptions(algorithm)
+    diva_algorithm = DivaServicesApi::Algorithm.by_id(algorithm.diva_id)
+    if diva_algorithm
+      diva_algorithm.exceptions.size
+    else
+      '-'
+    end
+  end
 end

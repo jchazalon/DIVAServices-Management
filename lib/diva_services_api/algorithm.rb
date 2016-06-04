@@ -13,6 +13,13 @@ module DivaServicesApi
       @status_message
     end
 
+    def exceptions
+      exceptions = DivaServicesApi.get("/algorithms/#{id}/exceptions").parsed_response
+      exceptions.map do |entry|
+        DivaServicesApi::ExceptionMessage.new(id, entry['date'], entry['exception'])
+      end
+    end
+
     def initialize(id)
       self.id = id
     end

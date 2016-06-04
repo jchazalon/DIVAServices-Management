@@ -1,8 +1,8 @@
 class AlgorithmsController < ApplicationController
   require 'will_paginate/array'
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:recover, :show, :edit, :update, :destroy, :publish]
-  before_action :algorithm_published!, only: [:show, :edit, :update]
+  before_action :set_algorithm, only: [:recover, :exceptions, :show, :edit, :update, :destroy, :publish]
+  before_action :algorithm_published!, only: [:exceptions, :show, :edit, :update]
   before_action :update_status_from_diva, only: :index
   before_action :needs_recover, only: :recover
   respond_to :html
@@ -29,6 +29,10 @@ class AlgorithmsController < ApplicationController
       @algorithm.set_status(:review)
       redirect_to algorithm_algorithm_wizard_path(@algorithm, :review)
     end
+  end
+
+  def exceptions
+    @exceptions = DivaServicesApi::Algorithm.by_id(@algorithm.diva_id).exceptions
   end
 
   def index

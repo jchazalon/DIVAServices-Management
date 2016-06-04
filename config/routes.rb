@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     root to: 'algorithms#index', as: :authenticated_root
   end
   resources :algorithms do
+    get '/exceptions', to: 'algorithms#exceptions', on: :member
     get '/status', to: 'algorithms#status', on: :member
     get '/edit', to: 'algorithms#edit', on: :member
     post '/publish', to: 'algorithms#publish', on: :member
