@@ -62,6 +62,7 @@ Create a new file called '.env' inside the root folder (/diva_algorithm) and app
 ```
 RECAPTCHA_PUBLIC_KEY=6Lc6BAAAAAAAAChqRbQZcn_yyyyyyyyyyyyyyyyy
 RECAPTCHA_PRIVATE_KEY=6Lc6BAAAAAAAAKN3DRm6VA_xxxxxxxxxxxxxxxxx
+DIVA_SERVICES_HOST=localhost:8080
 ```
 These are dummy keys, use your own.
 
@@ -81,7 +82,6 @@ Ensure that clamscan is installed under '/usr/bin/clamdscan', otherwise alter th
 ```sh
 $ which clamscan
 ```
-
 
 ## Run the server
 
@@ -111,3 +111,4 @@ $ ./bin/delayed_job start
 * RAILS_DB_PASSWORD
 * HOST_URL
 * SECRET_KEY_BASE
+* DIVA_SERVICES_HOST
