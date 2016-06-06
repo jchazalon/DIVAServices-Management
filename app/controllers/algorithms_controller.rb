@@ -36,7 +36,12 @@ class AlgorithmsController < ApplicationController
   end
 
   def index
-    @algorithms = current_user.algorithms.where(next: nil).order(:updated_at).sort do |a,b|
+    if current_user.admin?
+      algorithms = Algorithm.where(next: nil).order(:updated_at)
+    else
+      algorithms = current_user.algorithms.where(next: nil).order(:updated_at)
+    end
+    @algorithms = algorithms.sort do |a,b|
       if a.already_published? && b.already_published? || !a.already_published? && !b.already_published?
         b.updated_at <=> a.updated_at
       else

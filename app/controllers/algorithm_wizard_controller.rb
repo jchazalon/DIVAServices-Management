@@ -29,7 +29,7 @@ class AlgorithmWizardController < ApplicationController
   end
 
   def create
-    @algorithm = current_user.algorithms.create!(status: :empty)
+    @algorithm = current_user.algorithms.create!(status: :empty, user: current_user)
     redirect_to wizard_path(steps.first, algorithm_id: @algorithm.id)
   end
 

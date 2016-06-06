@@ -5,4 +5,16 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :algorithms, dependent: :destroy
+
+  def admin?
+    self.admin
+  end
+
+  def algorithms
+    if self.admin?
+      Algorithm.all
+    else
+      Algorithm.where(user: self)
+    end
+  end
 end

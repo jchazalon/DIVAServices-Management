@@ -16,6 +16,9 @@
         <tr>
           <th><em class="fa fa-cog"></em></th>
           <th>Name</th>
+          <% if current_user.admin? %>
+            <th>Owner</th>
+          <% end %>
           <th>Used</th>
           <th>Errors</th>
           <th>Version</th>
@@ -27,6 +30,9 @@
         <% @algorithms.each do |algorithm| %>
           <tr>
             <td align="center"><%= actions(algorithm) %></td>
+            <% if current_user.admin? %>
+              <td><%= algorithm.user.email %></td>
+            <% end %>
             <td><%= algorithm.name.blank? ? 'N/A' : algorithm.name %></br><%= link_to 'COPY!', copy_algorithm_path(algorithm), method: :post %></td>
             <td><%= executions(algorithm) %></td>
             <td><%= link_to exceptions(algorithm), exceptions_algorithm_path(algorithm) %></td>

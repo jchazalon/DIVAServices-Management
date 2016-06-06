@@ -22,7 +22,9 @@ Delayed::Job.destroy_all
 ############
 #Users
 ############
-user = User.create!(email: 'dev@diva.unifr.ch', password: '12345678')
+user1 = User.create!(email: 'dev@diva.unifr.ch', password: '12345678')
+user2 = User.create!(email: 'user@diva.unifr.ch', password: '12345678')
+user3 = User.create!(email: 'admin@diva.unifr.ch', password: '12345678', admin: true)
 
 if !DivaServicesApi.is_online?
   p '----------------------------------------------'
@@ -34,7 +36,7 @@ else
   ############
   #Algorithm 1
   ############
-  algorithm1 = user.algorithms.create!(status: :empty)
+  algorithm1 = user1.algorithms.create!(status: :empty)
   algorithm1.general_field('name').value = 'Canny Edge Detection'
   algorithm1.general_field('description').value = 'Who knows, I always only read candy detection ;)'
   algorithm1.general_field('author').value = 'DIVA UniFr'
@@ -58,7 +60,7 @@ else
   ############
   #Algorithm 2
   ############
-  algorithm2 = user.algorithms.create!(status: :empty)
+  algorithm2 = user2.algorithms.create!(status: :empty)
   algorithm2.general_field('name').value = 'Noising'
   algorithm2.general_field('description').value = 'Noises the image I guess?!'
   algorithm2.general_field('author').value = 'DIVA UniFr'
@@ -79,7 +81,7 @@ else
   ############
   #Algorithm 3
   ############
-  algorithm3 = user.algorithms.create!(status: :empty)
+  algorithm3 = user2.algorithms.create!(status: :empty)
   algorithm3.general_field('name').value = 'Canny Edge Detection'
   algorithm3.general_field('description').value = 'Who knows, I always only read candy detection ;)'
   algorithm3.general_field('author').value = 'DIVA UniFr'
