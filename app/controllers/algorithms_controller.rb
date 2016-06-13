@@ -1,22 +1,36 @@
 class AlgorithmsController < ApplicationController
   require 'will_paginate/array'
   before_action :authenticate_user!
-  before_action :set_algorithm, only: [:recover, :exceptions, :show, :edit, :update, :destroy, :publish]
+  before_action :set_algorithm, except: :index
   before_action :algorithm_published!, only: [:exceptions, :show, :edit, :update]
+  before_action :algorithm_has_unpublished_changes!, only: :revert
   before_action :update_status_from_diva, only: :index
   before_action :needs_recover, only: :recover
   respond_to :html
 
   def status
-    set_algorithm
     update_status(@algorithm) if @algorithm.publication_pending?
     render :json => { status: @algorithm.status, status_message: @algorithm.status_message }
   end
 
   #XXX DEV only
   def copy
-    set_algorithm
     @algorithm.update_version
+    redirect_to algorithms_path
+  end
+
+  def revert
+    predecessor = Algorithm.where(next: @algorithm).first
+    if predecessor
+      new_algorithm = @algorithm.deep_copy
+      predecessor.update_attributes(next: new_algorithm)
+      @algorithm.destroy
+      new_algorithm.update_attributes(status: :published)
+      new_algorithm.update_attributes(status_message: "Algorithm is published")
+      flash[:notice] = "Algorithm has been reverted to the previous version"
+    else
+      flash[:notice] = "Could not find previous version"
+    end
     redirect_to algorithms_path
   end
 
@@ -116,6 +130,13 @@ class AlgorithmsController < ApplicationController
   def algorithm_published!
     unless @algorithm.finished_wizard? || @algorithm.published? || @algorithm.unpublished_changes?
       flash[:notice] = "First publish your algorithm"
+      redirect_to algorithms_path
+    end
+  end
+
+  def algorithm_has_unpublished_changes!
+    unless @algorithm.unpublished_changes?
+      flash[:notice] = "You have no unpublished changes"
       redirect_to algorithms_path
     end
   end

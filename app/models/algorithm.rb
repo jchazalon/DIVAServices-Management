@@ -74,7 +74,9 @@ class Algorithm < ActiveRecord::Base
   end
 
   def already_published?
-    !self.diva_id.nil?
+    return false if self.diva_id.nil? # Algorithm has no id on DIVAServices yet
+    return false if Algorithm.where(next: self).empty? # Algorithm has no predecessor yet
+    return true
   end
 
   def check_for_virus

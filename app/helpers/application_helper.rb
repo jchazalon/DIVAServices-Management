@@ -27,7 +27,7 @@ module ApplicationHelper
       return html
     when :unpublished_changes
       html = link_to('<em class="fa fa-pencil"></em>'.html_safe, algorithm_path(algorithm), class: 'btn btn-primary')
-      html << link_to('<em class="fa fa-undo"></em>'.html_safe, algorithm_path(algorithm), class: 'btn btn-warning') #TODO implement undo path
+      html << link_to('<em class="fa fa-undo"></em>'.html_safe, revert_algorithm_path(algorithm), method: :post, class: 'btn btn-warning')
       html << link_to('<em class="fa fa-trash"></em>'.html_safe, algorithm_path(algorithm), class: 'btn btn-danger', method: :delete, data: { confirm: 'Are you sure?' })
       return html
     when :validating, :creating, :testing
