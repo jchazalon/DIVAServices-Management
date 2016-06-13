@@ -72,7 +72,12 @@ module DivaServicesApi
 
     def self.publish(json)
       response = DivaServicesApi.post('/algorithms', body: json, headers: { 'Content-Type' => 'application/json' })
-      self.new(response['identifier'])
+      case response.code
+        when 200
+          self.new(response['identifier'])
+        when 500
+          raise Exceptions::DivaServicesError ,response['message']
+      end
     end
 
     def update(id, json)

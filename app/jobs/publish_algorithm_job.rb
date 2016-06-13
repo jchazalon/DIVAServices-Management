@@ -20,13 +20,19 @@ class PublishAlgorithmJob < ActiveJob::Base
   end
 
   def publish(algorithm)
-    diva_algorithm = DivaServicesApi::Algorithm.publish(algorithm.to_schema)
-    if diva_algorithm
-      algorithm.update_attribute(:diva_id, diva_algorithm.id)
-      algorithm.set_status(diva_algorithm.status_code, diva_algorithm.status_message)
-    else
-      algorithm.set_status(:error, "Unknown error during publication, please try again.\n#{diva_algorithm}")
+    begin
+      diva_algorithm = DivaServicesApi::Algorithm.publish(algorithm.to_schema)
+
+      if diva_algorithm
+        algorithm.update_attribute(:diva_id, diva_algorithm.id)
+        algorithm.set_status(diva_algorithm.status_code, diva_algorithm.status_message)
+      else
+        algorithm.set_status(:error, "Unknown error during publication, please try again.\n#{diva_algorithm}")
+      end
+    rescue Exceptions::DivaServicesError => error
+      algorithm.set_status(:error, error.message)
     end
+
   end
 
   def update(algorithm)

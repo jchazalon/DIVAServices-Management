@@ -1,4 +1,4 @@
 module Exceptions
-  class DivaServiceError < StandardError
+  class DivaServicesError < StandardError
   end
 end
