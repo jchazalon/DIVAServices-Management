@@ -12,7 +12,7 @@
 !/log/.keep
 /tmp
 public/uploads
-
+.idea/
 # Urs Zysset
 *~
 .env
