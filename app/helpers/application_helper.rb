@@ -32,6 +32,7 @@ module ApplicationHelper
       html << link_to('<em class="fa fa-pencil"></em> Edit'.html_safe, algorithm_path(algorithm), class: 'btn btn-primary btn-block')
       html << link_to('<em class="fa fa-trash"></em> Remove'.html_safe, algorithm_path(algorithm), class: 'btn btn-danger btn-block', method: :delete, data: { confirm: 'Are you sure?' })
     when :unpublished_changes
+      html << link_to('<em class="fa fa-paper-plane"></em> Update'.html_safe, publish_algorithm_path(algorithm), class: 'btn btn-primary btn-block', method: :post, data: { confirm: 'Are you sure?' })
       html << link_to('<em class="fa fa-pencil"></em> Edit'.html_safe, algorithm_path(algorithm), class: 'btn btn-primary btn-block')
       html << link_to('<em class="fa fa-undo"></em> Undo'.html_safe, revert_algorithm_path(algorithm), method: :post, class: 'btn btn-warning btn-block')
       html << link_to('<em class="fa fa-trash"></em> Remove'.html_safe, algorithm_path(algorithm), class: 'btn btn-danger btn-block', method: :delete, data: { confirm: 'Are you sure?' })

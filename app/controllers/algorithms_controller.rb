@@ -12,8 +12,9 @@ class AlgorithmsController < ApplicationController
 
   ##
   # Fetches the status of the _algorithm_ and returns it as json.
+  # Normally the status is simply read from the _algorithm_. However, if there is a publication pending, the status is updated from the DIVAServices.
   def status
-    render :json => { status: @algorithm.status(true), status_message: @algorithm.status_message }
+    render :json => { status: @algorithm.status(@algorithm.publication_pending?), status_message: @algorithm.status_message }
   end
 
   ##
@@ -22,16 +23,13 @@ class AlgorithmsController < ApplicationController
     predecessor = Algorithm.where(next: @algorithm).first
     if predecessor
       # Exchange current version with copy of previous version ;)
-      new_algorithm = @algorithm.deep_copy
-      predecessor.update_attributes(next: new_algorithm)
-      @algorithm.destroy
-      new_algorithm.update_attributes(status: :published)
-      new_algorithm.update_attributes(status_message: "Algorithm is published")
+      new_algorithm = @algorithm.revert_changes(predecessor)
       flash[:notice] = "Algorithm has been reverted to the previous version"
+      redirect_to algorithm_path(new_algorithm)
     else
       flash[:notice] = "Could not find previous version"
+      redirect_to algorithms_path
     end
-    redirect_to algorithms_path
   end
 
   ##

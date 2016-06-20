@@ -32,12 +32,12 @@
             <% if current_user.admin? %>
               <td><%= algorithm.user.email %></td>
             <% end %>
-            <td><%= algorithm.name.blank? ? 'N/A' : algorithm.name %></br><%= link_to 'COPY!', copy_algorithm_path(algorithm), method: :post %></td>
+            <td><%= algorithm.name.blank? ? 'N/A' : algorithm.name %></td>
             <td><%= algorithm.execution_count %></td>
             <td><%= link_to algorithm.exceptions.count, exceptions_algorithm_path(algorithm) %></td>
             <td><%= algorithm.version %></td>
             <td><%= algorithm.updated_at.to_formatted_s(:db) %></td>
-            <td><span class="label label-info" id="status_<%= algorithm.id %>"><%= algorithm.status %></span></br><span id="status_message_<%= algorithm.id %>"><%= algorithm.status_message %></span></td>
+            <td><div style="text-align:center"><span class="label label-info" id="status_<%= algorithm.id %>"><%= algorithm.status %></span></div><div><span id="status_message_<%= algorithm.id %>"><%= algorithm.status_message %></span></div></td>
           </tr>
           <% if !previous_versions(algorithm).empty? %>
             <tr class="versions-toggle">
