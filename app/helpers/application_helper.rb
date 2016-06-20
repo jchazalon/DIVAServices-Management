@@ -1,9 +1,13 @@
 module ApplicationHelper
 
+  ##
+  # Defines all available flash types supported by bootstrap.
   def bootstrap_class_for flash_type
     { success: "alert-success", error: "alert-danger", alert: "alert-warning", notice: "alert-info" }[flash_type.to_sym] || flash_type.to_s
   end
 
+  ##
+  # Formats the flash messages.
   def flash_messages(opts = {})
     flash.each do |msg_type, message|
       concat(content_tag(:div, message, class: "alert #{bootstrap_class_for(msg_type)} alert-dismissible", role: 'alert') do
@@ -17,6 +21,8 @@ module ApplicationHelper
     nil
   end
 
+  ##
+  # Defines and formats all available actions for _algorithms_ depending on the current step.
   def actions(algorithm)
     html = '<div class="buttons">'
     case algorithm.status.to_sym

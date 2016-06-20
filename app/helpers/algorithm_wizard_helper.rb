@@ -1,5 +1,7 @@
 module AlgorithmWizardHelper
 
+  ##
+  # Renders the progress bar used in the wizard.
   def progress_bar(current_step)
     names = ['General Information', 'Input/Output', 'Detailed Input', 'Upload', 'Review']
     icons = ['fa fa-info', 'fa fa-exchange', 'fa fa-list', 'fa fa-upload', 'fa fa-eye']
@@ -17,6 +19,8 @@ module AlgorithmWizardHelper
     end
   end
 
+  ##
+  # Renders an icon used in the progress bar.
   def progress_icon(name, icon, active)
     content_tag(:li, role: 'presentation', class: (active ? 'active' : '')) do
       content_tag(:a, role: 'tab', title: name) do
@@ -28,6 +32,8 @@ module AlgorithmWizardHelper
     end
   end
 
+  ##
+  # Returns the humanized (aka pretty) value of the given field.
   def humanize_value(field)
     case field.type
     when 'EnumField'

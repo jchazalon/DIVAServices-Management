@@ -1,5 +1,7 @@
 module AlgorithmHelper
 
+  ##
+  # Returns an array containing all previous versions of the given _algorithm_.
   def previous_versions(algorithm)
     versions = Array.new
     begin
