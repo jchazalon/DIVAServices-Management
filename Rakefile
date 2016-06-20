@@ -11,4 +11,5 @@ RDoc::Task.new :rdoc do |rdoc|
   rdoc.rdoc_files.include("README.rdoc", "app/**/*.rb", "lib/*.rb", "lib/**/*.rb", "config/**/*.rb") #"doc/*.rdoc"
   rdoc.title = "DIVAServices-Algorithm Documentation"
   rdoc.options << "--all"
+  rdoc.options << "--overwrite"
 end

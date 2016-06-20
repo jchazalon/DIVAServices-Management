@@ -1,5 +1,5 @@
 ##
-# Responsible to enable CRUD actions on algorithms. Additionally provides methods to revert to a previous version, recover from errors and publish to the DIVAServices.
+# Responsible to enable CRUD actions on _algorithms_. Additionally provides methods to revert to a previous version, recover from errors and publish to the DIVAServices.
 # Uses a gem calles {will_paginate}[https://github.com/mislav/will_paginate] to allow pagination.
 class AlgorithmsController < ApplicationController
   require 'will_paginate/array'
@@ -11,13 +11,13 @@ class AlgorithmsController < ApplicationController
   respond_to :html
 
   ##
-  # Fetches the status of the algorithm and returns it as json.
+  # Fetches the status of the _algorithm_ and returns it as json.
   def status
     render :json => { status: @algorithm.status(true), status_message: @algorithm.status_message }
   end
 
   ##
-  # Discards all unpublished changes and reverts to the last version of the algorithm.
+  # Discards all unpublished changes and reverts to the last version of the _algorithm_.
   def revert
     predecessor = Algorithm.where(next: @algorithm).first
     if predecessor
@@ -55,8 +55,8 @@ class AlgorithmsController < ApplicationController
   end
 
   ##
-  # List all owned algorithms and sort them by published and not published.
-  # If the current user is an administrator, list all algorithms.
+  # List all owned _algorithms_ and sort them by published and not published.
+  # If the current user is an administrator, list all _algorithms_.
   def index
     if current_user.admin?
       algorithms = Algorithm.where(next: nil).order(:updated_at)
@@ -101,7 +101,7 @@ class AlgorithmsController < ApplicationController
   end
 
   ##
-  # Remove the algorithm from DIVAServices and DIVAServices-Algorithm.
+  # Remove the _algorithm_ from DIVAServices and DIVAServices-Algorithm.
   def destroy
     if @algorithm.finished_wizard?
       if DivaServicesApi::Algorithm.by_id(@algorithm.diva_id).delete && @algorithm.destroy
@@ -129,7 +129,7 @@ class AlgorithmsController < ApplicationController
   private
 
   ##
-  # Gets the algorithm from the URL params.
+  # Gets the _algorithm_ from the URL params.
   def set_algorithm
     @algorithm = current_user.algorithms.find(params[:id])
   end
@@ -156,7 +156,7 @@ class AlgorithmsController < ApplicationController
   end
 
   ##
-  # Redirects if the algorithm is already published.
+  # Redirects if the _algorithm_ is already published.
   def algorithm_published!
     unless @algorithm.finished_wizard? || @algorithm.published? || @algorithm.unpublished_changes?
       flash[:notice] = "First publish your algorithm"
@@ -165,7 +165,7 @@ class AlgorithmsController < ApplicationController
   end
 
   ##
-  # Redirects if the algorithm has unpublished changes.
+  # Redirects if the _algorithm_ has unpublished changes.
   def algorithm_has_unpublished_changes!
     unless @algorithm.unpublished_changes?
       flash[:notice] = "You have no unpublished changes"
@@ -174,7 +174,7 @@ class AlgorithmsController < ApplicationController
   end
 
   ##
-  # Redirects if the algorithm cannot be recovered in its current state.
+  # Redirects if the _algorithm_ cannot be recovered in its current state.
   def can_recover
     unless @algorithm.validation_error? || @algorithm.connection_error? || @algorithm.error?
       flash[:notice] = "Cannot recover from valid status"

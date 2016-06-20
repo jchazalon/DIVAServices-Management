@@ -39,14 +39,14 @@ class AlgorithmWizardController < ApplicationController
   end
 
   ##
-  # Creates a new algorithms with the status _empty_ and redirects to the wizard.
+  # Creates a new _algorithm_ with the status _empty_ and redirects to the wizard.
   def create
     @algorithm = current_user.algorithms.create!(status: :empty, user: current_user)
     redirect_to wizard_path(steps.first, algorithm_id: @algorithm.id)
   end
 
   ##
-  # Saves the changes from each step to the algorithm. Note that all changes must be permitted in the AlgorithmWizardController#algorithm_params(step) method!
+  # Saves the changes from each step to the _algorithm_. Note that all changes must be permitted in the AlgorithmWizardController#algorithm_params(step) method!
   def update
     @algorithm.assign_attributes(algorithm_params(step))
     render_wizard @algorithm
@@ -63,13 +63,13 @@ class AlgorithmWizardController < ApplicationController
   private
 
   ##
-  # Gets the algorithm from the URL params.
+  # Gets the _algorithm_ from the URL params.
   def set_algorithm
     @algorithm = current_user.algorithms.find(params[:algorithm_id])
   end
 
   ##
-  # Redirects if the algorithm already passed the wizard.
+  # Redirects if the _algorithm_ already passed the wizard.
   def algorithm_not_finished_yet!
     if @algorithm.finished_wizard?
       flash[:notice] = "The algorithm '#{@algorithm.name}' is already finished! The wizard can only be accessed during creation. Use the edit routes to update an exising algorithm."
