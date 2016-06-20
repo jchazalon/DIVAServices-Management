@@ -8,7 +8,7 @@ Rails.application.load_tasks
 
 RDoc::Task.new :rdoc do |rdoc|
   rdoc.main = "README.rdoc"
-  rdoc.rdoc_files.include("README.rdoc", "app/**/*.rb", "lib/*.rb", "lib/**/*.rb", "config/**/*.rb") #"doc/*.rdoc"
+  rdoc.rdoc_files.include("README.rdoc", "app/**/*.rb", "lib/*.rb", "lib/**/*.rb", "config/*.rb", "config/**/*.rb", "db/seeds.rb")
   rdoc.title = "DIVAServices-Algorithm Documentation"
   rdoc.options << "--all"
   rdoc.options << "--overwrite"

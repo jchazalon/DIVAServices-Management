@@ -77,6 +77,19 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # uzysset: set root_url
+  # Define root_url
   routes.default_url_options[:host] = ENV["HOST_URL"]
+
+  # Send errors and exceptions to slack channel
+  if ENV['SLACK_HOOK_PROD'] && ENV['SLACK_CHANNEL_PROD']
+    config.middleware.use ExceptionNotification::Rack,
+      :slack => {
+        :webhook_url => ENV['SLACK_HOOK_PROD'],
+        :channel => ENV['SLACK_CHANNEL_PROD'],
+        :username => 'Karl der Kühne',
+        :additional_parameters => {
+          :icon_emoji => ':heart:'
+        }
+      }
+  end
 end

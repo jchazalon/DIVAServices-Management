@@ -8,6 +8,12 @@ class ApplicationController < ActionController::Base
   protected
 
   ##
+  # Defines the path after sign in.
+  def after_sign_in_path_for(resource_or_scope)
+   algorithms_path
+  end
+
+  ##
   # Defines that parameters must be permitted on which step of the algorithm.
   def permitted_params(step)
     case step.to_sym

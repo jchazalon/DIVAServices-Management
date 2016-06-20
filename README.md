@@ -66,6 +66,16 @@ DIVA_SERVICES_HOST=localhost:8080
 ```
 These are dummy keys, use your own.
 
+If you whish to send exceptions to a Slack Channel, set the following ENV values:
+
+```
+SLACK_HOOK_DEV="https://slackhook"
+SLACK_CHANNEL_DEV="#channelname"
+or
+SLACK_HOOK_PROD="https://slackhook"
+SLACK_CHANNEL_PROD="#channelname"
+```
+
 #### 8. Install ClamAV
 ```sh
 $ sudo apt-get update

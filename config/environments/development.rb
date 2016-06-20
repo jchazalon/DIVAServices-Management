@@ -39,16 +39,19 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  # uzysset: set root_url
+  # Define root_url
   routes.default_url_options[:host] = 'localhost:3000'
-end
 
-Rails.application.config.middleware.use ExceptionNotification::Rack,
-  :slack => {
-    :webhook_url => "https://hooks.slack.com/services/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",
-    :channel => "#delayed_jobs",
-    :username => 'Karl der Kühne',
-    :additional_parameters => {
-      :icon_emoji => ':heart:'
-    }
-  }
+  # Send errors and exceptions to slack channel
+  if ENV['SLACK_HOOK_DEV'] && ENV['SLACK_CHANNEL_DEV']
+    config.middleware.use ExceptionNotification::Rack,
+      :slack => {
+        :webhook_url => ENV['SLACK_HOOK_DEV'],
+        :channel => ENV['SLACK_CHANNEL_DEV'],
+        :username => 'Karl der Kühne',
+        :additional_parameters => {
+          :icon_emoji => ':heart:'
+        }
+      }
+  end
+end

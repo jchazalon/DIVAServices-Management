@@ -250,6 +250,7 @@ DEPENDENCIES
   json
   pg (~> 0.15)
   rails (= 4.2.5.2)
+  rdoc
   recaptcha
   rubyzip
   sass-rails (~> 5.0)
