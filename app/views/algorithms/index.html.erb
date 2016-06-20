@@ -3,7 +3,6 @@
   <div class="panel-heading">
     <div class="row">
       <div class="col col-xs-6">
-        <h2 class="panel-title">All Algorithms</h2>
       </div>
       <div class="col col-xs-6 text-right">
         <%= link_to 'New algorithm',  terms_algorithms_path, class: 'btn btn btn-primary btn-create' %>
@@ -14,7 +13,7 @@
     <table class="table table-bordered table-list main-table">
       <thead>
         <tr>
-          <th><em class="fa fa-cog"></em></th>
+          <th><em class="fa fa-cog"></em> Actions</th>
           <th>Name</th>
           <% if current_user.admin? %>
             <th>Owner</th>
