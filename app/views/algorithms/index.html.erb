@@ -33,8 +33,8 @@
               <td><%= algorithm.user.email %></td>
             <% end %>
             <td><%= algorithm.name.blank? ? 'N/A' : algorithm.name %></br><%= link_to 'COPY!', copy_algorithm_path(algorithm), method: :post %></td>
-            <td><%= executions(algorithm) %></td>
-            <td><%= link_to exceptions(algorithm), exceptions_algorithm_path(algorithm) %></td>
+            <td><%= algorithm.execution_count %></td>
+            <td><%= link_to algorithm.exceptions.count, exceptions_algorithm_path(algorithm) %></td>
             <td><%= algorithm.version %></td>
             <td><%= algorithm.updated_at.to_formatted_s(:db) %></td>
             <td><span class="label label-info" id="status_<%= algorithm.id %>"><%= algorithm.status %></span></br><span id="status_message_<%= algorithm.id %>"><%= algorithm.status_message %></span></td>

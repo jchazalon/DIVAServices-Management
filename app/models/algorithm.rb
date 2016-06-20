@@ -143,6 +143,24 @@ class Algorithm < ActiveRecord::Base
     self.method_fields.where(fieldable_id: self.id).where("payload->>'key' = ?", name).first
   end
 
+  def execution_count
+    diva_algorithm = DivaServicesApi::Algorithm.by_id(self.diva_id)
+    if diva_algorithm
+      diva_algorithm.executions
+    else
+      0
+    end
+  end
+
+  def exceptions
+    diva_algorithm = DivaServicesApi::Algorithm.by_id(self.diva_id)
+    if diva_algorithm
+      diva_algorithm.exceptions
+    else
+      Array.new
+    end
+  end
+
   #TODO Pretty sure that will break in production (since root_url isn't set)
   def zip_url
      root_url[0..-2] + self.zip_file.url if self.zip_file.file
