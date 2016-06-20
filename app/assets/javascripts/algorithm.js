@@ -32,7 +32,7 @@ function status_updater() {
          },
          complete: function() {
            if(update) {
-             setTimeout(status_updater, 10000);
+             setTimeout(status_updater, 5000);
            }
          }
        });

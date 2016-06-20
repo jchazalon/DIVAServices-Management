@@ -41,10 +41,11 @@ class Algorithm < ActiveRecord::Base
   end
 
   def publication_pending?
-    creating? || testing?
+    validating? || creating? || testing?
   end
 
   def set_status(status, status_message = '')
+    return if status == Algorithm.statuses[self.status]
     self.update_attributes(status: status)
     self.update_attributes(status_message: status_message)
     self.update_version if self.status == 'published'
@@ -141,6 +142,16 @@ class Algorithm < ActiveRecord::Base
 
   def method_field(name)
     self.method_fields.where(fieldable_id: self.id).where("payload->>'key' = ?", name).first
+  end
+
+  def status(update = false)
+    if update
+      diva_algorithm = DivaServicesApi::Algorithm.by_id(self.diva_id)
+      if diva_algorithm
+        self.set_status(diva_algorithm.status_code, diva_algorithm.status_message)
+      end
+    end
+    super()
   end
 
   def execution_count

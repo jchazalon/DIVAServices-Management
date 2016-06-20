@@ -1,6 +1,6 @@
 ##
 # Guides the user through the algorithm creation process with the help of a wizard.
-# Uses a gem called {wicked}[https://github.com/schneems/wicked].
+# Uses a gem called {wicked}[https://github.com/schneems/wicked] for the wizard.
 class AlgorithmWizardController < ApplicationController
   include Wicked::Wizard
   before_action :authenticate_user!
@@ -11,7 +11,7 @@ class AlgorithmWizardController < ApplicationController
   steps *Algorithm.wizard_steps
 
   ##
-  # Render view/algorithm_wizard/terms.html.
+  # Render views/algorithm_wizard/terms.html.
   def terms
   end
 
@@ -33,7 +33,7 @@ class AlgorithmWizardController < ApplicationController
         end
       end
     end
-    # Update the step of the algorithm
+    # Update the step of the algorithm.
     @algorithm.update_attribute(:status, step.to_sym) if steps.include?(step)
     render_wizard
   end
@@ -53,7 +53,7 @@ class AlgorithmWizardController < ApplicationController
   end
 
   ##
-  # Initializes the validation and exits the wizard
+  # Initializes the validation and exits the wizard.
   def finish_wizard_path
     @algorithm.set_status(:validating, 'Information are currently validated.')
     ValidateAlgorithmJob.perform_later(@algorithm.id)
@@ -63,13 +63,13 @@ class AlgorithmWizardController < ApplicationController
   private
 
   ##
-  # Gets the algorithm from the URL params
+  # Gets the algorithm from the URL params.
   def set_algorithm
     @algorithm = current_user.algorithms.find(params[:algorithm_id])
   end
 
   ##
-  # Redirects if the algorithm already passed the wizard
+  # Redirects if the algorithm already passed the wizard.
   def algorithm_not_finished_yet!
     if @algorithm.finished_wizard?
       flash[:notice] = "The algorithm '#{@algorithm.name}' is already finished! The wizard can only be accessed during creation. Use the edit routes to update an exising algorithm."
@@ -78,13 +78,13 @@ class AlgorithmWizardController < ApplicationController
   end
 
   ##
-  # Permits the params of the current step. For more details see ApplicationController#permitted_params(step)
+  # Permits the params of the current step. For more details see ApplicationController#permitted_params(step).
   def algorithm_params(step)
     params.require(:algorithm).permit(permitted_params(step))
   end
 
   ##
-  # Redirects if the DIVAServices is not reachable
+  # Redirects if the DIVAServices is not reachable.
   def diva_service_online!
     unless DivaServicesApi.is_online?
       flash[:error] = "DIVAServices is currently not reachable. Please stand by until we are able to reconnect."
