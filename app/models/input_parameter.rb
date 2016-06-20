@@ -1,3 +1,5 @@
+##
+# Wraps an _input parameter_ from the input fields of DIVAServices. Similar to a field.
 class InputParameter < ActiveRecord::Base
   default_scope { order('position ASC') }
 

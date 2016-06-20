@@ -1,3 +1,5 @@
+##
+# Field used to store other fields. Allows nesting of fields.
 class ObjectField < Field
 
   has_many :fields, as: :fieldable, dependent: :destroy
@@ -36,6 +38,8 @@ class ObjectField < Field
     return false;
   end
 
+  ##
+  # Collects all contained fields.
   def all_fields
     found_fields = Array.new
     self.fields.each do |field|

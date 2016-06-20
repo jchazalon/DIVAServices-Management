@@ -1,3 +1,5 @@
+##
+# Field used to store enums.
 class EnumField < Field
 
   content_attr :values, :string
@@ -5,6 +7,8 @@ class EnumField < Field
 
   validate :valid_selection
 
+  ##
+  # Validates that the selection is valid.
   def valid_selection
     if !self.value.blank?
       errors.add(:value, 'cannot be selected!') unless self.values.include?(self.value)
@@ -26,6 +30,8 @@ class EnumField < Field
     end
   end
 
+  ##
+  # Provides the values as a collection for simple_form
   def collection
     self.values.each_with_index.map{ |v,i| [self.keys[i], v] }
   end

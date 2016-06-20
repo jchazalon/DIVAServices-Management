@@ -1,3 +1,5 @@
+##
+# Field used to store Strings.
 class StringField < Field
 
   content_attr :minLength, :integer
@@ -12,18 +14,24 @@ class StringField < Field
   validates :value, email: { strict_mode: true, message: 'Invalid email address!' }, if: '!self.value.blank? && self.format && self.format.eql?("email")'
   validates :value, url: { allow_nil: true, allow_blank: true, no_local: true }, if: '!self.value.blank? && self.format && self.format.eql?("uri")'
 
+  ##
+  # Validates if the value matches the given regex rule.
   def match_regex
     if !self.value.blank? && self.regex
       errors.add(:value, 'is a invalid value') unless self.value =~ Regexp.new(self.regex)
     end
   end
 
+  ##
+  # Validates if the string contains a minimal amount of characters.
   def minimal_length
     if !self.value.blank? && self.minLength
       errors.add(:value, 'is too short!') if self.value.length < self.minLength
     end
   end
 
+  ##
+  # Validates if the string doesn't exceeds a maximal amount of characters.
   def maximal_length
     if !self.value.blank? && self.maxLength
       errors.add(:value, 'is too long!') if self.value.length > self.maxLength
