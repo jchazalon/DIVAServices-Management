@@ -16,3 +16,5 @@ public/uploads
 # Urs Zysset
 *~
 .env
+/doc
+/html
