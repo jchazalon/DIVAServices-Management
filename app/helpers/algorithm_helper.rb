@@ -10,4 +10,19 @@ module AlgorithmHelper
     end while(algorithm)
     versions
   end
+
+  ##
+  # Exchanges the raw status with a more user friendly description.
+  def pretty_status(algorithm)
+    case algorithm.status.to_sym
+    when *Algorithm.wizard_steps[0..-2]
+      return 'Currently in wizard'
+    when :review
+      return 'Needs review'
+    when :connection_error
+      return 'No connection to DIVAServices'
+    else
+     return algorithm.status.humanize
+    end
+  end
 end

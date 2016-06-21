@@ -18,6 +18,13 @@
         </tr>
       </thead>
       <tbody>
+        <% if @exceptions.empty? %>
+          <tr>
+            <td colspan="2">
+              <p class="bg-info">No exception found. Great!</p>
+            </td>
+          <tr>
+        <% end %>
         <% @exceptions.each do |exception| %>
           <tr>
             <td><%= exception.datetime %></td>

@@ -14,7 +14,8 @@ class AlgorithmsController < ApplicationController
   # Fetches the status of the _algorithm_ and returns it as json.
   # Normally the status is simply read from the _algorithm_. However, if there is a publication pending, the status is updated from the DIVAServices.
   def status
-    render :json => { status: @algorithm.status(@algorithm.publication_pending?), status_message: @algorithm.status_message }
+    status = @algorithm.status(@algorithm.publication_pending?)
+    render :json => { status: status, status_code: Algorithm.statuses[status], status_message: @algorithm.status_message }
   end
 
   ##
