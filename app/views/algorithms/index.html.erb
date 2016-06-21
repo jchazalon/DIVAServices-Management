@@ -39,7 +39,7 @@
             <td><%= algorithm.updated_at.to_formatted_s(:db) %></td>
             <td><div style="text-align:center"><span class="label label-info" id="status_<%= algorithm.id %>" data-statuscode="<%= Algorithm.statuses[algorithm.status] %>"><%= pretty_status(algorithm) %></span></div><div><span id="status_message_<%= algorithm.id %>"><%= algorithm.status_message %></span></div></td>
           </tr>
-          <% if !previous_versions(algorithm).empty? %>
+          <% if algorithm.version > 1 && !previous_versions(algorithm).empty? %>
             <tr class="versions-toggle">
               <td colspan="7">
                 <button class="btn btn-sm btn-default" type="button" data-toggle="collapse" data-target="#collapse<%= algorithm.id %>" aria-expanded="false" aria-controls="collapse<%= algorithm.id %>">
@@ -51,13 +51,22 @@
               <td class="versions-panel" colspan="7">
                 <div class="collapse" id="collapse<%= algorithm.id %>">
                   <table class="table table-striped">
-                    <% previous_versions(algorithm).each do |older_algorithm| %>
+                    <thead>
                       <tr>
-                        <td><%= older_algorithm.version %></td>
-                        <td><%= older_algorithm.updated_at.to_formatted_s(:db) %></td>
-                        <td><span class="label label-info"><%= older_algorithm.status %></span></td>
+                        <th>Version</th>
+                        <th>Last update</th>
+                        <th>Status</th>
                       </tr>
-                    <% end %>
+                    </thead>
+                    <tbody>
+                      <% previous_versions(algorithm).each do |older_algorithm| %>
+                        <tr>
+                          <td><%= older_algorithm.version %></td>
+                          <td><%= older_algorithm.updated_at.to_formatted_s(:db) %></td>
+                          <td><span class="label label-info"><%= pretty_status(older_algorithm) %></span></td>
+                        </tr>
+                      <% end %>
+                    </tbody>
                   </table>
                 </div>
               </td>
