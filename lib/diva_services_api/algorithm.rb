@@ -26,7 +26,7 @@ module DivaServicesApi
     def exceptions
       exceptions = DivaServicesApi.get("/algorithms/#{id}/exceptions").parsed_response
       exceptions.map do |entry|
-        DivaServicesApi::ExceptionMessage.create(id, DateTime.parse(entry['date']), entry['errorMessage'])
+        DivaServicesApi::ExceptionMessage.new(id, DateTime.parse(entry['date']), entry['errorMessage'])
       end
     end
 
