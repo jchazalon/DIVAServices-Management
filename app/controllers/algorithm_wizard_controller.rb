@@ -6,6 +6,7 @@ class AlgorithmWizardController < ApplicationController
   before_action :authenticate_user!
   before_action :diva_service_online!
   before_action :set_algorithm, only: [:show, :update]
+  before_action :owns_algorithm!, only: [:show, :update, :finish_wizard_path]
   before_action :algorithm_not_finished_yet!, only: [:show, :update]
 
   steps *Algorithm.wizard_steps

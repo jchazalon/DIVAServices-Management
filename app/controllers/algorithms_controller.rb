@@ -5,6 +5,7 @@ class AlgorithmsController < ApplicationController
   require 'will_paginate/array'
   before_action :authenticate_user!
   before_action :set_algorithm, except: :index
+  before_action :owns_algorithm!, except: :index
   before_action :algorithm_published!, only: [:exceptions, :show, :edit, :update]
   before_action :algorithm_has_unpublished_changes!, only: :revert
   before_action :can_recover, only: :recover

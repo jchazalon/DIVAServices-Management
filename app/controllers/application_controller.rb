@@ -8,6 +8,15 @@ class ApplicationController < ActionController::Base
   protected
 
   ##
+  # Redirects if the algorithm is not owned by the current user.
+  def owns_algorithm!
+    unless @algorithm.user == current_user && !current_user.nil?
+      flash[:notice] = "Algorithm not found!"
+      redirect_to algorithms_path
+    end
+  end
+
+  ##
   # Defines the path after sign in.
   def after_sign_in_path_for(resource_or_scope)
    algorithms_path
