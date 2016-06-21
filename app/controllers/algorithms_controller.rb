@@ -49,7 +49,7 @@ class AlgorithmsController < ApplicationController
   ##
   # Render views/algorithms/exceptions.html and list all exceptions.
   def exceptions
-    @exceptions = DivaServicesApi::Algorithm.by_id(@algorithm.diva_id).exceptions
+    @exceptions = @algorithm.exceptions
   end
 
   ##

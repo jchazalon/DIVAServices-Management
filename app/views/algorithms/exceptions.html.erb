@@ -1,5 +1,30 @@
 <h1>Exceptions</h1>
 
-<% @exceptions.each do |exception| %>
-  <p><%= exception.datetime %> | <%= exception.message %></p>
-<% end %>
+<div class="panel panel-default panel-table">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col col-xs-6">
+      </div>
+      <div class="col col-xs-6 text-right">
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <table class="table table-bordered table-list main-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Message</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @exceptions.each do |exception| %>
+          <tr>
+            <td><%= exception.datetime %></td>
+            <td><%= exception.message %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
