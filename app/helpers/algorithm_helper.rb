@@ -8,7 +8,8 @@ module AlgorithmHelper
       algorithm = current_user.algorithms.where(next: algorithm).first
       versions << algorithm if algorithm
     end while(algorithm)
-    versions
+    # Do not list the most previous version, because thats simply the backup of the current one!
+    versions[1..-1] # [1..-1] means all elements, except the first one. 0 means first, -1 means last
   end
 
   ##

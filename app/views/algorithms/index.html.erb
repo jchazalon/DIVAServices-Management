@@ -41,14 +41,12 @@
           </tr>
           <% if algorithm.version > 1 && !previous_versions(algorithm).empty? %>
             <tr class="versions-toggle">
-              <td colspan="7">
+              <td>
                 <button class="btn btn-sm btn-default" type="button" data-toggle="collapse" data-target="#collapse<%= algorithm.id %>" aria-expanded="false" aria-controls="collapse<%= algorithm.id %>">
                   <em class="fa fa-plus-circle"></em> Show older versions
                 </button>
               </td>
-            </tr>
-            <tr>
-              <td class="versions-panel" colspan="7">
+              <td class="versions-panel" colspan="6">
                 <div class="collapse" id="collapse<%= algorithm.id %>">
                   <table class="table table-striped">
                     <thead>
