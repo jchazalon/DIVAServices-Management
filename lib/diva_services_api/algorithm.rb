@@ -111,14 +111,14 @@ module DivaServicesApi
     # Publish a new algorithm with the given json schema.
     def self.publish(json)
       response = DivaServicesApi.post('/algorithms', body: json, headers: { 'Content-Type' => 'application/json' })
-      self.new(response['identifier'])
+      DivaServicesApi::Algorithm.new(response['identifier'])
     end
 
     ##
     # Update an existing algorithm with the given json schema.
     def update(json)
       response = DivaServicesApi.put("/algorithms/#{self.id}", body: json, headers: { 'Content-Type' => 'application/json' })
-      self.new(response['identifier'])
+      DivaServicesApi::Algorithm.new(response['identifier'])
     end
 
     ##
