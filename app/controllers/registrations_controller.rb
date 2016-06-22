@@ -16,4 +16,12 @@ class RegistrationsController < Devise::RegistrationsController
       render :new
     end
   end
+
+  ##
+  # Prevent users to delete their accounts.
+  # Because the route is there by default due to devise.
+  def destroy
+    flash[:error] = 'Accounts can only be deleted by admins!'
+    redirect_to edit_user_registration_path
+  end
 end
