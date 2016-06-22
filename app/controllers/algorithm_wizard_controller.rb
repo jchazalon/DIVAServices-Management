@@ -83,13 +83,4 @@ class AlgorithmWizardController < ApplicationController
   def algorithm_params(step)
     params.require(:algorithm).permit(permitted_params(step))
   end
-
-  ##
-  # Redirects if the DIVAServices is not reachable.
-  def diva_service_online!
-    unless DivaServicesApi.is_online?
-      flash[:error] = "DIVAServices is currently not reachable. Please stand by until we are able to reconnect."
-      redirect_to algorithms_path
-    end
-  end
 end

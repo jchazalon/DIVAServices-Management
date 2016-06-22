@@ -10,14 +10,13 @@ class ValidateAlgorithmJob < ActiveJob::Base
     algorithm = Algorithm.find(algorithm_id)
     if algorithm
       begin
-        response = DivaServicesApi::Algorithm.validate(algorithm.to_schema)
-        if response.success?
+        if DivaServicesApi::Algorithm.validate(algorithm.to_schema)
           PublishAlgorithmJob.perform_later(algorithm.id)
         else
-          algorithm.set_status(:validation_error, "Validation Error\nMessage: #{response['message']}")
+          algorithm.set_status(:validation_error, "Validation was not sucessful, please review the following message:\n#{DivaServicesApi::Algorithm.validation_message(algorithm.to_schema)}")
         end
       rescue Errno::ECONNREFUSED => error
-        algorithm.set_status(:connection_error, 'Connection error during publication, please try again.')
+        algorithm.set_status(:connection_error, 'The DIVAServices cannot be reached at the moment. Please try again later.')
       end
     end
   end

@@ -94,27 +94,31 @@ module DivaServicesApi
 
     ##
     # Validate the given json against the algorithm schema.
+    # Returns true if the json is valid on the DIVAServices
     def self.validate(json)
-      DivaServicesApi.post('/validate/create', body: json, headers: { 'Content-Type' => 'application/json' })
+      DivaServicesApi.post('/validate/create', body: json, headers: { 'Content-Type' => 'application/json' }).success?
+    end
+
+    ##
+    # Returns the message received from the DIVAServices after it failed the validation!
+    # Note that this method should not be used on valid validations!
+    def self.validation_message(json)
+      response = DivaServicesApi.post('/validate/create', body: json, headers: { 'Content-Type' => 'application/json' })
+      return response['message']
     end
 
     ##
     # Publish a new algorithm with the given json schema.
     def self.publish(json)
       response = DivaServicesApi.post('/algorithms', body: json, headers: { 'Content-Type' => 'application/json' })
-      case response.code
-        when 200
-          self.new(response['identifier'])
-        when 500
-          raise Exceptions::DivaServicesError ,response['message']
-      end
+      self.new(response['identifier'])
     end
 
     ##
     # Update an existing algorithm with the given json schema.
     def update(id, json)
       response = DivaServicesApi.put("/algorithms/#{id}", body: json, headers: { 'Content-Type' => 'application/json' })
-      DivaServicesApi::Algorithm.new(response['identifier'])
+      self.new(response['identifier'])
     end
 
     ##

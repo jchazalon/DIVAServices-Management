@@ -8,6 +8,15 @@ class ApplicationController < ActionController::Base
   protected
 
   ##
+  # Redirects if the DIVAServices is not reachable.
+  def diva_service_online!
+    unless DivaServicesApi.is_online?
+      flash[:error] = "DIVAServices is currently not reachable. Please stand by until we are able to reconnect."
+      redirect_to algorithms_path
+    end
+  end
+
+  ##
   # Redirects if the algorithm is not owned by the current user.
   def owns_algorithm!
     unless @algorithm.user == current_user && !current_user.nil?
