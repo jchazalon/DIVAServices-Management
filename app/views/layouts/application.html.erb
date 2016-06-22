@@ -14,8 +14,9 @@
       <ul class="nav nav-pills pull-right">
         <% if current_user %>
           <li><%= link_to 'Home', root_path %></li>
-          <li><%= link_to 'Algorithms', algorithms_path %></li>
           <li><%= link_to 'FAQ', faq_path %></li>
+          <li><%= link_to 'Algorithms', algorithms_path %></li>
+          <li><%= link_to 'Profile', edit_user_registration_path %></li>
           <li><%= link_to 'Logout', destroy_user_session_path, method: :delete %></li>
         <% else %>
           <li><%= link_to 'Home', root_path %></li>
