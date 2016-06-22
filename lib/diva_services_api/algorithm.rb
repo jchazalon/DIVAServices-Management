@@ -116,8 +116,8 @@ module DivaServicesApi
 
     ##
     # Update an existing algorithm with the given json schema.
-    def update(id, json)
-      response = DivaServicesApi.put("/algorithms/#{id}", body: json, headers: { 'Content-Type' => 'application/json' })
+    def update(json)
+      response = DivaServicesApi.put("/algorithms/#{self.id}", body: json, headers: { 'Content-Type' => 'application/json' })
       self.new(response['identifier'])
     end
 

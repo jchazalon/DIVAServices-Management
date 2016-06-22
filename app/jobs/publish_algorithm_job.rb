@@ -26,6 +26,7 @@ class PublishAlgorithmJob < ActiveJob::Base
   ##
   # Publishes the given _algorithm_ to the DIVAServices
   def publish(algorithm)
+    p 'Publising algorithm' if Rails.env.development?
     diva_algorithm = DivaServicesApi::Algorithm.publish(algorithm.to_schema)
     if diva_algorithm
       algorithm.update_attribute(:diva_id, diva_algorithm.id)
@@ -40,8 +41,9 @@ class PublishAlgorithmJob < ActiveJob::Base
   ##
   # Updates the given _algorithm_ on the DIVAServices
   def update(algorithm)
-    old_diva_algorithm = DivaServicesApi::Algorithm.by_id(algorithm.diva_id)
-    diva_algorithm = old_diva_algorithm.update(algorithm.diva_id, algorithm.to_schema)
+    p 'Updating algorithm' if Rails.env.development?
+    old_diva_algorithm = DivaServicesApi::Algorithm.by_id(algorithm.predecessor.diva_id)
+    diva_algorithm = old_diva_algorithm.update(algorithm.to_schema)
     if diva_algorithm
       algorithm.update_attribute(:diva_id, diva_algorithm.id)
       algorithm.set_status(diva_algorithm.status_code, diva_algorithm.status_message)

@@ -119,7 +119,6 @@ class Algorithm < ActiveRecord::Base
   ##
   # Returns true if the _algorithm_ is already published.
   def already_published?
-    return false if self.diva_id.nil? # Algorithm has no id on DIVAServices yet
     return false if Algorithm.where(next: self).empty? # Algorithm has no predecessor yet
     return true
   end
@@ -129,11 +128,19 @@ class Algorithm < ActiveRecord::Base
   # --------------------------------------
 
   ##
+  # Returns the previous version of the current _algorithm_.
+  def predecessor
+    Algorithm.where(next: self).first
+  end
+
+  ##
   # Updates the status and (optionally) status message of the _algorithm_.
+  # It is extremly important that the status is only changed via this method!
   def set_status(status, status_message = '')
     return if status == Algorithm.statuses[self.status]
     self.update_attributes(status: status)
     self.update_attributes(status_message: status_message)
+    self.update_attribute(:diva_id, nil) if self.status == 'review' || self.status == 'unpublished_changes'
     self.update_version if self.status == 'published'
   end
 
