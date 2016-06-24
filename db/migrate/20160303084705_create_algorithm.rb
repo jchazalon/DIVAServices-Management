@@ -10,6 +10,8 @@ class CreateAlgorithm < ActiveRecord::Migration
 
       t.belongs_to :next, default: nil
 
+      t.string :secure_id
+
       t.timestamps null: false
     end
   end

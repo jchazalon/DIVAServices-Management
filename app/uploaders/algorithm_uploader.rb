@@ -8,7 +8,7 @@ class AlgorithmUploader < CarrierWave::Uploader::Base
   ##
   # Override the directory where uploaded files will be stored.
   def store_dir
-    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.secure_id}"
   end
 
   ##
@@ -25,8 +25,11 @@ class AlgorithmUploader < CarrierWave::Uploader::Base
 
   ##
   # 'Deep copy' of a file
-  def self.copy_file(src_id, dst_id)
-    FileUtils.mkdir_p("#{Rails.root}/public/uploads/algorithm/zip_file/#{dst_id}/")
-    FileUtils.cp(File.join(Rails.root, "public/uploads/algorithm/zip_file/#{src_id}/algorithm.zip"), "#{Rails.root}/public/uploads/algorithm/zip_file/#{dst_id}/")
+  def copy_file(dst_id)
+    destination_algorithm = Algorithm.find(dst_id)
+    destination_path = ::File.expand_path(destination_algorithm.zip_file.store_dir, root)
+    source_path = ::File.expand_path(store_dir, root)
+    FileUtils.mkdir_p(destination_path)
+    FileUtils.cp(File.join(source_path, "/algorithm.zip"), destination_path)
   end
 end

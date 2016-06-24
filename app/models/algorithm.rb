@@ -4,6 +4,7 @@ class Algorithm < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   require 'zip'
   default_scope { order('updated_at DESC') }
+  before_create :generate_secure_id
 
   ##
   # Defines the subset of statuses that are considered as wizard steps as well.
@@ -248,6 +249,18 @@ class Algorithm < ActiveRecord::Base
   protected
 
   ##
+  # Generates a secure id for the algorithm. Only used for the zip_file folder location.
+  # Regenerates secure id if overwrite is set to true
+  def generate_secure_id(overwrite = false)
+    token = nil
+    loop do
+      token = SecureRandom.urlsafe_base64
+      break unless Algorithm.exists?(secure_id: token)
+    end
+    self.secure_id = token if (self.secure_id == nil || overwrite)
+  end
+
+  ##
   # Creates a new version of the _algorithm_ and adds it as the successor to the current one.
   def update_version
     self.update_attributes(version: self.version + 1)
@@ -265,9 +278,10 @@ class Algorithm < ActiveRecord::Base
     self.input_parameters.each{ |input_parameter| algorithm_copy.input_parameters << input_parameter.deep_copy }
     self.output_fields.each{ |field| algorithm_copy.output_fields << field.deep_copy }
     self.method_fields.each{ |field| algorithm_copy.method_fields << field.deep_copy }
-    algorithm_copy.save(validate: false) #NOTE Can't do validations before the fields are saved(created!) the first time
-    AlgorithmUploader.copy_file(self.id, algorithm_copy.id) #XXX Need to copy the file, since CarrierWave won't do that for us...
-    algorithm_copy.save! #NOTE Save it for real!
+    algorithm_copy.generate_secure_id(true) # Overwrite secure id
+    algorithm_copy.save(validate: false) # Can't do validations before the fields are saved(created!) the first time
+    self.zip_file.copy_file(algorithm_copy.id) # Need to copy the file, since CarrierWave won't do that for us...
+    algorithm_copy.save! # Save it for real!
     algorithm_copy
   end
 
