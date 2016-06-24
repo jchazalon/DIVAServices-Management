@@ -40,7 +40,13 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # Define root_url
-  routes.default_url_options[:host] = 'localhost:3000'
+  port = nil
+  begin
+    port = Rails::Server.new.options[:Port]
+  rescue NameError => e # Port not available during 'rake db:drop db:create db:migrate db:seed'
+    port = 3000
+  end
+  routes.default_url_options[:host] = "localhost:#{port}"
 
   # Send errors and exceptions to slack channel
   if ENV['SLACK_HOOK_DEV'] && ENV['SLACK_CHANNEL_DEV']
