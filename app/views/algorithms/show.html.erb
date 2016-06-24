@@ -49,7 +49,10 @@
 </div>
 <div class="col-md-12 edit-button">
   <div class="pull-right">
-    <%= link_to 'Edit input information', edit_algorithm_path(@algorithm, step: :parameters_details), class: 'btn btn-default' %>
+    <%= link_to 'Edit input details', edit_algorithm_path(@algorithm, step: :parameters_details), class: 'btn btn-default' %>
+  </div>
+  <div class="pull-right">
+    <%= link_to 'Edit input information', edit_algorithm_path(@algorithm, step: :parameters), class: 'btn btn-default' %>
   </div>
 </div>
 
