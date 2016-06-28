@@ -66,7 +66,13 @@ DIVA_SERVICES_HOST=localhost:8080
 ```
 These are dummy keys, use your own.
 
-If you whish to send exceptions to a Slack Channel, set the following ENV values:
+Make sure that you set the port used in development in your .env file via:
+```
+PORT=4000
+```
+However, do not forget to start a rails server with the port option set, because rails will not care about the environment value. (It is necessary to run delayed_jobs and any other asynchronous application on the correct port): E.g. 'rails server -p 4000'.
+
+If you wish to send exceptions to a Slack Channel, set the following ENV values:
 
 ```
 SLACK_HOOK_DEV="https://slackhook"
