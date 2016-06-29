@@ -5,6 +5,7 @@ class InputParameter < ActiveRecord::Base
 
   before_validation :set_position, if: 'self.position.nil?'
   after_validation :create_fields, if: 'self.errors.empty? && self.fields.empty?'
+  before_update :adapt_fields, if: :input_type_changed? # Need to make sure that old fields for a previous input_type are removed and exchanged.
 
   has_many :fields, as: :fieldable, dependent: :destroy
   belongs_to :algorithm
@@ -17,6 +18,13 @@ class InputParameter < ActiveRecord::Base
   def review_or_step_2?
     self.algorithm.parameters? || self.algorithm.review?
     return true
+  end
+
+  ##
+  # Removes all fields related to this input parameter and then creates the new ones.
+  def adapt_fields
+    self.fields.destroy_all
+    self.create_fields
   end
 
   def all_fields
