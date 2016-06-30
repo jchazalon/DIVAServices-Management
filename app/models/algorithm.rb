@@ -89,7 +89,7 @@ class Algorithm < ActiveRecord::Base
       zip = Zip::File.open(self.zip_file.file.file)
       errors.add(:executable_path, "doesn't point to a file") unless zip.find_entry(self.method_field('executable_path').value).ftype == :file
     rescue StandardError => e
-      errors.add(:zip_file, "is not a valid zip.\nError: #{e}")
+      errors.add(:executable_path, "Invalid executable path!\nError: #{e}")
     ensure
       zip.close if zip
     end
