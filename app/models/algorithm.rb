@@ -40,7 +40,7 @@ class Algorithm < ActiveRecord::Base
   validate :valid_zip_file, if: :validate_upload?
   validate :zip_file_includes_executable_path, if: :validate_upload?
   validate :executable_path_is_a_file, if: :validate_upload?
-  #validate :check_for_virus #TODO temporally deactivated until not everythin is a virus on production....
+  validate :check_for_virus
 
   # --------------------------------------
   # :section: Validation methods
@@ -74,7 +74,7 @@ class Algorithm < ActiveRecord::Base
   def zip_file_includes_executable_path
     begin
       zip = Zip::File.open(self.zip_file.file.file)
-      errors.add(:zip_file, "doesn't contain the executable '#{self.method_field('executable_path').value}'") unless zip.find_entry(self.method_field('executable_path').value)
+      errors.add(:executable_path, "doesn't contain the executable '#{self.method_field('executable_path').value}'") unless zip.find_entry(self.method_field('executable_path').value)
     rescue StandardError => e
       errors.add(:zip_file, "is not a valid zip.\nError: #{e}")
     ensure
