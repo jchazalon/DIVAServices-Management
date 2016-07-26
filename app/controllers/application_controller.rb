@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
     when :informations
       [general_fields_attributes: [:id, :value]]
     when :parameters
-      [output_fields_attributes: [:id, :value], input_parameters_attributes: [:id, :input_type, :_destroy]]
+      [input_parameters_attributes: [:id, :input_type, :_destroy]]
     when :parameters_details
       field_attributes_base = [:id, :value]
       fields = []

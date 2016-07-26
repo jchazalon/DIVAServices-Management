@@ -24,12 +24,10 @@ class Algorithm < ActiveRecord::Base
 
   has_many :general_fields, -> { where category: :general }, class_name: 'Field', as: :fieldable, dependent: :destroy
   has_many :input_parameters, dependent: :destroy
-  has_many :output_fields, -> { where category: :output }, class_name: 'Field', as: :fieldable, dependent: :destroy
   has_many :method_fields, -> { where category: :method }, class_name: 'Field', as: :fieldable, dependent: :destroy
 
   accepts_nested_attributes_for :general_fields, allow_destroy: :true
   accepts_nested_attributes_for :input_parameters, allow_destroy: :true
-  accepts_nested_attributes_for :output_fields, allow_destroy: :true
   accepts_nested_attributes_for :method_fields, allow_destroy: :true
 
   validates :status, presence: true
@@ -176,13 +174,7 @@ class Algorithm < ActiveRecord::Base
     self.general_fields.where(fieldable_id: self.id).where("payload->>'key' = ?", name).first
   end
 
-  ##
-  # Used to access a output field.
-  def output_field(name)
-    self.output_fields.where(fieldable_id: self.id).where("payload->>'key' = ?", name).first
-  end
-
-  ##
+ ##
   # Used to access a method field.
   def method_field(name)
     self.method_fields.where(fieldable_id: self.id).where("payload->>'key' = ?", name).first
@@ -235,7 +227,6 @@ class Algorithm < ActiveRecord::Base
   def to_schema
     { general: self.general_fields.map{ |field| {field.key => field.value} unless field.value.blank? }.compact.reduce(:merge) || {},
       input: self.input_parameters.map{ |input_parameter| { input_parameter.input_type => input_parameter.to_schema } } || [],
-      output: self.output_fields.map{ |field| {field.key => field.value} unless field.value.blank? }.compact.reduce(:merge) || {},
       method: {file: self.zip_url}.merge!(self.method_fields.map{ |field| {field.key => field.value} unless field.value.blank? }.compact.reduce(:merge) || {})
     }.to_json
   end
@@ -243,7 +234,7 @@ class Algorithm < ActiveRecord::Base
   ##
   # Returns true if any field or value of the _algorithm_ changed since the last save.
   def anything_changed?
-    self.changed? || collection_anything_changed([self.general_fields, self.input_parameters, self.output_fields, self.method_fields])
+    self.changed? || collection_anything_changed([self.general_fields, self.input_parameters, self.method_fields])
   end
 
   protected
@@ -276,7 +267,6 @@ class Algorithm < ActiveRecord::Base
     algorithm_copy = self.dup
     self.general_fields.each{ |field| algorithm_copy.general_fields << field.deep_copy }
     self.input_parameters.each{ |input_parameter| algorithm_copy.input_parameters << input_parameter.deep_copy }
-    self.output_fields.each{ |field| algorithm_copy.output_fields << field.deep_copy }
     self.method_fields.each{ |field| algorithm_copy.method_fields << field.deep_copy }
     algorithm_copy.generate_secure_id(true) # Overwrite secure id
     algorithm_copy.save(validate: false) # Can't do validations before the fields are saved(created!) the first time
@@ -299,7 +289,6 @@ class Algorithm < ActiveRecord::Base
   # Creates all necessary fields as ordered by the DIVAServices.
   def create_fields
     create_fields_of(DivaServicesApi::Algorithm.general_information, :general)
-    create_fields_of(DivaServicesApi::Algorithm.output_information, :output)
     create_fields_of(DivaServicesApi::Algorithm.method_information, :method)
   end
 

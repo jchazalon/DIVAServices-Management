@@ -64,12 +64,6 @@ module DivaServicesApi
     end
 
     ##
-    # Access the /information/output route
-    def self.output_information
-      DivaServicesApi.get('/information/output').parsed_response
-    end
-
-    ##
     # Access the /information/method route
     def self.method_information
       DivaServicesApi.get('/information/method').parsed_response
