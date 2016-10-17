@@ -41,7 +41,7 @@ Rails.application.configure do
 
   # Define root_url
   if ENV['PORT']
-    routes.default_url_options[:host] = "localhost:#{ENV['PORT']}"
+    routes.default_url_options[:host] = "0.0.0.0:#{ENV['PORT']}"
   else
     print 'Please make sure to add an environment value called \'PORT\' to your local .env file while in development! Default of 3000 is used.'
     routes.default_url_options[:host] = "localhost:3000"
