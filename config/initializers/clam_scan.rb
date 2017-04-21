@@ -7,7 +7,7 @@ ClamScan.configure do |config|
   # path to clamscan/clamdscan client
   # try `which clamdscan` or `which clamscan` in your shell to see where you should point this to
   # recommended to set to an absolute path to clamdscan
-  config.client_location            = '/usr/bin/clamdscan' # default
+  config.client_location            = '/usr/bin/clamscan' # default
 
   # if set to true, ClamScan will raise an exception
   # unless a scan is successful and no viruses were found

@@ -26,7 +26,7 @@ class PublishAlgorithmJob < ActiveJob::Base
   ##
   # Publishes the given _algorithm_ to the DIVAServices
   def publish(algorithm)
-    p 'Publising algorithm' if Rails.env.development?
+    p 'Publishing algorithm' if Rails.env.development?
     diva_algorithm = DivaServicesApi::Algorithm.publish(algorithm.to_schema)
     if diva_algorithm
       algorithm.update_attribute(:diva_id, diva_algorithm.id)

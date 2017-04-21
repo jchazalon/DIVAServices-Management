@@ -3,6 +3,10 @@
 class ValidateAlgorithmJob < ActiveJob::Base
   queue_as :default
 
+    rescue_from(StandardError) do |exception|
+      Rails.logger.error "[#{self.class.name}] Hey, something was wrong with you job #{exception.to_s}"       
+    end
+
   ##
   # Main method that is launched with job instance. Validates the given algorithm.
   def perform(algorithm_id)
