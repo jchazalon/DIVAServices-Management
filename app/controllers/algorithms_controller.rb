@@ -150,6 +150,10 @@ class AlgorithmsController < ApplicationController
       'algorithms/parameters'
     when :parameters_details
       'algorithms/parameters_details'
+    when :outputs
+      'algorithms/outputs'
+    when :outputs_details
+      'algorithms/outputs_details'
     when :upload
       'algorithms/upload'
     end

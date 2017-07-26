@@ -3,8 +3,8 @@ module AlgorithmWizardHelper
   ##
   # Renders the progress bar used in the wizard.
   def progress_bar(current_step)
-    names = ['General Information', 'Input/Output', 'Detailed Input', 'Upload', 'Review']
-    icons = ['fa fa-info', 'fa fa-exchange', 'fa fa-list', 'fa fa-upload', 'fa fa-eye']
+    names = ['General Information', 'Input', 'Detailed Input', 'Output', 'Detailed Output', 'Upload', 'Review']
+    icons = ['fa fa-info', 'fa fa-exchange', 'fa fa-list', 'fa fa-exchange', 'fa fa-list', 'fa fa-upload', 'fa fa-eye']
 
     content_tag(:div, class: 'wizard') do
       content_tag(:div, class: 'wizard-inner') do

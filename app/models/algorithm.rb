@@ -9,7 +9,7 @@ class Algorithm < ActiveRecord::Base
   ##
   # Defines the subset of statuses that are considered as wizard steps as well.
   def self.wizard_steps
-    [:informations, :parameters, :parameters_details, :upload, :review]
+    [:informations, :parameters, :parameters_details, :outputs, :outputs_details, :upload, :review]
   end
 
   # All statuses an _algorithm_ can have
@@ -24,10 +24,12 @@ class Algorithm < ActiveRecord::Base
 
   has_many :general_fields, -> { where category: :general }, class_name: 'Field', as: :fieldable, dependent: :destroy
   has_many :input_parameters, dependent: :destroy
+  has_many :output_parameters, dependent: :destroy
   has_many :method_fields, -> { where category: :method }, class_name: 'Field', as: :fieldable, dependent: :destroy
 
   accepts_nested_attributes_for :general_fields, allow_destroy: :true
   accepts_nested_attributes_for :input_parameters, allow_destroy: :true
+  accepts_nested_attributes_for :output_parameters, allow_destroy: :true
   accepts_nested_attributes_for :method_fields, allow_destroy: :true
 
   validates :status, presence: true
@@ -112,7 +114,7 @@ class Algorithm < ActiveRecord::Base
   ##
   # Returns true if the wizard is already finished.
   def finished_wizard?
-    !empty? && !informations? && !parameters? && !parameters_details? && !upload? && !review?
+    !empty? && !informations? && !parameters? && !parameters_details? && !outputs? && !outputs_details? && !upload? && !review?
   end
 
   ##
@@ -158,8 +160,14 @@ class Algorithm < ActiveRecord::Base
 
   @@current_input_parameter_position = 0
 
+  @@current_output_parameter_position = 0
+
   def next_input_parameter_position
     @@current_input_parameter_position += 1
+  end
+
+  def next_output_parameter_position
+    @@current_output_parameter_position += 1
   end
 
   ##
@@ -227,6 +235,7 @@ class Algorithm < ActiveRecord::Base
   def to_schema
     { general: self.general_fields.map{ |field| {field.key => field.value} unless field.value.blank? }.compact.reduce(:merge) || {},
       input: self.input_parameters.map{ |input_parameter| { input_parameter.input_type => input_parameter.to_schema } } || [],
+      output: self.output_parameters.map{ |output_parameter| {output_parameter.output_type => output_parameter.to_schema} } || [],
       method: {file: self.zip_url}.merge!(self.method_fields.map{ |field| {field.key => field.value} unless field.value.blank? }.compact.reduce(:merge) || {})
     }.to_json
   end
@@ -234,7 +243,7 @@ class Algorithm < ActiveRecord::Base
   ##
   # Returns true if any field or value of the _algorithm_ changed since the last save.
   def anything_changed?
-    self.changed? || collection_anything_changed([self.general_fields, self.input_parameters, self.method_fields])
+    self.changed? || collection_anything_changed([self.general_fields, self.input_parameters, self.output_parameters, self.method_fields])
   end
 
   protected
@@ -267,6 +276,7 @@ class Algorithm < ActiveRecord::Base
     algorithm_copy = self.dup
     self.general_fields.each{ |field| algorithm_copy.general_fields << field.deep_copy }
     self.input_parameters.each{ |input_parameter| algorithm_copy.input_parameters << input_parameter.deep_copy }
+    self.output_parameters.each{ |output_parameter| algorithm_copy.output_parameters << output_parameter.deep_copy }
     self.method_fields.each{ |field| algorithm_copy.method_fields << field.deep_copy }
     algorithm_copy.generate_secure_id(true) # Overwrite secure id
     algorithm_copy.save(validate: false) # Can't do validations before the fields are saved(created!) the first time
@@ -290,6 +300,7 @@ class Algorithm < ActiveRecord::Base
   def create_fields
     create_fields_of(DivaServicesApi::Algorithm.general_information, :general)
     create_fields_of(DivaServicesApi::Algorithm.method_information, :method)
+    create_fields_of(DivaServicesApi::Algorithm.output_information, :output)
   end
 
   ##

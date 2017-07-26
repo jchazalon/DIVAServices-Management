@@ -73,6 +73,18 @@ ActiveRecord::Schema.define(version: 20160311214907) do
 
   add_index "input_parameters", ["algorithm_id"], name: "index_input_parameters_on_algorithm_id", using: :btree
 
+  create_table "output_parameters", force: :cascade do |t|
+    t.string   "output_type"
+    t.integer  "position"
+    t.string   "name"
+    t.string   "description"
+    t.integer  "algorithm_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "output_parameters", ["algorithm_id"], name: "index_output_parameters_on_algorithm_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false

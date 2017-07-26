@@ -1,0 +1,9 @@
+<h2>Output parameter details</h2>
+
+<%= simple_form_for(@algorithm, url: algorithm_path(@algorithm, step: :outputs_details), method: :put) do |f| %>
+  <%= render partial: 'output_parameters/output_parameter_detail_fields', locals: { f: f } %>
+  <hr>
+  <br/>
+  <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
+  <%= f.submit 'Save', class: 'btn btn-primary' %>
+<% end %>

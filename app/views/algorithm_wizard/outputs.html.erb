@@ -1,0 +1,33 @@
+<h1>Algorithm Wizard - Step 4/7</h1>
+<%= progress_bar(4) %>
+
+<h2>Output information</h2>
+
+<p>To make sure that your algorithm will run correctly please select all necessary output parameters.
+  Once you have selected all parameter, you can define further details in the next step.
+</p>
+
+<%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
+  <div class="inputs_wrapper">
+    <hr style="margin-bottom: 0;">
+    <div class="inputs_left">
+      <h3>Output</h3>
+      <%= render partial: 'algorithms/output_fields', locals: { f: f } %>
+    </div>
+    <div class="inputs_right">
+      <h3>Available Output types</h3>
+      <div class="well">
+        <% DivaServicesApi::Algorithm.list_output_types.each do |output_type| %>
+          <h4><%= output_type[:name] %></h4>
+          <p><%= output_type[:hint] %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <p style="clear: both;"></p>
+  <hr>
+  <br/>
+  <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>
+  <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
+  <%= f.submit 'Next', class: 'btn btn-primary' %>
+<% end %>

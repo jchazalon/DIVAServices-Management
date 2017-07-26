@@ -1,0 +1,8 @@
+<div class="input_parameters">
+  <%= f.simple_fields_for :output_parameters do |ff| %>
+    <%= render partial: 'output_parameters/output_parameter_fields', locals: { f: ff } %>
+  <% end %>
+  <div class="links">
+    <%= link_to_add_association '<i class="fa fa-plus"></i> New Output variable'.html_safe, f, :output_parameters, class: 'btn btn-default', partial: 'output_parameters/output_parameter_fields' %>
+  </div>
+</div>

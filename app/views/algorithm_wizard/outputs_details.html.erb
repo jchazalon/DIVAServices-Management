@@ -1,0 +1,18 @@
+<h1>Algorithm Wizard - Step 5/7</h1>
+<%= progress_bar(5) %>
+
+<h2>Output parameter details</h2>
+
+<p>
+  If necessary, please provide additional information to the output parameters you have selected in the previous step.
+</p>
+
+<%= simple_form_for(@algorithm, url: wizard_path, method: :put) do |f| %>
+  <hr/>
+  <%= render partial: 'output_parameters/output_parameter_detail_fields', locals: { f: f } %>
+  <hr/>
+  </br>
+  <%= link_to 'Back', previous_wizard_path, class: 'btn btn-default' %>
+  <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
+  <%= f.submit 'Next', class: 'btn btn-primary' %>
+<% end %>

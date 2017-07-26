@@ -1,0 +1,23 @@
+<h2>Output information</h2>
+
+<%= simple_form_for(@algorithm, url: algorithm_path(@algorithm, step: :outputs), method: :put) do |f| %>
+  <div class="inputs_wrapper">
+    <div class="inputs_left">
+      <h3>Input</h3>
+      <%= render partial: 'algorithms/output_fields', locals: { f: f } %>
+    </div>
+    <div class="inputs_right">
+      <h3>Available Input types</h3>
+      <div class="well">
+        <% DivaServicesApi::Algorithm.list_output_types.each do |output_type| %>
+          <h4><%= output_type[:name] %></h4>
+          <p><%= output_type[:hint] %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <p style="clear: both;"></p>
+  <br/>
+  <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
+  <%= f.submit 'Save', class: 'btn btn-primary' %>
+<% end %>

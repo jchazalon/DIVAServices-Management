@@ -63,7 +63,11 @@ class Field < ActiveRecord::Base
   ##
   # Transforms the field to json
   def to_schema
-    self.value_to_schema unless self.value.blank?
+    if self.value.blank?
+      self.value.to_s
+    else
+      self.value_to_schema
+    end
   end
 
   ##

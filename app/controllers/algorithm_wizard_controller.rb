@@ -23,6 +23,8 @@ class AlgorithmWizardController < ApplicationController
     when :parameters
       # Create an initial input parameter if there is none
       @algorithm.input_parameters.build if @algorithm.input_parameters.empty?
+    when :outputs
+      @algorithm.output_parameters.build if @algorithm.output_parameters.empty?
     when :parameters_details
       # Possibly skip a step if there are no parameters used
       if @algorithm.input_parameters.empty?

@@ -63,6 +63,10 @@ module DivaServicesApi
       DivaServicesApi.get('/information/input').parsed_response
     end
 
+    def self.output_information
+      DivaServicesApi.get('/information/output').parsed_response
+    end
+
     ##
     # Access the /information/method route
     def self.method_information
@@ -86,11 +90,36 @@ module DivaServicesApi
       end
     end
 
+        ##
+    # Create a collection containing tuples like e.g. ['Input Image', 'input_image'].
+    def self.output_type_keys_with_names
+      DivaServicesApi::Algorithm.output_information.map do |output_type|
+        [output_type[1]['displayText'], output_type[0]]
+      end
+    end
+
+    ##
+    # Create a collection containing hashes like e.g. {hint: 'Image that is used for ...', name: 'Input Image'}.
+    def self.list_output_types
+      info = DivaServicesApi::Algorithm.output_information
+      DivaServicesApi::Algorithm.output_information.keys.map do |output_type|
+        { hint: info[output_type]['infoText'], name: info[output_type]['displayText'] }
+      end
+    end
+
+
     ##
     # Validate the given json against the algorithm schema.
     # Returns true if the json is valid on the DIVAServices
     def self.validate(json)
-      DivaServicesApi.post('/validate/create', body: json, headers: { 'Content-Type' => 'application/json' }).success?
+      response = DivaServicesApi.post('/validate/create', body: json, headers: { 'Content-Type' => 'application/json' })
+      Rails.logger.info "[#{response}]"      
+      case response.code
+        when 200
+          return true
+        else
+          return false
+      end
     end
 
     ##

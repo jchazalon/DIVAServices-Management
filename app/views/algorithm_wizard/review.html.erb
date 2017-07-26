@@ -1,5 +1,5 @@
-<h1>Algorithm Wizard - Step 5/5</h1>
-<%= progress_bar(5) %>
+<h1>Algorithm Wizard - Step 7/7</h1>
+<%= progress_bar(7) %>
 
 <h2>Review</h2>
 
@@ -36,6 +36,35 @@
             <th style="width: 50%">Value</th>
           </thead>
         <% input_parameter.all_fields.each do |field| %>
+          <% unless field.type == 'ObjectField' %>
+            <tr>
+              <td><%= field.name %> <br/> <p class="help-block"><%= field.infoText %></p></td>
+              <td><span class="label label-primary"><%= field.object_type %></span></td>
+              <td><%= field.value.blank? ? '-' : humanize_value(field) %></td>
+            </tr>
+          <% end %>
+        <% end %>
+        </table>
+      <% end %>
+    </div>
+  <% end %>
+  </ol>
+</div>
+<div class="row">
+  <h3>Output Information</h3>
+  <ol>
+  <% @algorithm.output_parameters.each do |output_parameter| %>
+    <div class="col-md-12">
+      <li class="input_parameter"><h4><%= output_parameter.name %></h4></li>
+      <p class="help-block"><%= output_parameter.description %></p>
+      <% unless output_parameter.fields.empty? %>
+        <table class="table table-striped table-bordered">
+          <thead>
+            <th style="width: 35%">Field</th>
+            <th style="width: 15%">Type</th>
+            <th style="width: 50%">Value</th>
+          </thead>
+        <% output_parameter.all_fields.each do |field| %>
           <% unless field.type == 'ObjectField' %>
             <tr>
               <td><%= field.name %> <br/> <p class="help-block"><%= field.infoText %></p></td>

@@ -1,4 +1,4 @@
-<h2>Input/Output information</h2>
+<h2>Input information</h2>
 
 <%= simple_form_for(@algorithm, url: algorithm_path(@algorithm, step: :parameters), method: :put) do |f| %>
   <div class="inputs_wrapper">
@@ -17,10 +17,6 @@
     </div>
   </div>
   <p style="clear: both;"></p>
-  <hr>
-  <h3>Output</h3>
-  <%= render partial: 'algorithms/output_fields', locals: { f: f } %>
-  <hr>
   <br/>
   <%= link_to 'Cancel', algorithms_path, class: 'btn btn-default' %>
   <%= f.submit 'Save', class: 'btn btn-primary' %>

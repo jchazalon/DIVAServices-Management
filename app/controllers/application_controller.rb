@@ -46,6 +46,15 @@ class ApplicationController < ActionController::Base
         fields = field_attributes_base + [fields_attributes: fields]
       end
       [input_parameters_attributes: [:id, fields_attributes: fields]]
+    when :outputs
+      [output_parameters_attributes: [:id, :output_type, :_destroy]]
+    when :outputs_details
+      field_attributes_base = [:id, :value]
+      fields = []
+      (1..7).each do
+        fields = field_attributes_base + [fields_attributes: fields]
+      end
+      [output_parameters_attributes: [:id, fields_attributes: fields]]
     when :upload
       [:zip_file, method_fields_attributes: [:id, :value]]
     end

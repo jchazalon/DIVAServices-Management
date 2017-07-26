@@ -9,6 +9,10 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
+  #configure the logger
+  config.logger = Logger.new(STDOUT)
+  config.log_level = :ERROR
+
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
@@ -18,6 +22,9 @@ Rails.application.configure do
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
+
+  #disable active_record logger
+  config.active_record.logger = nil
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
