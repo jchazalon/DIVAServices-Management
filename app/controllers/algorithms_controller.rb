@@ -120,6 +120,7 @@ class AlgorithmsController < ApplicationController
       flash[:notice] = "Algorithm not yet ready for publishing"
       redirect_to algorithms_path
     else
+      flash[:notice] = 'Algorithm will be deployed'
       @algorithm.set_status(:validating, 'Information are currently validated.')
       ValidateAlgorithmJob.perform_later(@algorithm.id)
       redirect_to algorithms_path

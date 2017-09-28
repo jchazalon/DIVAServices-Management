@@ -112,6 +112,7 @@ module DivaServicesApi
     # Validate the given json against the algorithm schema.
     # Returns true if the json is valid on the DIVAServices
     def self.validate(json)
+      puts "VALIDATE"      
       response = DivaServicesApi.post('/validate/create', body: json, headers: { 'Content-Type' => 'application/json' })
       Rails.logger.info "[#{response}]"      
       case response.code
@@ -133,6 +134,7 @@ module DivaServicesApi
     ##
     # Publish a new algorithm with the given json schema.
     def self.publish(json)
+      puts "PUBLISH"
       response = DivaServicesApi.post('/algorithms', body: json, headers: { 'Content-Type' => 'application/json' })
       DivaServicesApi::Algorithm.new(response['identifier'])
     end

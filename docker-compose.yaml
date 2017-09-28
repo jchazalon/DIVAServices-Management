@@ -1,0 +1,16 @@
+version: '2'
+services:
+  db:
+    image: postgres:latest
+    ports: 
+      - "5432:5432"
+
+  management:
+    build: .
+    command: bin/rails server --port 5000 --binding 0.0.0.0
+    links:
+     - db
+    ports:
+     - "5000:5000"
+    volumes:
+     - .:/management
