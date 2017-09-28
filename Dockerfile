@@ -14,5 +14,5 @@ ADD Gemfile.lock /management/Gemfile.lock
 RUN bundle install
 
 ADD . /management
-RUN rake db:create db:setup db:seed
 ENV RAILS_ENV development
+#RUN rake db:create db:setup db:seed
